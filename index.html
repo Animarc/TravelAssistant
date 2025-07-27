@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Viaje</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+
+<body>
+    <div class="controls">
+        <div class="controls-row">
+            <button id="addDayBtn">+ Añadir Día</button>
+            <button id="addActivityBtn">+ Añadir Actividad</button>
+            <button id="exportBtn">Exportar JSON</button>
+        </div>
+        <div class="controls-row">
+            <button id="moveDayLeftBtn">← Mover día a la izquierda</button>
+            <button id="moveDayRightBtn">Mover día a la derecha →</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="left-panel">
+            <header class="day-header">
+                <button id="prevDay">←</button>
+                <h2 id="dayTitle">Día 1: Llegada</h2>
+                <button id="nextDay">→</button>
+            </header>
+            <ul id="activityList" class="activity-list">
+                <!-- Actividades aquí -->
+            </ul>
+        </div>
+        <div class="right-panel">
+            <div id="map"></div>
+        </div>
+    </div>
+    <!-- Modal para añadir actividad -->
+    <div id="activityModal" class="modal">
+        <div class="modal-content">
+            <span id="closeModal" class="close">&times;</span>
+            <h2>Añadir Nueva Actividad</h2>
+            <form id="activityForm">
+                <label>Hora: <input type="time" name="time" required></label><br>
+                <label>Nombre: <input type="text" name="name" required></label><br>
+                <label>Descripción:<br>
+                    <textarea name="description" rows="3" required></textarea>
+                </label><br>
+                <label>Información importante:<br>
+                    <textarea name="importantInfo" rows="2" placeholder="Opcional"></textarea>
+                </label><br>
+                <label>Latitud: <input type="number" step="any" name="lat" required></label><br>
+                <label>Longitud: <input type="number" step="any" name="lng" required></label><br>
+                <button type="submit">Añadir Actividad</button>
+            </form>
+        </div>
+    </div>
+
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
