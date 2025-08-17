@@ -133,13 +133,23 @@ function renderDay() {
 
         } else {
             li.innerHTML = `
-        <strong>${act.time}</strong> - ${act.name}
+        <div class="activity-header">
+          <strong>${act.time}</strong> - ${act.name}
+          <button class="edit-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">✏️</button>
+        </div>
         <div class="activity-details" id="details-${i}" style="display:none;">
           <p>${act.description}</p>
           ${act.importantInfo ? `<p class="important-info">${act.importantInfo}</p>` : ''}
           ${act.price ? `<p class="price-info"><strong>Precio:</strong> ${act.price}</p>` : ''}
         </div>
       `;
+            
+            // Add event listener for edit button
+            const editBtn = li.querySelector('.edit-activity-btn');
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                editActivity(currentDay, day.activities.indexOf(act));
+            });
             li.addEventListener('click', () => {
                 [...activityListEl.querySelectorAll('.activity-details')].forEach(d => d.style.display = 'none');
                 const detailEl = document.getElementById(`details-${i}`);
@@ -301,15 +311,28 @@ function showBudgetView() {
             dayHeader.innerHTML = `<h3>Día ${dayIndex + 1}: ${day.title}</h3>`;
             activityListEl.appendChild(dayHeader);
             
-            dayActivities.forEach(activity => {
+            dayActivities.forEach((activity, activityIndex) => {
                 const li = document.createElement('li');
                 li.className = 'budget-item';
                 li.innerHTML = `
                     <div class="budget-activity">
-                        <strong>${activity.time}</strong> - ${activity.name}
-                        <span class="budget-price">${activity.price}</span>
+                        <div class="budget-activity-info">
+                            <strong>${activity.time}</strong> - ${activity.name}
+                        </div>
+                        <div class="budget-activity-actions">
+                            <span class="budget-price">${activity.price}</span>
+                            <button class="edit-activity-btn" data-day="${dayIndex}" data-activity="${activityIndex}">✏️</button>
+                        </div>
                     </div>
                 `;
+                
+                // Add event listener for edit button
+                const editBtn = li.querySelector('.edit-activity-btn');
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    editActivity(dayIndex, activityIndex);
+                });
+                
                 activityListEl.appendChild(li);
                 activitiesWithPrice++;
             });
@@ -325,6 +348,65 @@ function showBudgetView() {
         </div>
     `;
     activityListEl.appendChild(summaryLi);
+}
+
+// Función para editar actividad
+function editActivity(dayIndex, activityIndex) {
+    const activity = daysData[dayIndex].activities[activityIndex];
+    
+    // Llenar el formulario con los datos actuales
+    activityForm.time.value = activity.time;
+    activityForm.name.value = activity.name;
+    activityForm.description.value = activity.description;
+    activityForm.importantInfo.value = activity.importantInfo || '';
+    activityForm.price.value = activity.price || '';
+    activityForm.lat.value = activity.coordinates[0];
+    activityForm.lng.value = activity.coordinates[1];
+    
+    // Mostrar modal
+    modal.style.display = 'block';
+    
+    // Cambiar el comportamiento del formulario para actualizar en lugar de crear
+    const originalSubmitHandler = activityForm.onsubmit;
+    
+    activityForm.onsubmit = (e) => {
+        e.preventDefault();
+        
+        const time = activityForm.time.value;
+        const name = activityForm.name.value.trim();
+        const description = activityForm.description.value.trim();
+        const importantInfo = activityForm.importantInfo.value.trim();
+        const price = activityForm.price.value.trim();
+        const lat = parseFloat(activityForm.lat.value);
+        const lng = parseFloat(activityForm.lng.value);
+        
+        if (!time || !name || !description || isNaN(lat) || isNaN(lng)) {
+            alert('Por favor completa todos los campos correctamente.');
+            return;
+        }
+        
+        // Actualizar la actividad
+        daysData[dayIndex].activities[activityIndex] = {
+            time,
+            name,
+            description,
+            importantInfo: importantInfo || null,
+            price: price || null,
+            coordinates: [lat, lng]
+        };
+        
+        modal.style.display = 'none';
+        
+        // Restaurar el handler original
+        activityForm.onsubmit = originalSubmitHandler;
+        
+        // Re-renderizar la vista actual
+        if (activityListEl.classList.contains('budget-list')) {
+            showBudgetView();
+        } else {
+            renderDay();
+        }
+    };
 }
 
 // Función para mostrar vista de planificación

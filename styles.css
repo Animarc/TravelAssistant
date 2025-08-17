@@ -98,6 +98,38 @@ body {
     color: #495057;
 }
 
+/* Estilos para botones de editar */
+.edit-activity-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.edit-activity-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.budget-activity-info {
+    flex: 1;
+}
+
+.budget-activity-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .container {
     display: flex;
     height: 100vh;
