@@ -278,5 +278,72 @@ moveDayRightBtn.addEventListener('click', () => {
     }
 });
 
+// Función para mostrar vista de presupuesto
+function showBudgetView() {
+    // Ocultar elementos de planificación
+    document.querySelector('.controls-row:nth-child(3)').style.display = 'none';
+    document.querySelector('.right-panel').style.display = 'none';
+    document.querySelector('.day-header').style.display = 'none';
+    
+    // Mostrar lista de presupuesto
+    activityListEl.innerHTML = '';
+    activityListEl.className = 'activity-list budget-list';
+    
+    let totalBudget = 0;
+    let activitiesWithPrice = 0;
+    
+    daysData.forEach((day, dayIndex) => {
+        const dayActivities = day.activities.filter(activity => activity.price);
+        
+        if (dayActivities.length > 0) {
+            const dayHeader = document.createElement('li');
+            dayHeader.className = 'budget-day-header';
+            dayHeader.innerHTML = `<h3>Día ${dayIndex + 1}: ${day.title}</h3>`;
+            activityListEl.appendChild(dayHeader);
+            
+            dayActivities.forEach(activity => {
+                const li = document.createElement('li');
+                li.className = 'budget-item';
+                li.innerHTML = `
+                    <div class="budget-activity">
+                        <strong>${activity.time}</strong> - ${activity.name}
+                        <span class="budget-price">${activity.price}</span>
+                    </div>
+                `;
+                activityListEl.appendChild(li);
+                activitiesWithPrice++;
+            });
+        }
+    });
+    
+    // Mostrar resumen total
+    const summaryLi = document.createElement('li');
+    summaryLi.className = 'budget-summary';
+    summaryLi.innerHTML = `
+        <div class="budget-total">
+            <strong>Resumen:</strong> ${activitiesWithPrice} actividades con precio
+        </div>
+    `;
+    activityListEl.appendChild(summaryLi);
+}
+
+// Función para mostrar vista de planificación
+function showPlanningView() {
+    // Mostrar elementos de planificación
+    document.querySelector('.controls-row:nth-child(3)').style.display = 'flex';
+    document.querySelector('.right-panel').style.display = 'block';
+    document.querySelector('.day-header').style.display = 'flex';
+    
+    // Restaurar clase original
+    activityListEl.className = 'activity-list';
+    
+    // Renderizar día actual
+    renderDay();
+}
+
+// Event listeners para los botones de navegación
+document.getElementById('presupuestoBtn').addEventListener('click', showBudgetView);
+document.getElementById('planificacionBtn').addEventListener('click', showPlanningView);
+
 // Render inicial
 renderDay();

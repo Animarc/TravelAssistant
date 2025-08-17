@@ -3,6 +3,101 @@ body {
     font-family: Arial, sans-serif;
 }
 
+.controls {
+    padding: 10px;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+}
+
+.controls-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.controls-row:last-child {
+    margin-bottom: 0;
+}
+
+.controls-row button {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.controls-row button:hover {
+    background: #f0f0f0;
+}
+
+.controls-row button:active {
+    background: #e0e0e0;
+}
+
+#exportBtn {
+    font-size: 18px;
+    padding: 8px 12px;
+}
+
+/* Estilos para la vista de presupuesto */
+.budget-list {
+    padding: 0;
+}
+
+.budget-day-header {
+    background-color: #f0f0f0;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.budget-day-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.budget-item {
+    border-bottom: 1px solid #eee;
+    padding: 12px 0;
+    margin: 0;
+}
+
+.budget-activity {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.budget-price {
+    background-color: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.budget-summary {
+    background-color: #e9ecef;
+    padding: 15px;
+    margin-top: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #6c757d;
+}
+
+.budget-total {
+    text-align: center;
+    font-size: 1.1em;
+    color: #495057;
+}
+
 .container {
     display: flex;
     height: 100vh;
@@ -200,22 +295,27 @@ body {
     .day-header h2 {
         font-size: 1.1em;
     }
+    .controls {
+        padding: 8px;
+    }
+    
     .controls-row {
         display: flex;
         flex-direction: row;
-        gap: 8px;
-        margin-bottom: 8px;
+        gap: 6px;
+        margin-bottom: 6px;
         width: 100%;
     }
     .controls-row button {
         flex: 1 1 0;
         min-width: 0;
-        font-size: 1.1em;
-        padding: 12px 0;
+        font-size: 0.9em;
+        padding: 8px 4px;
     }
-    .controls button, .modal-content button {
-        width: auto;
-        margin-bottom: 0;
+    
+    #exportBtn {
+        font-size: 16px;
+        padding: 6px 8px;
     }
     .modal-content {
         width: 95vw;
@@ -232,6 +332,25 @@ body {
 }
 
 @media (max-width: 500px) {
+    .controls {
+        padding: 6px;
+    }
+    
+    .controls-row {
+        gap: 4px;
+        margin-bottom: 4px;
+    }
+    
+    .controls-row button {
+        font-size: 0.8em;
+        padding: 6px 2px;
+    }
+    
+    #exportBtn {
+        font-size: 14px;
+        padding: 4px 6px;
+    }
+    
     .day-header button {
         min-width: 30px;
         padding: 4px 6px;
