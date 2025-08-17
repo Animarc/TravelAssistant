@@ -10,19 +10,19 @@
 </head>
 
 <body>
-    <div class="controls">
-        <div class="controls-row">
+    <nav class="controls">
+        <section class="controls-row">
             <button id="addDayBtn">+ Añadir Día</button>
             <button id="addActivityBtn">+ Añadir Actividad</button>
             <button id="exportBtn">Exportar JSON</button>
-        </div>
-        <div class="controls-row">
+        </section>
+        <section class="controls-row">
             <button id="moveDayLeftBtn">← Mover día a la izquierda</button>
             <button id="moveDayRightBtn">Mover día a la derecha →</button>
-        </div>
-    </div>
-    <div class="container">
-        <div class="left-panel">
+        </section>
+    </nav>
+    <main class="container">
+        <aside class="left-panel">
             <header class="day-header">
                 <button id="prevDay">←</button>
                 <h2 id="dayTitle">Día 1: Llegada</h2>
@@ -31,14 +31,14 @@
             <ul id="activityList" class="activity-list">
                 <!-- Actividades aquí -->
             </ul>
-        </div>
-        <div class="right-panel">
-            <div id="map"></div>
-        </div>
-    </div>
+        </aside>
+        <section class="right-panel">
+            <article id="map"></article>
+        </section>
+    </main>
     <!-- Modal para añadir actividad -->
-    <div id="activityModal" class="modal">
-        <div class="modal-content">
+    <dialog id="activityModal" class="modal">
+        <section class="modal-content">
             <span id="closeModal" class="close">&times;</span>
             <h2>Añadir Nueva Actividad</h2>
             <form id="activityForm">
@@ -50,12 +50,13 @@
                 <label>Información importante:<br>
                     <textarea name="importantInfo" rows="2" placeholder="Opcional"></textarea>
                 </label><br>
+                <label>Precio: <input type="text" name="price" placeholder="Opcional (ej: 15€, $20, etc.)"></label><br>
                 <label>Latitud: <input type="number" step="any" name="lat" required></label><br>
                 <label>Longitud: <input type="number" step="any" name="lng" required></label><br>
                 <button type="submit">Añadir Actividad</button>
             </form>
-        </div>
-    </div>
+        </section>
+    </dialog>
 
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>

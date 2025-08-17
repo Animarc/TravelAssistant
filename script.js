@@ -137,6 +137,7 @@ function renderDay() {
         <div class="activity-details" id="details-${i}" style="display:none;">
           <p>${act.description}</p>
           ${act.importantInfo ? `<p class="important-info">${act.importantInfo}</p>` : ''}
+          ${act.price ? `<p class="price-info"><strong>Precio:</strong> ${act.price}</p>` : ''}
         </div>
       `;
             li.addEventListener('click', () => {
@@ -227,6 +228,7 @@ activityForm.addEventListener('submit', (e) => {
     const name = activityForm.name.value.trim();
     const description = activityForm.description.value.trim();
     const importantInfo = activityForm.importantInfo.value.trim();
+    const price = activityForm.price.value.trim();
     const lat = parseFloat(activityForm.lat.value);
     const lng = parseFloat(activityForm.lng.value);
 
@@ -240,6 +242,7 @@ activityForm.addEventListener('submit', (e) => {
         name,
         description,
         importantInfo: importantInfo || null,
+        price: price || null,
         coordinates: [lat, lng]
     });
 

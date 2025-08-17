@@ -29,6 +29,32 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 10px;
+}
+
+.day-header button {
+    flex-shrink: 0;
+    min-width: 40px;
+    padding: 8px 12px;
+    font-size: 1.2em;
+    border: 1px solid #ccc;
+    background: #f8f8f8;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.day-header button:hover {
+    background: #e8e8e8;
+}
+
+.day-header h2 {
+    flex: 1;
+    margin: 0;
+    text-align: center;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .activity-list {
@@ -116,6 +142,19 @@ body {
     border-radius: 3px;
 }
 
+.price-info {
+    background-color: #e6f3ff;
+    /* fondo suave azul */
+    color: #0066cc;
+    /* texto azul oscuro */
+    padding: 6px 8px;
+    margin-top: 8px;
+    border-left: 4px solid #0066cc;
+    font-weight: 600;
+    font-size: 1em;
+    border-radius: 3px;
+}
+
 /* Responsive styles for mobile */
 @media (max-width: 800px) {
     .container {
@@ -146,9 +185,20 @@ body {
         padding: 10px;
     }
     .day-header {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
         gap: 8px;
+        flex-wrap: nowrap;
+    }
+    
+    .day-header button {
+        min-width: 35px;
+        padding: 6px 8px;
+        font-size: 1em;
+    }
+    
+    .day-header h2 {
+        font-size: 1.1em;
     }
     .controls-row {
         display: flex;
@@ -182,6 +232,16 @@ body {
 }
 
 @media (max-width: 500px) {
+    .day-header button {
+        min-width: 30px;
+        padding: 4px 6px;
+        font-size: 0.9em;
+    }
+    
+    .day-header h2 {
+        font-size: 1em;
+    }
+    
     .modal-content {
         width: 99vw;
         margin: 30% auto;
