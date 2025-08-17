@@ -135,12 +135,15 @@ function renderDay() {
             li.innerHTML = `
         <div class="activity-header">
           <strong>${act.time}</strong> - ${act.name}
-          <button class="edit-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">✏️</button>
+          <div class="activity-actions">
+            <button class="edit-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">✏️</button>
+            <button class="delete-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">🗑️</button>
+          </div>
         </div>
         <div class="activity-details" id="details-${i}" style="display:none;">
           <p>${act.description}</p>
           ${act.importantInfo ? `<p class="important-info">${act.importantInfo}</p>` : ''}
-          ${act.price ? `<p class="price-info"><strong>Precio:</strong> ${act.price}</p>` : ''}
+          ${act.price ? `<p class="price-info"><strong>Precio:</strong> ${act.price} ${act.currency || 'EUR'}</p>` : ''}
         </div>
       `;
             
@@ -149,6 +152,13 @@ function renderDay() {
             editBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 editActivity(currentDay, day.activities.indexOf(act));
+            });
+            
+            // Add event listener for delete button
+            const deleteBtn = li.querySelector('.delete-activity-btn');
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteActivity(currentDay, day.activities.indexOf(act));
             });
             li.addEventListener('click', () => {
                 [...activityListEl.querySelectorAll('.activity-details')].forEach(d => d.style.display = 'none');
@@ -230,8 +240,8 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Manejar envío del formulario de actividad
-activityForm.addEventListener('submit', (e) => {
+// Función para manejar añadir actividad
+function handleAddActivity(e) {
     e.preventDefault();
 
     const time = activityForm.time.value;
@@ -239,6 +249,7 @@ activityForm.addEventListener('submit', (e) => {
     const description = activityForm.description.value.trim();
     const importantInfo = activityForm.importantInfo.value.trim();
     const price = activityForm.price.value.trim();
+    const currency = activityForm.currency.value;
     const lat = parseFloat(activityForm.lat.value);
     const lng = parseFloat(activityForm.lng.value);
 
@@ -253,12 +264,16 @@ activityForm.addEventListener('submit', (e) => {
         description,
         importantInfo: importantInfo || null,
         price: price || null,
+        currency: price ? currency : null,
         coordinates: [lat, lng]
     });
 
     modal.style.display = 'none';
     renderDay();
-});
+}
+
+// Manejar envío del formulario de actividad
+activityForm.addEventListener('submit', handleAddActivity);
 
 // Exportar JSON para copiar
 document.getElementById('exportBtn').addEventListener('click', () => {
@@ -291,7 +306,7 @@ moveDayRightBtn.addEventListener('click', () => {
 // Función para mostrar vista de presupuesto
 function showBudgetView() {
     // Ocultar elementos de planificación
-    document.querySelector('.controls-row:nth-child(3)').style.display = 'none';
+    document.querySelector('.controls-row:nth-child(2)').style.display = 'none';
     document.querySelector('.right-panel').style.display = 'none';
     document.querySelector('.day-header').style.display = 'none';
     
@@ -320,8 +335,9 @@ function showBudgetView() {
                             <strong>${activity.time}</strong> - ${activity.name}
                         </div>
                         <div class="budget-activity-actions">
-                            <span class="budget-price">${activity.price}</span>
+                            <span class="budget-price">${activity.price} ${activity.currency || 'EUR'}</span>
                             <button class="edit-activity-btn" data-day="${dayIndex}" data-activity="${activityIndex}">✏️</button>
+                            <button class="delete-activity-btn" data-day="${dayIndex}" data-activity="${activityIndex}">🗑️</button>
                         </div>
                     </div>
                 `;
@@ -331,6 +347,13 @@ function showBudgetView() {
                 editBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     editActivity(dayIndex, activityIndex);
+                });
+                
+                // Add event listener for delete button
+                const deleteBtn = li.querySelector('.delete-activity-btn');
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteActivity(dayIndex, activityIndex);
                 });
                 
                 activityListEl.appendChild(li);
@@ -360,16 +383,22 @@ function editActivity(dayIndex, activityIndex) {
     activityForm.description.value = activity.description;
     activityForm.importantInfo.value = activity.importantInfo || '';
     activityForm.price.value = activity.price || '';
+    activityForm.currency.value = activity.currency || 'EUR';
     activityForm.lat.value = activity.coordinates[0];
     activityForm.lng.value = activity.coordinates[1];
+    
+    // Cambiar el texto del botón
+    const submitBtn = activityForm.querySelector('button[type="submit"]');
+    submitBtn.textContent = 'Actualizar Actividad';
     
     // Mostrar modal
     modal.style.display = 'block';
     
-    // Cambiar el comportamiento del formulario para actualizar en lugar de crear
-    const originalSubmitHandler = activityForm.onsubmit;
+    // Remover el event listener original
+    activityForm.removeEventListener('submit', handleAddActivity);
     
-    activityForm.onsubmit = (e) => {
+    // Agregar event listener para editar
+    const handleEditActivity = (e) => {
         e.preventDefault();
         
         const time = activityForm.time.value;
@@ -377,6 +406,7 @@ function editActivity(dayIndex, activityIndex) {
         const description = activityForm.description.value.trim();
         const importantInfo = activityForm.importantInfo.value.trim();
         const price = activityForm.price.value.trim();
+        const currency = activityForm.currency.value;
         const lat = parseFloat(activityForm.lat.value);
         const lng = parseFloat(activityForm.lng.value);
         
@@ -392,13 +422,16 @@ function editActivity(dayIndex, activityIndex) {
             description,
             importantInfo: importantInfo || null,
             price: price || null,
+            currency: price ? currency : null,
             coordinates: [lat, lng]
         };
         
         modal.style.display = 'none';
         
-        // Restaurar el handler original
-        activityForm.onsubmit = originalSubmitHandler;
+        // Restaurar el botón y event listener original
+        submitBtn.textContent = 'Añadir Actividad';
+        activityForm.removeEventListener('submit', handleEditActivity);
+        activityForm.addEventListener('submit', handleAddActivity);
         
         // Re-renderizar la vista actual
         if (activityListEl.classList.contains('budget-list')) {
@@ -407,12 +440,28 @@ function editActivity(dayIndex, activityIndex) {
             renderDay();
         }
     };
+    
+    activityForm.addEventListener('submit', handleEditActivity);
+}
+
+// Función para borrar actividad
+function deleteActivity(dayIndex, activityIndex) {
+    if (confirm('¿Estás seguro de que quieres borrar esta actividad?')) {
+        daysData[dayIndex].activities.splice(activityIndex, 1);
+        
+        // Re-renderizar la vista actual
+        if (activityListEl.classList.contains('budget-list')) {
+            showBudgetView();
+        } else {
+            renderDay();
+        }
+    }
 }
 
 // Función para mostrar vista de planificación
 function showPlanningView() {
     // Mostrar elementos de planificación
-    document.querySelector('.controls-row:nth-child(3)').style.display = 'flex';
+    document.querySelector('.controls-row:nth-child(2)').style.display = 'flex';
     document.querySelector('.right-panel').style.display = 'block';
     document.querySelector('.day-header').style.display = 'flex';
     
