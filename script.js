@@ -65,131 +65,160 @@ function renderDay() {
         currentPolyline = null;
     }
 
-    // Generar lista de actividades + traslados automáticos
-    const activitiesWithTransfers = [];
-    for (let i = 0; i < day.activities.length; i++) {
-        const current = day.activities[i];
-        activitiesWithTransfers.push(current);
+    // Separar actividades obligatorias y opcionales
+    const mandatoryActivities = day.activities.filter(activity => !activity.isOptional);
+    const optionalActivities = day.activities.filter(activity => activity.isOptional);
 
-        const next = day.activities[i + 1];
-        if (next) {
-            const dist = haversineDistance(current.coordinates, next.coordinates);
-            if (dist < 1000) {
-                activitiesWithTransfers.push({
-                    isTransfer: true,
-                    from: current.name,
-                    to: next.name,
-                    coordinates: [current.coordinates, next.coordinates],
-                    distance: dist.toFixed(2)
-                });
+    // Función para renderizar una lista de actividades
+    function renderActivityList(activities, isOptional = false) {
+        if (activities.length === 0) return;
+
+        // Agregar header para actividades opcionales
+        if (isOptional) {
+            const optionalHeader = document.createElement('li');
+            optionalHeader.className = 'optional-activities-header';
+            optionalHeader.innerHTML = '<h3>Actividades Opcionales</h3>';
+            activityListEl.appendChild(optionalHeader);
+        }
+
+        // Generar lista de actividades + traslados automáticos
+        const activitiesWithTransfers = [];
+        for (let i = 0; i < activities.length; i++) {
+            const current = activities[i];
+            activitiesWithTransfers.push(current);
+
+            const next = activities[i + 1];
+            if (next && current.coordinates && next.coordinates) {
+                const dist = haversineDistance(current.coordinates, next.coordinates);
+                if (dist < 1000) {
+                    activitiesWithTransfers.push({
+                        isTransfer: true,
+                        from: current.name,
+                        to: next.name,
+                        coordinates: [current.coordinates, next.coordinates],
+                        distance: dist.toFixed(2)
+                    });
+                }
             }
         }
+
+        // Renderizar actividades y traslados
+        activitiesWithTransfers.forEach((act, i) => {
+            const li = document.createElement('li');
+            li.className = isOptional ? 'activity-item optional-activity' : 'activity-item';
+
+            if (act.isTransfer) {
+                li.innerHTML = `
+            <em>Traslado automático:</em> De <strong>${act.from}</strong> a <strong>${act.to}</strong> (${act.distance} km)<br>
+            <button class="open-gmaps-btn" style="margin-top:5px;">Ir en Google Maps</button>
+          `;
+                const gmapsBtn = li.querySelector('.open-gmaps-btn');
+                gmapsBtn.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    const [from, to] = act.coordinates;
+                    const url = `https://www.google.com/maps/dir/?api=1&origin=${from[0]},${from[1]}&destination=${to[0]},${to[1]}&travelmode=transit`;
+                    window.open(url, '_blank');
+                });
+                li.addEventListener('click', () => {
+                    if (currentPolyline) {
+                        map.removeLayer(currentPolyline);
+                        currentPolyline = null;
+                    }
+                    if (currentMarker) {
+                        if (Array.isArray(currentMarker)) {
+                            currentMarker.forEach(m => map.removeLayer(m));
+                        } else {
+                            map.removeLayer(currentMarker);
+                        }
+                        currentMarker = null;
+                    }
+
+                    currentPolyline = L.polyline(act.coordinates, { color: 'blue' }).addTo(map);
+                    const [from, to] = act.coordinates;
+                    const markerA = L.marker(from, { icon: redIcon }).addTo(map);
+                    const markerB = L.marker(to, { icon: redIcon }).addTo(map);
+                    currentMarker = [markerA, markerB];
+                    map.fitBounds(currentPolyline.getBounds());
+                });
+
+            } else {
+                li.innerHTML = `
+            <div class="activity-header ${act.isDone ? 'activity-done' : ''}">
+              <label class="activity-checkbox-label">
+                <input type="checkbox" class="activity-checkbox" ${act.isDone ? 'checked' : ''} data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">
+                <strong>${act.time || 'Sin hora'}</strong> - ${act.name}${isOptional ? ' <span class="optional-badge">(Opcional)</span>' : ''}
+              </label>
+              <div class="activity-actions">
+                <button class="edit-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">✏️</button>
+                <button class="delete-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">🗑️</button>
+              </div>
+            </div>
+            <div class="activity-details" id="details-${i}" style="display:none;">
+              <p>${act.description}</p>
+              ${act.importantInfo ? `<p class="important-info">${act.importantInfo}</p>` : ''}
+              ${act.price ? `<p class="price-info"><strong>Precio:</strong> ${act.price} ${act.currency || 'EUR'}</p>` : ''}
+            </div>
+          `;
+                
+                // Add event listeners
+                const editBtn = li.querySelector('.edit-activity-btn');
+                editBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    editActivity(currentDay, day.activities.indexOf(act));
+                });
+                
+                const deleteBtn = li.querySelector('.delete-activity-btn');
+                deleteBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteActivity(currentDay, day.activities.indexOf(act));
+                });
+                
+                const checkbox = li.querySelector('.activity-checkbox');
+                checkbox.addEventListener('change', (e) => {
+                    e.stopPropagation();
+                    toggleActivityDone(currentDay, day.activities.indexOf(act));
+                });
+                
+                li.addEventListener('click', () => {
+                    [...activityListEl.querySelectorAll('.activity-details')].forEach(d => d.style.display = 'none');
+                    const detailEl = document.getElementById(`details-${i}`);
+                    if (detailEl) {
+                        detailEl.style.display = detailEl.style.display === 'block' ? 'none' : 'block';
+                    }
+
+                    // Only update map if activity has coordinates
+                    if (act.coordinates) {
+                        if (currentMarker) {
+                            if (Array.isArray(currentMarker)) {
+                                currentMarker.forEach(m => map.removeLayer(m));
+                            } else {
+                                map.removeLayer(currentMarker);
+                            }
+                            currentMarker = null;
+                        }
+                        if (currentPolyline) {
+                            map.removeLayer(currentPolyline);
+                            currentPolyline = null;
+                        }
+
+                        currentMarker = L.marker(act.coordinates, { icon: redIcon }).addTo(map);
+                        map.setView(act.coordinates, 15);
+                    }
+                });
+            }
+
+            activityListEl.appendChild(li);
+        });
     }
 
-    // Renderizar actividades y traslados
-    activitiesWithTransfers.forEach((act, i) => {
-        const li = document.createElement('li');
-        li.className = 'activity-item';
+    // Renderizar actividades obligatorias primero
+    renderActivityList(mandatoryActivities, false);
+    
+    // Renderizar actividades opcionales al final
+    renderActivityList(optionalActivities, true);
 
-        if (act.isTransfer) {
-            li.innerHTML = `
-        <em>Traslado automático:</em> De <strong>${act.from}</strong> a <strong>${act.to}</strong> (${act.distance} km)<br>
-        <button class="open-gmaps-btn" style="margin-top:5px;">Ir en Google Maps</button>
-      `;
-            const gmapsBtn = li.querySelector('.open-gmaps-btn');
-            gmapsBtn.addEventListener('click', (event) => {
-                event.stopPropagation(); // Prevent triggering the li click event
-                const [from, to] = act.coordinates;
-                const url = `https://www.google.com/maps/dir/?api=1&origin=${from[0]},${from[1]}&destination=${to[0]},${to[1]}&travelmode=transit`;
-                window.open(url, '_blank');
-            });
-            li.addEventListener('click', () => {
-                // Eliminar marcador o línea anteriores
-                if (currentPolyline) {
-                    map.removeLayer(currentPolyline);
-                    currentPolyline = null;
-                }
-                if (currentMarker) {
-                    if (Array.isArray(currentMarker)) {
-                        currentMarker.forEach(m => map.removeLayer(m));
-                    } else {
-                        map.removeLayer(currentMarker);
-                    }
-                    currentMarker = null;
-                }
-
-                // Dibujar línea azul
-                currentPolyline = L.polyline(act.coordinates, { color: 'blue' }).addTo(map);
-
-                // Añadir dos marcadores rojos (origen y destino)
-                const [from, to] = act.coordinates;
-                const markerA = L.marker(from, { icon: redIcon }).addTo(map);
-                const markerB = L.marker(to, { icon: redIcon }).addTo(map);
-                currentMarker = [markerA, markerB];
-
-                // Ajustar vista del mapa
-                map.fitBounds(currentPolyline.getBounds());
-            });
-
-        } else {
-            li.innerHTML = `
-        <div class="activity-header">
-          <strong>${act.time}</strong> - ${act.name}
-          <div class="activity-actions">
-            <button class="edit-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">✏️</button>
-            <button class="delete-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">🗑️</button>
-          </div>
-        </div>
-        <div class="activity-details" id="details-${i}" style="display:none;">
-          <p>${act.description}</p>
-          ${act.importantInfo ? `<p class="important-info">${act.importantInfo}</p>` : ''}
-          ${act.price ? `<p class="price-info"><strong>Precio:</strong> ${act.price} ${act.currency || 'EUR'}</p>` : ''}
-        </div>
-      `;
-            
-            // Add event listener for edit button
-            const editBtn = li.querySelector('.edit-activity-btn');
-            editBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                editActivity(currentDay, day.activities.indexOf(act));
-            });
-            
-            // Add event listener for delete button
-            const deleteBtn = li.querySelector('.delete-activity-btn');
-            deleteBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                deleteActivity(currentDay, day.activities.indexOf(act));
-            });
-            li.addEventListener('click', () => {
-                [...activityListEl.querySelectorAll('.activity-details')].forEach(d => d.style.display = 'none');
-                const detailEl = document.getElementById(`details-${i}`);
-                if (detailEl) {
-                    detailEl.style.display = detailEl.style.display === 'block' ? 'none' : 'block';
-                }
-
-                if (currentMarker) {
-                    if (Array.isArray(currentMarker)) {
-                        currentMarker.forEach(m => map.removeLayer(m));
-                    } else {
-                        map.removeLayer(currentMarker);
-                    }
-                    currentMarker = null;
-                }
-                if (currentPolyline) {
-                    map.removeLayer(currentPolyline);
-                    currentPolyline = null;
-                }
-
-                currentMarker = L.marker(act.coordinates, { icon: redIcon }).addTo(map);
-                map.setView(act.coordinates, 15);
-            });
-        }
-
-        activityListEl.appendChild(li);
-    });
-
-    // Centrar mapa en la primera actividad si existe
-    const firstRealAct = day.activities[0];
+    // Centrar mapa en la primera actividad con coordenadas si existe
+    const firstRealAct = day.activities.find(activity => activity.coordinates);
     if (firstRealAct) {
         currentMarker = L.marker(firstRealAct.coordinates, { icon: redIcon }).addTo(map);
         map.setView(firstRealAct.coordinates, 13);
@@ -226,6 +255,20 @@ document.getElementById('addDayBtn').addEventListener('click', () => {
 addActivityBtn.addEventListener('click', () => {
     activityForm.reset();
     modal.style.display = 'block';
+    // Reset time field requirement
+    document.getElementById('timeInput').required = true;
+});
+
+// Handle optional checkbox change
+document.getElementById('isOptionalCheckbox').addEventListener('change', function() {
+    const timeInput = document.getElementById('timeInput');
+    if (this.checked) {
+        timeInput.required = false;
+        timeInput.placeholder = "Opcional para actividades opcionales";
+    } else {
+        timeInput.required = true;
+        timeInput.placeholder = "";
+    }
 });
 
 // Cerrar modal con la X
@@ -250,11 +293,12 @@ function handleAddActivity(e) {
     const importantInfo = activityForm.importantInfo.value.trim();
     const price = activityForm.price.value.trim();
     const currency = activityForm.currency.value;
+    const isOptional = activityForm.isOptional.checked;
     const lat = parseFloat(activityForm.lat.value);
     const lng = parseFloat(activityForm.lng.value);
 
-    if (!time || !name || !description || isNaN(lat) || isNaN(lng)) {
-        alert('Por favor completa todos los campos correctamente.');
+    if ((!isOptional && !time) || !name || !description) {
+        alert('Por favor completa todos los campos obligatorios correctamente.');
         return;
     }
 
@@ -265,7 +309,9 @@ function handleAddActivity(e) {
         importantInfo: importantInfo || null,
         price: price || null,
         currency: price ? currency : null,
-        coordinates: [lat, lng]
+        isOptional: isOptional,
+        isDone: false,
+        coordinates: (!isNaN(lat) && !isNaN(lng)) ? [lat, lng] : null
     });
 
     modal.style.display = 'none';
@@ -378,14 +424,25 @@ function editActivity(dayIndex, activityIndex) {
     const activity = daysData[dayIndex].activities[activityIndex];
     
     // Llenar el formulario con los datos actuales
-    activityForm.time.value = activity.time;
+    activityForm.time.value = activity.time || '';
     activityForm.name.value = activity.name;
     activityForm.description.value = activity.description;
     activityForm.importantInfo.value = activity.importantInfo || '';
     activityForm.price.value = activity.price || '';
     activityForm.currency.value = activity.currency || 'EUR';
-    activityForm.lat.value = activity.coordinates[0];
-    activityForm.lng.value = activity.coordinates[1];
+    activityForm.isOptional.checked = activity.isOptional || false;
+    activityForm.lat.value = activity.coordinates ? activity.coordinates[0] : '';
+    activityForm.lng.value = activity.coordinates ? activity.coordinates[1] : '';
+    
+    // Set time field requirement based on optional status
+    const timeInput = document.getElementById('timeInput');
+    if (activity.isOptional) {
+        timeInput.required = false;
+        timeInput.placeholder = "Opcional para actividades opcionales";
+    } else {
+        timeInput.required = true;
+        timeInput.placeholder = "";
+    }
     
     // Cambiar el texto del botón
     const submitBtn = activityForm.querySelector('button[type="submit"]');
@@ -407,11 +464,12 @@ function editActivity(dayIndex, activityIndex) {
         const importantInfo = activityForm.importantInfo.value.trim();
         const price = activityForm.price.value.trim();
         const currency = activityForm.currency.value;
+        const isOptional = activityForm.isOptional.checked;
         const lat = parseFloat(activityForm.lat.value);
         const lng = parseFloat(activityForm.lng.value);
         
-        if (!time || !name || !description || isNaN(lat) || isNaN(lng)) {
-            alert('Por favor completa todos los campos correctamente.');
+        if ((!isOptional && !time) || !name || !description) {
+            alert('Por favor completa todos los campos obligatorios correctamente.');
             return;
         }
         
@@ -423,7 +481,9 @@ function editActivity(dayIndex, activityIndex) {
             importantInfo: importantInfo || null,
             price: price || null,
             currency: price ? currency : null,
-            coordinates: [lat, lng]
+            isOptional: isOptional,
+            isDone: daysData[dayIndex].activities[activityIndex].isDone || false,
+            coordinates: (!isNaN(lat) && !isNaN(lng)) ? [lat, lng] : null
         };
         
         modal.style.display = 'none';
@@ -455,6 +515,18 @@ function deleteActivity(dayIndex, activityIndex) {
         } else {
             renderDay();
         }
+    }
+}
+
+// Función para marcar/desmarcar actividad como completada
+function toggleActivityDone(dayIndex, activityIndex) {
+    daysData[dayIndex].activities[activityIndex].isDone = !daysData[dayIndex].activities[activityIndex].isDone;
+    
+    // Re-renderizar la vista actual
+    if (activityListEl.classList.contains('budget-list')) {
+        showBudgetView();
+    } else {
+        renderDay();
     }
 }
 

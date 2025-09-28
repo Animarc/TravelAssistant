@@ -45,7 +45,10 @@
             <span id="closeModal" class="close">&times;</span>
             <h2>Añadir Nueva Actividad</h2>
             <form id="activityForm">
-                <label>Hora: <input type="time" name="time" required></label><br>
+                <label>
+                    <input type="checkbox" name="isOptional" value="true" id="isOptionalCheckbox"> Actividad opcional
+                </label><br>
+                <label>Hora: <input type="time" name="time" id="timeInput" required></label><br>
                 <label>Nombre: <input type="text" name="name" required></label><br>
                 <label>Descripción:<br>
                     <textarea name="description" rows="3" required></textarea>
@@ -78,8 +81,8 @@
                         <option value="ZAR">ZAR - South African Rand (R)</option>
                     </select>
                 </label><br>
-                <label>Latitud: <input type="number" step="any" name="lat" required></label><br>
-                <label>Longitud: <input type="number" step="any" name="lng" required></label><br>
+                <label>Latitud: <input type="number" step="any" name="lat" placeholder="Opcional"></label><br>
+                <label>Longitud: <input type="number" step="any" name="lng" placeholder="Opcional"></label><br>
                 <button type="submit">Añadir Actividad</button>
             </form>
         </section>
