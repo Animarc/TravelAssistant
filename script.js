@@ -5,6 +5,7 @@ let currentDay = 0;
 // Referencias al DOM
 const dayTitleEl = document.getElementById('dayTitle');
 const activityListEl = document.getElementById('activityList');
+const pageTitleEl = document.getElementById('pageTitle');
 
 const modal = document.getElementById('activityModal');
 const closeModalBtn = document.getElementById('closeModal');
@@ -53,6 +54,13 @@ function haversineDistance(coords1, coords2) {
 function renderDay() {
     const day = daysData[currentDay];
     dayTitleEl.textContent = `Día ${currentDay + 1}: ${day.title}`;
+    
+    // Update page title with current travel name
+    if (daysData.length > 0) {
+        const travelName = daysData[0].title || 'Mi Viaje';
+        pageTitleEl.textContent = travelName;
+    }
+    
     activityListEl.innerHTML = '';
 
     // Limpiar mapa
@@ -801,6 +809,7 @@ function setupAccountEventListeners() {
                     try {
                         const importedData = JSON.parse(e.target.result);
                         daysData = importedData;
+                        currentDay = 0; // Reset to first day
                         showPlanningView(); // Volver a la vista de planificación
                         alert('JSON importado correctamente');
                     } catch (error) {
