@@ -594,3 +594,347 @@ body {
         padding: 10px 0;
     }
 }
+
+/* Estilos para la vista de objetos */
+.objects-list {
+    padding: 0;
+}
+
+.objects-header {
+    background-color: #f0f0f0;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+}
+
+.objects-header h3 {
+    margin: 0;
+    color: #333;
+    font-size: 1.2em;
+}
+
+.objects-content {
+    padding: 0;
+}
+
+.objects-section {
+    background-color: #f8f9fa;
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 3px solid #6c757d;
+}
+
+.objects-section h4 {
+    margin: 0 0 10px 0;
+    color: #495057;
+    font-size: 1.1em;
+}
+
+.objects-section ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.objects-section li {
+    margin: 5px 0;
+    color: #6c757d;
+}
+
+/* Estilos para la vista de cuenta */
+.account-list {
+    padding: 0;
+}
+
+.account-section {
+    background-color: #f8f9fa;
+    margin: 15px 0;
+    border-radius: 8px;
+    border-left: 4px solid #007bff;
+    overflow: hidden;
+}
+
+.account-header {
+    background-color: #e9ecef;
+    padding: 15px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.account-header h3 {
+    margin: 0;
+    color: #495057;
+    font-size: 1.2em;
+}
+
+.login-content,
+.my-travels-content,
+.find-travels-content,
+.tools-content {
+    padding: 15px;
+}
+
+.login-status p {
+    margin: 0 0 15px 0;
+    color: #6c757d;
+}
+
+.google-login-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.google-login-btn:hover {
+    background-color: #3367d6;
+}
+
+.google-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.logout-btn {
+    padding: 8px 16px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+.travel-item {
+    background-color: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.travel-item h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.travel-item p {
+    margin: 0 0 12px 0;
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.travel-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.travel-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.travel-btn.primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.travel-btn.primary:hover {
+    background-color: #0056b3;
+}
+
+.travel-btn.secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.travel-btn.secondary:hover {
+    background-color: #545b62;
+}
+
+.travel-btn.danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.travel-btn.danger:hover {
+    background-color: #c82333;
+}
+
+.create-travel-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: 15px;
+    transition: background-color 0.2s;
+}
+
+.create-travel-btn:hover {
+    background-color: #218838;
+}
+
+.search-box {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.search-box input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-box button {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.search-box button:hover {
+    background-color: #0056b3;
+}
+
+.search-filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.search-filters select {
+    flex: 1;
+    min-width: 150px;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.search-results {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.search-placeholder {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 20px;
+}
+
+.no-results {
+    text-align: center;
+    color: #dc3545;
+    padding: 20px;
+}
+
+.search-result-item {
+    background-color: white;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #dee2e6;
+}
+
+.search-result-item h4 {
+    margin: 0 0 8px 0;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.search-result-item p {
+    margin: 0 0 10px 0;
+    color: #6c757d;
+    font-size: 0.9em;
+}
+
+.result-meta {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.result-meta span {
+    font-size: 0.8em;
+    color: #6c757d;
+}
+
+.result-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.tool-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 8px 0;
+    transition: background-color 0.2s;
+}
+
+.tool-btn:hover {
+    background-color: #138496;
+}
+
+/* Responsive styles for account view */
+@media (max-width: 800px) {
+    .search-filters {
+        flex-direction: column;
+    }
+    
+    .search-filters select {
+        min-width: auto;
+    }
+    
+    .result-meta {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .travel-actions {
+        flex-direction: column;
+    }
+    
+    .travel-btn {
+        width: 100%;
+    }
+}

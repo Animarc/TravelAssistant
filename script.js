@@ -326,11 +326,8 @@ function handleAddActivity(e) {
 // Manejar envío del formulario de actividad
 activityForm.addEventListener('submit', handleAddActivity);
 
-// Exportar JSON para copiar
-document.getElementById('exportBtn').addEventListener('click', () => {
-    const jsonStr = JSON.stringify(daysData, null, 2);
-    prompt('Copia el JSON y pégalo en tu data.js:', jsonStr);
-});
+// Mostrar ventana de cuenta
+document.getElementById('accountBtn').addEventListener('click', showAccountView);
 
 // Mover día actual hacia la izquierda
 moveDayLeftBtn.addEventListener('click', () => {
@@ -552,6 +549,364 @@ function showPlanningView() {
 // Event listeners para los botones de navegación
 document.getElementById('presupuestoBtn').addEventListener('click', showBudgetView);
 document.getElementById('planificacionBtn').addEventListener('click', showPlanningView);
+document.getElementById('objetosBtn').addEventListener('click', showObjectsView);
+
+// Función para mostrar vista de objetos
+function showObjectsView() {
+    // Ocultar elementos de planificación
+    document.querySelector('.controls-row:nth-child(2)').style.display = 'none';
+    document.querySelector('.right-panel').style.display = 'none';
+    document.querySelector('.day-header').style.display = 'none';
+    
+    // Mostrar lista de objetos
+    activityListEl.innerHTML = '';
+    activityListEl.className = 'activity-list objects-list';
+    
+    const objectsHeader = document.createElement('li');
+    objectsHeader.className = 'objects-header';
+    objectsHeader.innerHTML = '<h3>Lista de Objetos para el Viaje</h3>';
+    activityListEl.appendChild(objectsHeader);
+    
+    const objectsList = document.createElement('li');
+    objectsList.className = 'objects-content';
+    objectsList.innerHTML = `
+        <div class="objects-section">
+            <h4>📱 Electrónicos</h4>
+            <ul>
+                <li>☐ Cargador del teléfono</li>
+                <li>☐ Power bank</li>
+                <li>☐ Adaptador de corriente</li>
+                <li>☐ Auriculares</li>
+                <li>☐ Cámara (opcional)</li>
+            </ul>
+        </div>
+        <div class="objects-section">
+            <h4>👕 Ropa</h4>
+            <ul>
+                <li>☐ Ropa interior (días + 2)</li>
+                <li>☐ Calcetines (días + 2)</li>
+                <li>☐ Camisetas</li>
+                <li>☐ Pantalones/Shorts</li>
+                <li>☐ Chaqueta/Abrigo</li>
+                <li>☐ Pijama</li>
+            </ul>
+        </div>
+        <div class="objects-section">
+            <h4>🧴 Higiene</h4>
+            <ul>
+                <li>☐ Cepillo de dientes</li>
+                <li>☐ Pasta de dientes</li>
+                <li>☐ Champú</li>
+                <li>☐ Jabón</li>
+                <li>☐ Desodorante</li>
+                <li>☐ Toallas</li>
+            </ul>
+        </div>
+        <div class="objects-section">
+            <h4>📄 Documentos</h4>
+            <ul>
+                <li>☐ Pasaporte/DNI</li>
+                <li>☐ Billetes de avión</li>
+                <li>☐ Reservas de hotel</li>
+                <li>☐ Seguro de viaje</li>
+                <li>☐ Dinero en efectivo</li>
+                <li>☐ Tarjetas de crédito</li>
+            </ul>
+        </div>
+        <div class="objects-section">
+            <h4>🎒 Otros</h4>
+            <ul>
+                <li>☐ Mochila/Maletín</li>
+                <li>☐ Botella de agua</li>
+                <li>☐ Medicamentos</li>
+                <li>☐ Protector solar</li>
+                <li>☐ Gafas de sol</li>
+                <li>☐ Libro/Revista</li>
+            </ul>
+        </div>
+    `;
+    activityListEl.appendChild(objectsList);
+}
+
+// Función para mostrar vista de cuenta
+function showAccountView() {
+    // Ocultar elementos de planificación
+    document.querySelector('.controls-row:nth-child(2)').style.display = 'none';
+    document.querySelector('.right-panel').style.display = 'none';
+    document.querySelector('.day-header').style.display = 'none';
+    
+    // Mostrar contenido de cuenta
+    activityListEl.innerHTML = '';
+    activityListEl.className = 'activity-list account-list';
+    
+    // Sección de login
+    const loginSection = document.createElement('li');
+    loginSection.className = 'account-section';
+    loginSection.innerHTML = `
+        <div class="account-header">
+            <h3>🔐 Iniciar Sesión</h3>
+        </div>
+        <div class="login-content">
+            <div class="login-status" id="loginStatus">
+                <p>No has iniciado sesión</p>
+                <button id="googleLoginBtn" class="google-login-btn">
+                    <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="google-icon">
+                    Iniciar sesión con Google
+                </button>
+            </div>
+        </div>
+    `;
+    activityListEl.appendChild(loginSection);
+    
+    // Sección Mis Viajes
+    const myTravelsSection = document.createElement('li');
+    myTravelsSection.className = 'account-section';
+    myTravelsSection.innerHTML = `
+        <div class="account-header">
+            <h3>✈️ Mis Viajes</h3>
+        </div>
+        <div class="my-travels-content">
+            <div class="travel-item">
+                <h4>🇯🇵 Viaje a Japón - Julio 2024</h4>
+                <p>25 días • 27 actividades • Presupuesto: €2,500</p>
+                <div class="travel-actions">
+                    <button class="travel-btn primary">Abrir</button>
+                    <button class="travel-btn secondary">Compartir</button>
+                    <button class="travel-btn danger">Eliminar</button>
+                </div>
+            </div>
+            <div class="travel-item">
+                <h4>🇮🇹 Viaje a Italia - Marzo 2024</h4>
+                <p>10 días • 15 actividades • Presupuesto: €1,200</p>
+                <div class="travel-actions">
+                    <button class="travel-btn primary">Abrir</button>
+                    <button class="travel-btn secondary">Compartir</button>
+                    <button class="travel-btn danger">Eliminar</button>
+                </div>
+            </div>
+            <button id="createNewTravelBtn" class="create-travel-btn">
+                ➕ Crear Nuevo Viaje
+            </button>
+        </div>
+    `;
+    activityListEl.appendChild(myTravelsSection);
+    
+    // Sección Buscar Viajes
+    const findTravelsSection = document.createElement('li');
+    findTravelsSection.className = 'account-section';
+    findTravelsSection.innerHTML = `
+        <div class="account-header">
+            <h3>🔍 Buscar Viajes</h3>
+        </div>
+        <div class="find-travels-content">
+            <div class="search-box">
+                <input type="text" id="travelSearchInput" placeholder="Buscar por destino, país, ciudad...">
+                <button id="searchTravelsBtn">🔍</button>
+            </div>
+            <div class="search-filters">
+                <select id="durationFilter">
+                    <option value="">Cualquier duración</option>
+                    <option value="1-3">1-3 días</option>
+                    <option value="4-7">4-7 días</option>
+                    <option value="8-14">8-14 días</option>
+                    <option value="15+">15+ días</option>
+                </select>
+                <select id="budgetFilter">
+                    <option value="">Cualquier presupuesto</option>
+                    <option value="0-500">€0-500</option>
+                    <option value="500-1000">€500-1,000</option>
+                    <option value="1000-2000">€1,000-2,000</option>
+                    <option value="2000+">€2,000+</option>
+                </select>
+            </div>
+            <div class="search-results" id="searchResults">
+                <p class="search-placeholder">Busca viajes compartidos por otros usuarios</p>
+            </div>
+        </div>
+    `;
+    activityListEl.appendChild(findTravelsSection);
+    
+    // Sección Exportar (mantener funcionalidad anterior)
+    const exportSection = document.createElement('li');
+    exportSection.className = 'account-section';
+    exportSection.innerHTML = `
+        <div class="account-header">
+            <h3>⚙️ Herramientas</h3>
+        </div>
+        <div class="tools-content">
+            <button id="exportJsonBtn" class="tool-btn">
+                📤 Exportar JSON
+            </button>
+            <button id="importJsonBtn" class="tool-btn">
+                📥 Importar JSON
+            </button>
+            <input type="file" id="jsonFileInput" accept=".json" style="display: none;">
+        </div>
+    `;
+    activityListEl.appendChild(exportSection);
+    
+    // Event listeners para la vista de cuenta
+    setupAccountEventListeners();
+}
+
+// Función para configurar event listeners de la cuenta
+function setupAccountEventListeners() {
+    // Google Login
+    const googleLoginBtn = document.getElementById('googleLoginBtn');
+    if (googleLoginBtn) {
+        googleLoginBtn.addEventListener('click', () => {
+            // Simular login con Google (aquí se integraría con Google OAuth)
+            const loginStatus = document.getElementById('loginStatus');
+            loginStatus.innerHTML = `
+                <p>✅ Has iniciado sesión como usuario@ejemplo.com</p>
+                <button id="logoutBtn" class="logout-btn">Cerrar sesión</button>
+            `;
+            
+            const logoutBtn = document.getElementById('logoutBtn');
+            logoutBtn.addEventListener('click', () => {
+                loginStatus.innerHTML = `
+                    <p>No has iniciado sesión</p>
+                    <button id="googleLoginBtn" class="google-login-btn">
+                        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="google-icon">
+                        Iniciar sesión con Google
+                    </button>
+                `;
+                setupAccountEventListeners(); // Re-setup listeners
+            });
+        });
+    }
+    
+    // Export JSON
+    const exportJsonBtn = document.getElementById('exportJsonBtn');
+    if (exportJsonBtn) {
+        exportJsonBtn.addEventListener('click', () => {
+            const jsonStr = JSON.stringify(daysData, null, 2);
+            prompt('Copia el JSON y pégalo en tu data.js:', jsonStr);
+        });
+    }
+    
+    // Import JSON
+    const importJsonBtn = document.getElementById('importJsonBtn');
+    const jsonFileInput = document.getElementById('jsonFileInput');
+    if (importJsonBtn && jsonFileInput) {
+        importJsonBtn.addEventListener('click', () => {
+            jsonFileInput.click();
+        });
+        
+        jsonFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const importedData = JSON.parse(e.target.result);
+                        daysData = importedData;
+                        showPlanningView(); // Volver a la vista de planificación
+                        alert('JSON importado correctamente');
+                    } catch (error) {
+                        alert('Error al importar el JSON: ' + error.message);
+                    }
+                };
+                reader.readAsText(file);
+            }
+        });
+    }
+    
+    // Crear nuevo viaje
+    const createNewTravelBtn = document.getElementById('createNewTravelBtn');
+    if (createNewTravelBtn) {
+        createNewTravelBtn.addEventListener('click', () => {
+            const title = prompt('Introduce el título del nuevo viaje:');
+            if (title && title.trim()) {
+                daysData = [{ title: title.trim(), activities: [] }];
+                currentDay = 0;
+                showPlanningView();
+            }
+        });
+    }
+    
+    // Buscar viajes
+    const searchTravelsBtn = document.getElementById('searchTravelsBtn');
+    const travelSearchInput = document.getElementById('travelSearchInput');
+    if (searchTravelsBtn && travelSearchInput) {
+        searchTravelsBtn.addEventListener('click', searchTravels);
+        travelSearchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchTravels();
+            }
+        });
+    }
+}
+
+// Función para buscar viajes
+function searchTravels() {
+    const searchInput = document.getElementById('travelSearchInput');
+    const durationFilter = document.getElementById('durationFilter');
+    const budgetFilter = document.getElementById('budgetFilter');
+    const searchResults = document.getElementById('searchResults');
+    
+    const query = searchInput.value.toLowerCase();
+    const duration = durationFilter.value;
+    const budget = budgetFilter.value;
+    
+    // Simular resultados de búsqueda
+    const mockResults = [
+        {
+            title: "🇯🇵 Aventura en Tokio - 7 días",
+            description: "Descubre la capital de Japón con esta guía completa",
+            duration: "7 días",
+            budget: "€1,200",
+            author: "viajero123",
+            rating: 4.8
+        },
+        {
+            title: "🇪🇸 Ruta por Andalucía - 10 días",
+            description: "Sevilla, Córdoba, Granada y más",
+            duration: "10 días",
+            budget: "€800",
+            author: "explorador_es",
+            rating: 4.6
+        },
+        {
+            title: "🇮🇹 Roma y Florencia - 5 días",
+            description: "Lo mejor de Italia en una semana",
+            duration: "5 días",
+            budget: "€900",
+            author: "italia_lover",
+            rating: 4.9
+        }
+    ];
+    
+    let filteredResults = mockResults;
+    
+    if (query) {
+        filteredResults = filteredResults.filter(result => 
+            result.title.toLowerCase().includes(query) || 
+            result.description.toLowerCase().includes(query)
+        );
+    }
+    
+    if (filteredResults.length === 0) {
+        searchResults.innerHTML = '<p class="no-results">No se encontraron viajes que coincidan con tu búsqueda</p>';
+    } else {
+        searchResults.innerHTML = filteredResults.map(result => `
+            <div class="search-result-item">
+                <h4>${result.title}</h4>
+                <p>${result.description}</p>
+                <div class="result-meta">
+                    <span>⏱️ ${result.duration}</span>
+                    <span>💰 ${result.budget}</span>
+                    <span>👤 ${result.author}</span>
+                    <span>⭐ ${result.rating}</span>
+                </div>
+                <div class="result-actions">
+                    <button class="travel-btn primary">Ver Detalles</button>
+                    <button class="travel-btn secondary">Importar</button>
+                </div>
+            </div>
+        `).join('');
+    }
+}
 
 // Render inicial
 renderDay();
