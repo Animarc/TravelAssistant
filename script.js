@@ -90,7 +90,7 @@ function renderDay() {
             const next = activities[i + 1];
             if (next && current.coordinates && next.coordinates) {
                 const dist = haversineDistance(current.coordinates, next.coordinates);
-                if (dist < 1000) {
+                if (dist >= 0.2 && dist < 100) {
                     activitiesWithTransfers.push({
                         isTransfer: true,
                         from: current.name,
