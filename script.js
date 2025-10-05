@@ -144,10 +144,12 @@ function renderDay() {
             } else {
                 li.innerHTML = `
             <div class="activity-header ${act.isDone ? 'activity-done' : ''}">
-              <label class="activity-checkbox-label">
+              <div class="activity-checkbox-container">
                 <input type="checkbox" class="activity-checkbox" ${act.isDone ? 'checked' : ''} data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">
+              </div>
+              <div class="activity-info" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">
                 <strong>${act.time || 'Sin hora'}</strong> - ${act.name}${isOptional ? ' <span class="optional-badge">(Opcional)</span>' : ''}
-              </label>
+              </div>
               <div class="activity-actions">
                 <button class="edit-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">✏️</button>
                 <button class="delete-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">🗑️</button>
@@ -179,7 +181,10 @@ function renderDay() {
                     toggleActivityDone(currentDay, day.activities.indexOf(act));
                 });
                 
-                li.addEventListener('click', () => {
+                // Activity info click handler for expanding details
+                const activityInfo = li.querySelector('.activity-info');
+                activityInfo.addEventListener('click', (e) => {
+                    e.stopPropagation();
                     [...activityListEl.querySelectorAll('.activity-details')].forEach(d => d.style.display = 'none');
                     const detailEl = document.getElementById(`details-${i}`);
                     if (detailEl) {

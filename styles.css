@@ -134,6 +134,17 @@ body {
     width: 100%;
 }
 
+.activity-checkbox-container {
+    flex-shrink: 0;
+    margin-right: 8px;
+}
+
+.activity-info {
+    flex: 1;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
 .activity-actions {
     display: flex;
     align-items: center;
