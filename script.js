@@ -1,6 +1,71 @@
 // Clonamos la variable global 'days' (de data.js) para no modificarla directamente
-let daysData = JSON.parse(JSON.stringify(days));
+// Load from localStorage if available, otherwise use default data
+let daysData = loadFromStorage() || JSON.parse(JSON.stringify(days));
 let currentDay = 0;
+let currentView = 'planning'; // Track current view: 'planning', 'budget', 'objects', 'account'
+let editingActivity = null; // Track editing state: { dayIndex, activityIndex } or null
+
+// Utility function to sanitize HTML and prevent XSS
+function sanitizeHTML(str) {
+    if (str === null || str === undefined) return '';
+    const div = document.createElement('div');
+    div.textContent = String(str);
+    return div.innerHTML;
+}
+
+// Utility function to escape HTML for attribute values
+function escapeAttr(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+// LocalStorage persistence functions
+function saveToStorage() {
+    try {
+        localStorage.setItem('travelAssistantData', JSON.stringify(daysData));
+        localStorage.setItem('travelAssistantCurrentDay', currentDay.toString());
+    } catch (e) {
+        console.error('Error saving to localStorage:', e);
+    }
+}
+
+function loadFromStorage() {
+    try {
+        const data = localStorage.getItem('travelAssistantData');
+        const savedDay = localStorage.getItem('travelAssistantCurrentDay');
+        if (savedDay !== null) {
+            currentDay = parseInt(savedDay, 10) || 0;
+        }
+        return data ? JSON.parse(data) : null;
+    } catch (e) {
+        console.error('Error loading from localStorage:', e);
+        return null;
+    }
+}
+
+// Refresh the current view based on state
+function refreshCurrentView() {
+    switch (currentView) {
+        case 'budget':
+            showBudgetView();
+            break;
+        case 'objects':
+            showObjectsView();
+            break;
+        case 'account':
+            showAccountView();
+            break;
+        case 'planning':
+        default:
+            renderDay();
+            break;
+    }
+}
 
 // Referencias al DOM
 const dayTitleEl = document.getElementById('dayTitle');
@@ -15,8 +80,20 @@ const addActivityBtn = document.getElementById('addActivityBtn');
 const moveDayLeftBtn = document.getElementById('moveDayLeftBtn');
 const moveDayRightBtn = document.getElementById('moveDayRightBtn');
 
-// Inicialización del mapa Leaflet
-const map = L.map('map').setView([41.3851, 2.1734], 13);
+// Inicialización del mapa Leaflet - get initial coordinates from first activity or default
+function getInitialMapCoordinates() {
+    for (const day of daysData) {
+        for (const activity of day.activities) {
+            if (activity.coordinates && Array.isArray(activity.coordinates) && activity.coordinates.length === 2) {
+                return activity.coordinates;
+            }
+        }
+    }
+    return [41.3851, 2.1734]; // Default to Barcelona if no coordinates found
+}
+
+const initialCoords = getInitialMapCoordinates();
+const map = L.map('map').setView(initialCoords, 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
@@ -73,9 +150,13 @@ function renderDay() {
         currentPolyline = null;
     }
 
-    // Separar actividades obligatorias y opcionales
-    const mandatoryActivities = day.activities.filter(activity => !activity.isOptional);
-    const optionalActivities = day.activities.filter(activity => activity.isOptional);
+    // Separar actividades obligatorias y opcionales, preservando índices originales
+    const mandatoryActivities = day.activities
+        .map((activity, index) => ({ ...activity, originalIndex: index }))
+        .filter(activity => !activity.isOptional);
+    const optionalActivities = day.activities
+        .map((activity, index) => ({ ...activity, originalIndex: index }))
+        .filter(activity => activity.isOptional);
 
     // Función para renderizar una lista de actividades
     function renderActivityList(activities, isOptional = false) {
@@ -117,14 +198,14 @@ function renderDay() {
 
             if (act.isTransfer) {
                 li.innerHTML = `
-            <em>Traslado automático:</em> De <strong>${act.from}</strong> a <strong>${act.to}</strong> (${act.distance} km)<br>
+            <em>Traslado automático:</em> De <strong>${sanitizeHTML(act.from)}</strong> a <strong>${sanitizeHTML(act.to)}</strong> (${sanitizeHTML(act.distance)} km)<br>
             <button class="open-gmaps-btn" style="margin-top:5px;">Ir en Google Maps</button>
           `;
                 const gmapsBtn = li.querySelector('.open-gmaps-btn');
                 gmapsBtn.addEventListener('click', (event) => {
                     event.stopPropagation();
                     const [from, to] = act.coordinates;
-                    const url = `https://www.google.com/maps/dir/?api=1&origin=${from[0]},${from[1]}&destination=${to[0]},${to[1]}&travelmode=transit`;
+                    const url = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(from[0])},${encodeURIComponent(from[1])}&destination=${encodeURIComponent(to[0])},${encodeURIComponent(to[1])}&travelmode=transit`;
                     window.open(url, '_blank');
                 });
                 li.addEventListener('click', () => {
@@ -150,57 +231,58 @@ function renderDay() {
                 });
 
             } else {
+                const activityIndex = act.originalIndex;
                 li.innerHTML = `
             <div class="activity-header ${act.isDone ? 'activity-done' : ''}">
               <div class="activity-checkbox-container">
-                <input type="checkbox" class="activity-checkbox" ${act.isDone ? 'checked' : ''} data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">
+                <input type="checkbox" class="activity-checkbox" ${act.isDone ? 'checked' : ''} data-day="${currentDay}" data-activity="${activityIndex}">
               </div>
-              <div class="activity-info" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">
-                <strong>${act.time || 'Sin hora'}</strong> - ${act.name}${isOptional ? ' <span class="optional-badge">(Opcional)</span>' : ''}
+              <div class="activity-info" data-day="${currentDay}" data-activity="${activityIndex}">
+                <strong>${sanitizeHTML(act.time) || 'Sin hora'}</strong> - ${sanitizeHTML(act.name)}${isOptional ? ' <span class="optional-badge">(Opcional)</span>' : ''}
               </div>
               <div class="activity-actions">
-                <button class="edit-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">✏️</button>
-                <button class="delete-activity-btn" data-day="${currentDay}" data-activity="${day.activities.indexOf(act)}">🗑️</button>
+                <button class="edit-activity-btn" data-day="${currentDay}" data-activity="${activityIndex}">✏️</button>
+                <button class="delete-activity-btn" data-day="${currentDay}" data-activity="${activityIndex}">🗑️</button>
               </div>
             </div>
-            <div class="activity-details" id="details-${i}" style="display:none;">
-              <p>${act.description}</p>
-              ${act.importantInfo ? `<p class="important-info">${act.importantInfo}</p>` : ''}
-              ${act.price ? `<p class="price-info"><strong>Precio:</strong> ${act.price} ${act.currency || 'EUR'}</p>` : ''}
+            <div class="activity-details" id="details-${currentDay}-${activityIndex}" style="display:none;">
+              <p>${sanitizeHTML(act.description)}</p>
+              ${act.importantInfo ? `<p class="important-info">${sanitizeHTML(act.importantInfo)}</p>` : ''}
+              ${act.price ? `<p class="price-info"><strong>Precio:</strong> ${sanitizeHTML(act.price)} ${sanitizeHTML(act.currency) || 'EUR'}</p>` : ''}
             </div>
           `;
-                
-                // Add event listeners
+
+                // Add event listeners using stored index
                 const editBtn = li.querySelector('.edit-activity-btn');
                 editBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    editActivity(currentDay, day.activities.indexOf(act));
+                    editActivity(currentDay, activityIndex);
                 });
-                
+
                 const deleteBtn = li.querySelector('.delete-activity-btn');
                 deleteBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    deleteActivity(currentDay, day.activities.indexOf(act));
+                    deleteActivity(currentDay, activityIndex);
                 });
-                
+
                 const checkbox = li.querySelector('.activity-checkbox');
                 checkbox.addEventListener('change', (e) => {
                     e.stopPropagation();
-                    toggleActivityDone(currentDay, day.activities.indexOf(act));
+                    toggleActivityDone(currentDay, activityIndex);
                 });
-                
+
                 // Activity info click handler for expanding details
                 const activityInfo = li.querySelector('.activity-info');
                 activityInfo.addEventListener('click', (e) => {
                     e.stopPropagation();
                     [...activityListEl.querySelectorAll('.activity-details')].forEach(d => d.style.display = 'none');
-                    const detailEl = document.getElementById(`details-${i}`);
+                    const detailEl = document.getElementById(`details-${currentDay}-${activityIndex}`);
                     if (detailEl) {
                         detailEl.style.display = detailEl.style.display === 'block' ? 'none' : 'block';
                     }
 
                     // Only update map if activity has coordinates
-                    if (act.coordinates) {
+                    if (act.coordinates && Array.isArray(act.coordinates) && act.coordinates.length === 2) {
                         if (currentMarker) {
                             if (Array.isArray(currentMarker)) {
                                 currentMarker.forEach(m => map.removeLayer(m));
@@ -242,12 +324,14 @@ function renderDay() {
 document.getElementById('prevDay').addEventListener('click', () => {
     if (currentDay > 0) {
         currentDay--;
+        saveToStorage();
         renderDay();
     }
 });
 document.getElementById('nextDay').addEventListener('click', () => {
     if (currentDay < daysData.length - 1) {
         currentDay++;
+        saveToStorage();
         renderDay();
     }
 });
@@ -261,15 +345,20 @@ document.getElementById('addDayBtn').addEventListener('click', () => {
     }
     daysData.push({ title: title.trim(), activities: [] });
     currentDay = daysData.length - 1;
+    saveToStorage();
     renderDay();
 });
 
 // Abrir modal para añadir actividad
 addActivityBtn.addEventListener('click', () => {
     activityForm.reset();
+    editingActivity = null; // Ensure we're in "add" mode, not "edit" mode
     modal.style.display = 'block';
     // Reset time field requirement
     document.getElementById('timeInput').required = true;
+    // Reset button text
+    const submitBtn = activityForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Añadir Actividad';
 });
 
 // Handle optional checkbox change
@@ -284,20 +373,43 @@ document.getElementById('isOptionalCheckbox').addEventListener('change', functio
     }
 });
 
+// Helper to reset modal state
+function resetModalState() {
+    modal.style.display = 'none';
+    editingActivity = null;
+    const submitBtn = activityForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Añadir Actividad';
+}
+
 // Cerrar modal con la X
 closeModalBtn.addEventListener('click', () => {
-    modal.style.display = 'none';
+    resetModalState();
 });
 
 // Cerrar modal al clicar fuera del contenido
 window.addEventListener('click', (e) => {
     if (e.target === modal) {
-        modal.style.display = 'none';
+        resetModalState();
     }
 });
 
-// Función para manejar añadir actividad
-function handleAddActivity(e) {
+// Parse and validate coordinates
+function parseCoordinates(latStr, lngStr) {
+    const lat = parseFloat(latStr);
+    const lng = parseFloat(lngStr);
+
+    // Validate coordinate ranges
+    if (isNaN(lat) || isNaN(lng)) {
+        return null;
+    }
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        return null;
+    }
+    return [lat, lng];
+}
+
+// Unified form submission handler
+function handleFormSubmit(e) {
     e.preventDefault();
 
     const time = activityForm.time.value;
@@ -307,15 +419,14 @@ function handleAddActivity(e) {
     const price = activityForm.price.value.trim();
     const currency = activityForm.currency.value;
     const isOptional = activityForm.isOptional.checked;
-    const lat = parseFloat(activityForm.lat.value);
-    const lng = parseFloat(activityForm.lng.value);
+    const coordinates = parseCoordinates(activityForm.lat.value, activityForm.lng.value);
 
     if ((!isOptional && !time) || !name || !description) {
         alert('Por favor completa todos los campos obligatorios correctamente.');
         return;
     }
 
-    daysData[currentDay].activities.push({
+    const activityData = {
         time,
         name,
         description,
@@ -324,11 +435,31 @@ function handleAddActivity(e) {
         currency: price ? currency : null,
         isOptional: isOptional,
         isDone: false,
-        coordinates: (!isNaN(lat) && !isNaN(lng)) ? [lat, lng] : null
-    });
+        coordinates
+    };
+
+    if (editingActivity) {
+        // Editing existing activity - preserve isDone state
+        activityData.isDone = daysData[editingActivity.dayIndex].activities[editingActivity.activityIndex].isDone || false;
+        daysData[editingActivity.dayIndex].activities[editingActivity.activityIndex] = activityData;
+        editingActivity = null;
+
+        // Reset button text
+        const submitBtn = activityForm.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = 'Añadir Actividad';
+    } else {
+        // Adding new activity
+        daysData[currentDay].activities.push(activityData);
+    }
 
     modal.style.display = 'none';
-    renderDay();
+    saveToStorage();
+    refreshCurrentView();
+}
+
+// Función para manejar añadir actividad (legacy wrapper for compatibility)
+function handleAddActivity(e) {
+    handleFormSubmit(e);
 }
 
 // Manejar envío del formulario de actividad
@@ -344,6 +475,7 @@ moveDayLeftBtn.addEventListener('click', () => {
         daysData[currentDay - 1] = daysData[currentDay];
         daysData[currentDay] = temp;
         currentDay--;
+        saveToStorage();
         renderDay();
     }
 });
@@ -355,95 +487,125 @@ moveDayRightBtn.addEventListener('click', () => {
         daysData[currentDay + 1] = daysData[currentDay];
         daysData[currentDay] = temp;
         currentDay++;
+        saveToStorage();
         renderDay();
     }
 });
 
 // Función para mostrar vista de presupuesto
 function showBudgetView() {
+    currentView = 'budget';
+
     // Ocultar elementos de planificación
     document.querySelector('.controls-row:nth-child(2)').style.display = 'none';
     document.querySelector('.right-panel').style.display = 'none';
     document.querySelector('.day-header').style.display = 'none';
-    
+
     // Mostrar lista de presupuesto
     activityListEl.innerHTML = '';
     activityListEl.className = 'activity-list budget-list';
-    
-    let totalBudget = 0;
+
+    // Group totals by currency
+    const totalsByCurrency = {};
     let activitiesWithPrice = 0;
-    
+
     daysData.forEach((day, dayIndex) => {
-        const dayActivities = day.activities.filter(activity => activity.price);
-        
-        if (dayActivities.length > 0) {
+        // Find activities with price and track their original indices
+        const dayActivitiesWithIndices = day.activities
+            .map((activity, index) => ({ activity, originalIndex: index }))
+            .filter(item => item.activity.price);
+
+        if (dayActivitiesWithIndices.length > 0) {
             const dayHeader = document.createElement('li');
             dayHeader.className = 'budget-day-header';
-            dayHeader.innerHTML = `<h3>Día ${dayIndex + 1}: ${day.title}</h3>`;
+            dayHeader.innerHTML = `<h3>Día ${dayIndex + 1}: ${sanitizeHTML(day.title)}</h3>`;
             activityListEl.appendChild(dayHeader);
-            
-            dayActivities.forEach((activity, activityIndex) => {
+
+            dayActivitiesWithIndices.forEach(({ activity, originalIndex }) => {
                 const li = document.createElement('li');
                 li.className = 'budget-item';
+                const currency = activity.currency || 'EUR';
+                const priceValue = parseFloat(activity.price) || 0;
+
+                // Add to currency totals
+                if (!totalsByCurrency[currency]) {
+                    totalsByCurrency[currency] = 0;
+                }
+                totalsByCurrency[currency] += priceValue;
+
                 li.innerHTML = `
                     <div class="budget-activity">
                         <div class="budget-activity-info">
-                            <strong>${activity.time}</strong> - ${activity.name}
+                            <strong>${sanitizeHTML(activity.time) || 'Sin hora'}</strong> - ${sanitizeHTML(activity.name)}
                         </div>
                         <div class="budget-activity-actions">
-                            <span class="budget-price">${activity.price} ${activity.currency || 'EUR'}</span>
-                            <button class="edit-activity-btn" data-day="${dayIndex}" data-activity="${activityIndex}">✏️</button>
-                            <button class="delete-activity-btn" data-day="${dayIndex}" data-activity="${activityIndex}">🗑️</button>
+                            <span class="budget-price">${sanitizeHTML(activity.price)} ${sanitizeHTML(currency)}</span>
+                            <button class="edit-activity-btn" data-day="${dayIndex}" data-activity="${originalIndex}">✏️</button>
+                            <button class="delete-activity-btn" data-day="${dayIndex}" data-activity="${originalIndex}">🗑️</button>
                         </div>
                     </div>
                 `;
-                
+
                 // Add event listener for edit button
                 const editBtn = li.querySelector('.edit-activity-btn');
                 editBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    editActivity(dayIndex, activityIndex);
+                    editActivity(dayIndex, originalIndex);
                 });
-                
+
                 // Add event listener for delete button
                 const deleteBtn = li.querySelector('.delete-activity-btn');
                 deleteBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    deleteActivity(dayIndex, activityIndex);
+                    deleteActivity(dayIndex, originalIndex);
                 });
-                
+
                 activityListEl.appendChild(li);
                 activitiesWithPrice++;
             });
         }
     });
-    
+
+    // Build totals summary string
+    const totalsArray = Object.entries(totalsByCurrency)
+        .map(([currency, total]) => `${total.toFixed(2)} ${sanitizeHTML(currency)}`)
+        .join(' + ');
+
     // Mostrar resumen total
     const summaryLi = document.createElement('li');
     summaryLi.className = 'budget-summary';
     summaryLi.innerHTML = `
         <div class="budget-total">
             <strong>Resumen:</strong> ${activitiesWithPrice} actividades con precio
+            ${totalsArray ? `<br><strong>Total:</strong> ${totalsArray}` : ''}
         </div>
     `;
     activityListEl.appendChild(summaryLi);
 }
 
-// Función para editar actividad
+// Función para editar actividad - uses unified form handler
 function editActivity(dayIndex, activityIndex) {
     const activity = daysData[dayIndex].activities[activityIndex];
-    
+
+    if (!activity) {
+        console.error('Activity not found:', dayIndex, activityIndex);
+        return;
+    }
+
+    // Set editing state
+    editingActivity = { dayIndex, activityIndex };
+
     // Llenar el formulario con los datos actuales
     activityForm.time.value = activity.time || '';
-    activityForm.name.value = activity.name;
-    activityForm.description.value = activity.description;
+    activityForm.name.value = activity.name || '';
+    activityForm.description.value = activity.description || '';
     activityForm.importantInfo.value = activity.importantInfo || '';
     activityForm.price.value = activity.price || '';
     activityForm.currency.value = activity.currency || 'EUR';
     activityForm.isOptional.checked = activity.isOptional || false;
     activityForm.lat.value = activity.coordinates ? activity.coordinates[0] : '';
     activityForm.lng.value = activity.coordinates ? activity.coordinates[1] : '';
-    
+
     // Set time field requirement based on optional status
     const timeInput = document.getElementById('timeInput');
     if (activity.isOptional) {
@@ -453,103 +615,45 @@ function editActivity(dayIndex, activityIndex) {
         timeInput.required = true;
         timeInput.placeholder = "";
     }
-    
+
     // Cambiar el texto del botón
     const submitBtn = activityForm.querySelector('button[type="submit"]');
-    submitBtn.textContent = 'Actualizar Actividad';
-    
+    if (submitBtn) submitBtn.textContent = 'Actualizar Actividad';
+
     // Mostrar modal
     modal.style.display = 'block';
-    
-    // Remover el event listener original
-    activityForm.removeEventListener('submit', handleAddActivity);
-    
-    // Agregar event listener para editar
-    const handleEditActivity = (e) => {
-        e.preventDefault();
-        
-        const time = activityForm.time.value;
-        const name = activityForm.name.value.trim();
-        const description = activityForm.description.value.trim();
-        const importantInfo = activityForm.importantInfo.value.trim();
-        const price = activityForm.price.value.trim();
-        const currency = activityForm.currency.value;
-        const isOptional = activityForm.isOptional.checked;
-        const lat = parseFloat(activityForm.lat.value);
-        const lng = parseFloat(activityForm.lng.value);
-        
-        if ((!isOptional && !time) || !name || !description) {
-            alert('Por favor completa todos los campos obligatorios correctamente.');
-            return;
-        }
-        
-        // Actualizar la actividad
-        daysData[dayIndex].activities[activityIndex] = {
-            time,
-            name,
-            description,
-            importantInfo: importantInfo || null,
-            price: price || null,
-            currency: price ? currency : null,
-            isOptional: isOptional,
-            isDone: daysData[dayIndex].activities[activityIndex].isDone || false,
-            coordinates: (!isNaN(lat) && !isNaN(lng)) ? [lat, lng] : null
-        };
-        
-        modal.style.display = 'none';
-        
-        // Restaurar el botón y event listener original
-        submitBtn.textContent = 'Añadir Actividad';
-        activityForm.removeEventListener('submit', handleEditActivity);
-        activityForm.addEventListener('submit', handleAddActivity);
-        
-        // Re-renderizar la vista actual
-        if (activityListEl.classList.contains('budget-list')) {
-            showBudgetView();
-        } else {
-            renderDay();
-        }
-    };
-    
-    activityForm.addEventListener('submit', handleEditActivity);
 }
 
 // Función para borrar actividad
 function deleteActivity(dayIndex, activityIndex) {
     if (confirm('¿Estás seguro de que quieres borrar esta actividad?')) {
         daysData[dayIndex].activities.splice(activityIndex, 1);
-        
-        // Re-renderizar la vista actual
-        if (activityListEl.classList.contains('budget-list')) {
-            showBudgetView();
-        } else {
-            renderDay();
-        }
+        saveToStorage();
+        refreshCurrentView();
     }
 }
 
 // Función para marcar/desmarcar actividad como completada
 function toggleActivityDone(dayIndex, activityIndex) {
-    daysData[dayIndex].activities[activityIndex].isDone = !daysData[dayIndex].activities[activityIndex].isDone;
-    
-    // Re-renderizar la vista actual
-    if (activityListEl.classList.contains('budget-list')) {
-        showBudgetView();
-    } else {
-        renderDay();
+    if (daysData[dayIndex] && daysData[dayIndex].activities[activityIndex]) {
+        daysData[dayIndex].activities[activityIndex].isDone = !daysData[dayIndex].activities[activityIndex].isDone;
+        saveToStorage();
+        refreshCurrentView();
     }
 }
 
 // Función para mostrar vista de planificación
 function showPlanningView() {
+    currentView = 'planning';
+
     // Mostrar elementos de planificación
     document.querySelector('.controls-row:nth-child(2)').style.display = 'flex';
     document.querySelector('.right-panel').style.display = 'block';
     document.querySelector('.day-header').style.display = 'flex';
-    
+
     // Restaurar clase original
     activityListEl.className = 'activity-list';
-    
+
     // Renderizar día actual
     renderDay();
 }
@@ -561,11 +665,13 @@ document.getElementById('objetosBtn').addEventListener('click', showObjectsView)
 
 // Función para mostrar vista de objetos
 function showObjectsView() {
+    currentView = 'objects';
+
     // Ocultar elementos de planificación
     document.querySelector('.controls-row:nth-child(2)').style.display = 'none';
     document.querySelector('.right-panel').style.display = 'none';
     document.querySelector('.day-header').style.display = 'none';
-    
+
     // Mostrar lista de objetos
     activityListEl.innerHTML = '';
     activityListEl.className = 'activity-list objects-list';
@@ -638,11 +744,13 @@ function showObjectsView() {
 
 // Función para mostrar vista de cuenta
 function showAccountView() {
+    currentView = 'account';
+
     // Ocultar elementos de planificación
     document.querySelector('.controls-row:nth-child(2)').style.display = 'none';
     document.querySelector('.right-panel').style.display = 'none';
     document.querySelector('.day-header').style.display = 'none';
-    
+
     // Mostrar contenido de cuenta
     activityListEl.innerHTML = '';
     activityListEl.className = 'activity-list account-list';
@@ -800,27 +908,45 @@ function setupAccountEventListeners() {
         importJsonBtn.addEventListener('click', () => {
             jsonFileInput.click();
         });
-        
+
         jsonFileInput.addEventListener('change', (e) => {
             const file = e.target.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = (e) => {
+                reader.onload = (event) => {
                     try {
-                        const importedData = JSON.parse(e.target.result);
+                        const importedData = JSON.parse(event.target.result);
+
+                        // Validate imported data structure
+                        if (!Array.isArray(importedData)) {
+                            throw new Error('El archivo debe contener un array de días');
+                        }
+                        if (importedData.length === 0) {
+                            throw new Error('El archivo no contiene ningún día');
+                        }
+                        for (const day of importedData) {
+                            if (typeof day.title !== 'string' || !Array.isArray(day.activities)) {
+                                throw new Error('Formato de día inválido: debe tener title (string) y activities (array)');
+                            }
+                        }
+
                         daysData = importedData;
                         currentDay = 0; // Reset to first day
+                        saveToStorage();
                         showPlanningView(); // Volver a la vista de planificación
                         alert('JSON importado correctamente');
                     } catch (error) {
                         alert('Error al importar el JSON: ' + error.message);
                     }
                 };
+                reader.onerror = () => {
+                    alert('Error al leer el archivo');
+                };
                 reader.readAsText(file);
             }
         });
     }
-    
+
     // Crear nuevo viaje
     const createNewTravelBtn = document.getElementById('createNewTravelBtn');
     if (createNewTravelBtn) {
@@ -829,6 +955,7 @@ function setupAccountEventListeners() {
             if (title && title.trim()) {
                 daysData = [{ title: title.trim(), activities: [] }];
                 currentDay = 0;
+                saveToStorage();
                 showPlanningView();
             }
         });
@@ -847,24 +974,40 @@ function setupAccountEventListeners() {
     }
 }
 
+// Helper to parse duration days from string like "7 días"
+function parseDurationDays(durationStr) {
+    const match = durationStr.match(/(\d+)/);
+    return match ? parseInt(match[1], 10) : 0;
+}
+
+// Helper to parse budget from string like "€1,200"
+function parseBudgetValue(budgetStr) {
+    const cleaned = budgetStr.replace(/[€,\s]/g, '');
+    return parseFloat(cleaned) || 0;
+}
+
 // Función para buscar viajes
 function searchTravels() {
     const searchInput = document.getElementById('travelSearchInput');
     const durationFilter = document.getElementById('durationFilter');
     const budgetFilter = document.getElementById('budgetFilter');
     const searchResults = document.getElementById('searchResults');
-    
+
+    if (!searchInput || !searchResults) return;
+
     const query = searchInput.value.toLowerCase();
-    const duration = durationFilter.value;
-    const budget = budgetFilter.value;
-    
+    const duration = durationFilter ? durationFilter.value : '';
+    const budget = budgetFilter ? budgetFilter.value : '';
+
     // Simular resultados de búsqueda
     const mockResults = [
         {
             title: "🇯🇵 Aventura en Tokio - 7 días",
             description: "Descubre la capital de Japón con esta guía completa",
             duration: "7 días",
+            durationDays: 7,
             budget: "€1,200",
+            budgetValue: 1200,
             author: "viajero123",
             rating: 4.8
         },
@@ -872,7 +1015,9 @@ function searchTravels() {
             title: "🇪🇸 Ruta por Andalucía - 10 días",
             description: "Sevilla, Córdoba, Granada y más",
             duration: "10 días",
+            durationDays: 10,
             budget: "€800",
+            budgetValue: 800,
             author: "explorador_es",
             rating: 4.6
         },
@@ -880,32 +1025,63 @@ function searchTravels() {
             title: "🇮🇹 Roma y Florencia - 5 días",
             description: "Lo mejor de Italia en una semana",
             duration: "5 días",
+            durationDays: 5,
             budget: "€900",
+            budgetValue: 900,
             author: "italia_lover",
             rating: 4.9
         }
     ];
-    
+
     let filteredResults = mockResults;
-    
+
+    // Filter by search query
     if (query) {
-        filteredResults = filteredResults.filter(result => 
-            result.title.toLowerCase().includes(query) || 
+        filteredResults = filteredResults.filter(result =>
+            result.title.toLowerCase().includes(query) ||
             result.description.toLowerCase().includes(query)
         );
     }
-    
+
+    // Filter by duration
+    if (duration) {
+        filteredResults = filteredResults.filter(result => {
+            const days = result.durationDays;
+            switch (duration) {
+                case '1-3': return days >= 1 && days <= 3;
+                case '4-7': return days >= 4 && days <= 7;
+                case '8-14': return days >= 8 && days <= 14;
+                case '15+': return days >= 15;
+                default: return true;
+            }
+        });
+    }
+
+    // Filter by budget
+    if (budget) {
+        filteredResults = filteredResults.filter(result => {
+            const value = result.budgetValue;
+            switch (budget) {
+                case '0-500': return value >= 0 && value <= 500;
+                case '500-1000': return value > 500 && value <= 1000;
+                case '1000-2000': return value > 1000 && value <= 2000;
+                case '2000+': return value > 2000;
+                default: return true;
+            }
+        });
+    }
+
     if (filteredResults.length === 0) {
         searchResults.innerHTML = '<p class="no-results">No se encontraron viajes que coincidan con tu búsqueda</p>';
     } else {
         searchResults.innerHTML = filteredResults.map(result => `
             <div class="search-result-item">
-                <h4>${result.title}</h4>
-                <p>${result.description}</p>
+                <h4>${sanitizeHTML(result.title)}</h4>
+                <p>${sanitizeHTML(result.description)}</p>
                 <div class="result-meta">
-                    <span>⏱️ ${result.duration}</span>
-                    <span>💰 ${result.budget}</span>
-                    <span>👤 ${result.author}</span>
+                    <span>⏱️ ${sanitizeHTML(result.duration)}</span>
+                    <span>💰 ${sanitizeHTML(result.budget)}</span>
+                    <span>👤 ${sanitizeHTML(result.author)}</span>
                     <span>⭐ ${result.rating}</span>
                 </div>
                 <div class="result-actions">

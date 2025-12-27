@@ -4,228 +4,363 @@ const days = [
         activities: [
             { time: "07:00", name: "Despertador", description: "Prepararse para el viaje hacia Japón." },
             { time: "07:30", name: "Uber al aeropuerto", description: "Traslado reservado hacia el aeropuerto de Barcelona.", coordinates: [41.2974, 2.0833] },
-            { time: "08:00", name: "Facturación", description: "Facturar maletas para el vuelo internacional.", importantInfo: "AAABBB"},
-            { time: "08:30", name: "Desayuno en el aeropuerto", description: "Comer algo antes del vuelo." },
+            { time: "08:00", name: "Facturar maletas", description: "Facturar maletas para el vuelo internacional." },
+            { time: "08:30", name: "Desayunar en el aeropuerto", description: "Comer algo antes del vuelo." },
             { time: "10:45", name: "Vuelo a Abu Dhabi", description: "Salida del vuelo hacia Abu Dhabi.", coordinates: [24.433, 54.6511] },
             { time: "19:10 (16:15 BCN)", name: "Llegada a Abu Dhabi", description: "Escala técnica antes de continuar hacia Osaka." },
             { time: "21:15 (18:15 BCN)", name: "Vuelo a Osaka", description: "Conexión hacia Japón." }
         ]
     },
     {
-        title: "3 de Julio - Llegada a Osaka",
+        title: "3 de Julio - Llegada",
+        sleep: {
+            name: "ShinOsaka",
+            price: "92€",
+            link: "https://www.airbnb.es/rooms/31774982?adults=2&check_in=2026-07-03&check_out=2026-07-04&children=2&location=Osaka%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766317504_P3b77foPsERBoXVj&previous_page_section_name=1001&federated_search_id=1823eed9-0f94-4b60-96d8-db901dca8fda"
+        },
         activities: [
             { time: "11:45 (04:45 BCN)", name: "Llegada a Osaka", description: "Aterrizaje en el Aeropuerto Internacional de Kansai.", coordinates: [34.4342, 135.2324] },
-            { time: "14:00", name: "Check-in en Airbnb", description: "Llegada al apartamento y siesta.", coordinates: [34.6937, 135.5023] },
-            { time: "15:00", name: "Buscar restaurante", description: "Explorar la zona y decidir dónde comer." },
-            { time: "16:00", name: "Tarde libre y compras", description: "Paseo por la ciudad y comprar desayuno para el día siguiente." },
-            { time: "19:30", name: "Cena", description: "Cenar en algún restaurante cercano." },
+            { time: "14:00", name: "Shin Osaka - Piso Airbnb", description: "Llegada al apartamento y siesta.", importantInfo: "4450 yen (25€)", coordinates: [34.7336, 135.5001] },
+            { time: "15:00", name: "Buscar donde comer", description: "Explorar la zona y decidir dónde comer.", importantInfo: "Pendiente de decidir" },
+            { time: "16:00", name: "Pasar la tarde y comprar desayuno", description: "Paseo por la zona y comprar desayuno para el día siguiente." },
+            { time: "19:30", name: "Cenar", description: "Cenar en algún restaurante cercano." },
             { time: "20:00", name: "Dormir", description: "Descansar tras el viaje." }
         ]
     },
     {
-        title: "4 de Julio - Osaka",
+        title: "4 de Julio - Miyama y Kinosaki Onsen",
+        sleep: {
+            name: "Ryokan",
+            price: "220€",
+            link: "https://dormy-hotels.com/reserve/search-plan-room?keyword=城崎%20円山川温泉%20銀花&checkin=2026%2F07%2F04&search_by_tag=plan&number_of_nights=1&number_of_rooms=1&tags=&brands=&order_by=&hotelId=271&planId=4898&number_of_adults[]=2&number_of_children_need_futons[]=2&number_of_children_no_need_futons[]=0"
+        },
         activities: [
-            { time: "06:00", name: "Bon dia", description: "Despertarse temprano." },
-            { time: "07:00", name: "Namba y Dotonbori", description: "Explorar Namba y el canal Dotonbori.", coordinates: [34.6687, 135.5010] },
-            { time: "12:00", name: "Comida", description: "Almuerzo en Osaka." },
-            { time: "14:00", name: "Umeda Sky Building y Pokémon Center", description: "Visitar el observatorio y la tienda Pokémon.", coordinates: [34.7055, 135.4892] },
-            { time: "16:00", name: "Acuario de Osaka", description: "Visitar el Kaiyukan, uno de los acuarios más grandes del mundo.", coordinates: [34.6545, 135.4281] },
-            { time: "18:00", name: "Noria Tempozan", description: "Subir a la noria con vistas a la bahía.", coordinates: [34.6559, 135.4292] },
-            { time: "20:00", name: "Dormir", description: "Descanso." }
+            { time: "08:00", name: "Alquilar coche en Shin-Osaka", description: "Recoger el coche de alquiler.", coordinates: [34.7336, 135.5001] },
+            { time: "10:30", name: "Llegada a Kayabuki no Sato", description: "Aldea tradicional con casas de tejado de paja.", importantInfo: "1200 yen peaje", coordinates: [35.2906, 135.6741] },
+            { time: "11:00", name: "Paseo por el pueblo y río", description: "Explorar el pintoresco pueblo de Miyama." },
+            { time: "13:00", name: "Comer", description: "Almuerzo en la zona." },
+            { time: "14:00", name: "Salida hacia Kinosaki", description: "Viaje en coche a la ciudad balneario." },
+            { time: "16:30", name: "Llegada a Kinosaki - Check-in", description: "Llegada al ryokan y check-in.", coordinates: [35.6283, 134.8141] },
+            { time: "17:00", name: "Pasear zona hotel / río", description: "Explorar los alrededores del hotel." },
+            { time: "19:00", name: "Baño termal y cena", description: "Disfrutar del onsen y cenar en el ryokan." },
+            { time: "22:00", name: "Bona nit", description: "Descanso." }
         ]
     },
     {
-        title: "5 de Julio - Nara y Fushimi Inari",
+        title: "5 de Julio - Península de Ine - Amanohashidate",
+        sleep: {
+            name: "ShinOsaka",
+            price: "92€",
+            link: "https://www.airbnb.es/rooms/31774982?adults=2&check_in=2026-07-03&check_out=2026-07-04&children=2&location=Osaka%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766317504_P3b77foPsERBoXVj&previous_page_section_name=1001&federated_search_id=1823eed9-0f94-4b60-96d8-db901dca8fda"
+        },
         activities: [
-            { time: "06:00", name: "Bon dia", description: "Despertar temprano." },
-            { time: "07:00", name: "Excursión a Nara", description: "Visitar el parque de los ciervos y el templo Todai-ji.", coordinates: [34.6851, 135.8050] },
-            { time: "12:00", name: "Comida", description: "Almuerzo en Nara." },
-            { time: "13:00", name: "Fushimi Inari Taisha", description: "Santuario con miles de torii rojos.", coordinates: [34.9671, 135.7727] },
-            { time: "17:00", name: "Parque infantil", description: "Lugar para que las niñas jueguen y descansen." },
-            { time: "20:00", name: "Dormir", description: "Regreso al alojamiento y descanso." }
+            { time: "09:00", name: "Salida destino Ine", description: "Viaje en coche hacia la aldea de pescadores." },
+            { time: "10:30", name: "Llegada a Ine", description: "Llegada a la pintoresca aldea.", coordinates: [35.6836, 135.2728] },
+            { time: "11:00", name: "Visitar pueblo y paseo en barco", description: "Tour en barco para ver las casas flotantes (funaya)." },
+            { time: "13:00", name: "Comer por la zona", description: "Marisco fresco y opciones locales." },
+            { time: "15:00", name: "Pasear por puente de arena de Amanohashidate", description: "Visitar uno de los tres paisajes más bellos de Japón.", coordinates: [35.5614, 135.1897] },
+            { time: "17:00", name: "Ir a Miyazu - Takigamijido Park", description: "Parque para que las niñas jueguen.", coordinates: [35.5361, 135.1986] },
+            { time: "18:00", name: "Volver a Osaka", description: "Viaje de regreso a Osaka." },
+            { time: "20:00", name: "Cena y dormir", description: "Cenar y descansar." },
+            { time: "", name: "Extra papá: Dejar el coche", description: "Devolver el coche de alquiler.", isOptional: true }
         ]
     },
     {
-        title: "6 de Julio - Kurashiki y Kinosaki Onsen",
+        title: "6 de Julio - Tokyo",
+        sleep: {
+            name: "Apartamento",
+            price: "100€",
+            link: "https://www.airbnb.es/rooms/46325248?adults=2&check_in=2026-07-06&check_out=2026-07-07&children=2&search_mode=regular_search&source_impression_id=p3_1766744958_P3slamj4HLrTlTKF&previous_page_section_name=1000&federated_search_id=9e056c25-318d-4f7b-b580-0e82719854b2"
+        },
         activities: [
-            { time: "07:00", name: "Viaje a Kurashiki", description: "Explorar el barrio histórico de Kurashiki Bikan.", coordinates: [34.5958, 133.7719] },
-            { time: "10:00", name: "Museo del Juguete", description: "Museo con juguetes japoneses tradicionales y antiguos." },
-            { time: "13:00", name: "Comida en Kurashiki", description: "Platos locales de Okayama." },
-            { time: "15:00", name: "Viaje a Kinosaki Onsen", description: "Llegada a la ciudad balneario.", coordinates: [35.624, 134.82] },
-            { time: "17:00", name: "Onsen familiar", description: "Disfrutar de baños termales en un ryokan adaptado a familias." }
+            { time: "09:00", name: "Shinkansen a Tokyo", description: "Viaje en tren bala a Tokyo.", importantInfo: "37500 yen (203,43€)", coordinates: [35.6812, 139.7671] },
+            { time: "12:30", name: "Comer", description: "Almuerzo en Tokyo." },
+            { time: "15:00", name: "Buscar donde jugar", description: "Encontrar un parque o zona de juegos para las niñas." },
+            { time: "16:00", name: "Café Pokémon", description: "Experiencia divertida para las niñas.", coordinates: [35.6295, 139.7109] },
+            { time: "20:00", name: "Casa y dormir", description: "Volver al apartamento y descansar." }
         ]
     },
     {
-        title: "7 de Julio - Península de Ine",
+        title: "7 de Julio - A Matsumoto",
+        sleep: {
+            name: "Apartamento",
+            price: "200€",
+            link: "https://www.airbnb.es/rooms/19581084?check_in=2026-07-07&check_out=2026-07-09&guests=1&adults=2&children=2&s=67&unique_share_id=4e9bab46-99d4-45e6-a371-60bdc67bb9bb"
+        },
         activities: [
-            { time: "08:00", name: "Viaje a Ine", description: "Traslado a la pintoresca aldea de pescadores.", coordinates: [35.6836, 135.2728] },
-            { time: "10:00", name: "Paseo en barco", description: "Tour en barco para ver las casas flotantes (funaya)." },
-            { time: "12:30", name: "Comida", description: "Marisco fresco y opciones para niños." },
-            { time: "15:00", name: "Playa tranquila", description: "Tiempo libre para que los niños jueguen cerca del mar." }
+            { time: "08:00", name: "Alquilar coche", description: "Recoger el coche de alquiler en Tokyo." },
+            { time: "11:00", name: "Llegada a Matsumoto", description: "Llegada a la ciudad.", coordinates: [36.2381, 137.9715] },
+            { time: "11:15", name: "Llegada a Daio Wasabi Farm", description: "Visitar la granja de wasabi más grande de Japón.", coordinates: [36.3419, 137.8968] },
+            { time: "13:00", name: "Buscar donde comer y pasear", description: "Almuerzo y explorar la zona." },
+            { time: "16:00", name: "Ir a Castillo de Matsumoto y pasear", description: "Visitar el Castillo del Cuervo.", coordinates: [36.2381, 137.9715] }
         ]
     },
     {
-        title: "8 de Julio - Península de Ine",
+        title: "8 de Julio - Shirakawago",
+        sleep: {
+            name: "Apartamento",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/19581084?check_in=2026-07-07&check_out=2026-07-09&guests=1&adults=2&children=2&s=67&unique_share_id=4e9bab46-99d4-45e6-a371-60bdc67bb9bb"
+        },
         activities: [
-            { time: "09:00", name: "Explorar senderos", description: "Caminata fácil por la costa." },
-            { time: "12:00", name: "Comida", description: "Almuerzo en Ine." },
-            { time: "14:00", name: "Juegos en la naturaleza", description: "Tarde relajada con picnic y juegos." }
+            { time: "08:00", name: "Salida hacia Shirakawago", description: "Viaje en coche a la aldea patrimonio UNESCO." },
+            { time: "10:30", name: "Llegada a Shirakawago", description: "Llegada a la aldea de casas gassho-zukuri.", coordinates: [36.2606, 136.9066] },
+            { time: "13:00", name: "Comer", description: "Almuerzo local, prueba de soba y miso." },
+            { time: "14:00", name: "Disfrutar del pueblo", description: "Explorar las casas tradicionales y vistas panorámicas." },
+            { time: "17:00", name: "Volver a Matsumoto", description: "Regreso en coche." },
+            { time: "19:30", name: "Dormir en Matsumoto", description: "Descanso en el apartamento." }
         ]
     },
     {
-        title: "9 de Julio - Miyama",
+        title: "9 de Julio - Lagos del Monte Fuji",
+        sleep: {
+            name: "Ryokan",
+            price: "200€",
+            link: "https://www.booking.com/hotel/jp/bamboo-choju-yu-hakone.es.html?label=gen173nr-10CAEoggI46AdIM1gEaEaIAQGYATO4AQfIAQ3YAQPoAQH4AQGIAgGoAgG4AqrDucoGwAIB0gIkMGY4NDJiN2EtOTE0YS00MmU1LTg5MWItNzQwNThlYmYwNjdl2AIB4AIB&sid=5c0576d54ea6b4c1471230389d0f9e39&aid=304142&ucfs=1&checkin=2026-07-09&checkout=2026-07-10&dest_id=258925&dest_type=landmark&group_adults=2&no_rooms=1&group_children=2&age=4&req_age=4&age=8&req_age=8&srpvid=ce898e7fb7273a9992f11ddc15662e61&srepoch=1766753543&matching_block_id=126761001_423823373_3_0_0&atlas_src=sr_iw_title"
+        },
         activities: [
-            { time: "08:00", name: "Viaje a Miyama", description: "Visita a la aldea de casas con techos de paja.", coordinates: [35.0906, 135.5241] },
-            { time: "10:00", name: "Museo del Pueblo", description: "Explicaciones sobre la vida tradicional japonesa." },
-            { time: "12:30", name: "Comida campestre", description: "Platos locales en un entorno rural." },
-            { time: "15:00", name: "Actividades al aire libre", description: "Niños jugando en campos y río." }
+            { time: "08:00", name: "Salida hacia Lago Kawaguchi", description: "Viaje en coche hacia la zona del Monte Fuji." },
+            { time: "10:00", name: "Visitar Lago Kawaguchi", description: "Explorar la zona con vistas al Fuji.", coordinates: [35.5163, 138.7515] },
+            { time: "12:00", name: "Salida al Lago Yamanaka", description: "Segundo lago de la zona.", coordinates: [35.4167, 138.8667] },
+            { time: "13:00", name: "Comer", description: "Almuerzo en la zona." },
+            { time: "14:00", name: "Salida al Lago Ashi", description: "Viaje hacia Hakone.", coordinates: [35.2039, 139.0220] },
+            { time: "15:30", name: "Actividades - Barco pirata", description: "Crucero en barco pirata por el lago.", coordinates: [35.2039, 139.0220] }
         ]
     },
     {
-        title: "10 de Julio - Shirakawago",
+        title: "10 de Julio - Shinkansen a Morioka",
+        sleep: {
+            name: "Ryokan",
+            price: "83€",
+            link: "https://www.tsurunoyu.com"
+        },
         activities: [
-            { time: "08:00", name: "Viaje a Shirakawago", description: "Aldea patrimonio mundial de la UNESCO.", coordinates: [36.2606, 136.9066] },
-            { time: "11:00", name: "Exploración a pie", description: "Casas gassho-zukuri y vistas panorámicas." },
-            { time: "13:00", name: "Comida local", description: "Prueba de soba y miso." },
-            { time: "15:00", name: "Juegos en el río", description: "Tiempo para que los niños disfruten de la naturaleza." }
+            { time: "09:00", name: "Salida a Tokyo", description: "Viaje en coche de regreso a Tokyo.", importantInfo: "37500 yen (203,43€)" },
+            { time: "11:00", name: "Devolver coche y Shinkansen a Morioka", description: "Devolver el coche y tomar el tren bala al norte.", coordinates: [39.7036, 141.1527] },
+            { time: "15:00", name: "Alquilar coche", description: "Recoger coche de alquiler en Morioka." },
+            { time: "16:00", name: "Ir a jugar a la zona del Lago Gosho", description: "Actividades al aire libre cerca del lago.", coordinates: [39.7500, 140.9500] }
         ]
     },
     {
-        title: "11 de Julio - Matsumoto",
+        title: "11 de Julio - Tsurunoyu Onsen y Lago Tazawako",
+        sleep: {
+            name: "Ryokan",
+            price: "0€",
+            link: "https://www.tsurunoyu.com"
+        },
         activities: [
-            { time: "09:00", name: "Castillo de Matsumoto", description: "Castillo del cuervo con actividades para niños.", coordinates: [36.2381, 137.9715] },
-            { time: "12:00", name: "Comida en Matsumoto", description: "Restaurante familiar japonés." },
-            { time: "14:00", name: "Museo Ukiyo-e", description: "Exposición de arte japonesa con talleres familiares." },
-            { time: "16:00", name: "Parque infantil", description: "Espacio para que las niñas descansen." }
+            { time: "09:00", name: "Ir al Lago Tazawa", description: "Levantarse cuando apetezca e ir al lago más profundo de Japón.", coordinates: [39.7286, 140.6597] },
+            { time: "16:00", name: "Disfrutar del día", description: "Hacer lo que queramos hasta ir a Tsurunoyu Onsen." },
+            { time: "18:00", name: "Tsurunoyu Onsen", description: "Disfrutar de uno de los onsen más famosos de Japón.", coordinates: [39.7450, 140.7860] }
         ]
     },
     {
-        title: "12 de Julio - Hakone",
+        title: "12 de Julio - Morioka",
+        sleep: {
+            name: "Alojamiento Morioka",
+            price: "90€",
+            link: ""
+        },
         activities: [
-            { time: "09:00", name: "Viaje a Hakone", description: "Llegada a la región termal.", coordinates: [35.2324, 139.1056] },
-            { time: "11:00", name: "Museo al aire libre", description: "Esculturas y espacios verdes ideales para niños." },
-            { time: "13:00", name: "Comida", description: "Ramen o soba local." },
-            { time: "15:00", name: "Crucero en el Lago Ashi", description: "Barco pirata para familias." },
-            { time: "17:00", name: "Onsen familiar", description: "Descanso en un ryokan." }
+            { time: "09:00", name: "Visitar Koiwai Farm", description: "Granja histórica con actividades para niños.", coordinates: [39.7544, 141.0056] },
+            { time: "14:00", name: "Visitar Castillo Morioka", description: "Ruinas del castillo con parque. Por la noche hay luciérnagas.", coordinates: [39.7022, 141.1378] }
         ]
     },
     {
-        title: "13 de Julio - Tokyo",
+        title: "13 de Julio - Ichinoseki",
+        sleep: {
+            name: "Alojamiento",
+            price: "90€",
+            link: "https://www.booking.com/hotel/jp/comfort-inn-iwate-ichinoseki-ic.es.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaEaIAQGYATO4AQfIAQ3YAQPoAQH4AQGIAgGoAgG4AqrDucoGwAIB0gIkMGY4NDJiN2EtOTE0YS00MmU1LTg5MWItNzQwNThlYmYwNjdl2AIB4AIB&sid=93cfe30cb393e684186c32dd5aca3382&age=4&age=8&all_sr_blocks=33296016_394322684_2_2_0%2C33296017_394322684_1_2_0&checkin=2026-07-13&checkout=2026-07-14&dest_id=-230081&dest_type=city&dist=0&group_adults=2&group_children=2&hapos=1&highlighted_blocks=33296016_394322684_2_2_0%2C33296017_394322684_1_2_0&hpos=1&matching_block_id=33296016_394322684_2_2_0&no_rooms=1&req_adults=2&req_age=4&req_age=8&req_children=2&room1=A%2CA%2C4%2C8&sb_price_type=total&sr_order=popularity&sr_pri_blocks=33296016_394322684_2_2_0__840000%2C33296017_394322684_1_2_0__690000&srepoch=1766769350&srpvid=f682fc9bf1a837bbb31acb4aab7381d3&type=total&ucfs=1&#_"
+        },
         activities: [
-            { time: "10:00", name: "Llegada a Tokyo", description: "Instalarse en el alojamiento.", coordinates: [35.6812, 139.7671] },
-            { time: "12:00", name: "Comida", description: "Almuerzo en restaurante familiar." },
-            { time: "14:00", name: "Tokyo Skytree", description: "Subida al mirador.", coordinates: [35.7101, 139.8107] },
-            { time: "16:00", name: "Pokémon Café", description: "Experiencia divertida para las niñas." }
+            { time: "08:00", name: "Tren de Morioka a Ichinoseki", description: "Viaje en tren hacia el sur.", importantInfo: "10500 yen (56,97€)", coordinates: [38.9342, 141.1267] },
+            { time: "09:00", name: "Coger el tren Pikachu", description: "Experiencia especial en el tren temático de Pokémon." },
+            { time: "10:00", name: "Bajar en Hiraizumi", description: "Visitar la zona histórica de Hiraizumi.", coordinates: [38.9867, 141.1136] },
+            { time: "12:00", name: "Volver a Ichinoseki", description: "Regreso a la ciudad." },
+            { time: "16:00", name: "Geibikei Gorge - Paseo en barca", description: "Paisajes espectaculares y paseo en barca tradicional.", coordinates: [38.9833, 141.2833] }
         ]
     },
     {
-        title: "14 de Julio - Tokyo",
+        title: "14 de Julio - Nikko",
+        sleep: {
+            name: "Nikkoshi Ogurayama Forest Park",
+            price: "120€",
+            link: "https://www.booking.com/hotel/jp/nikko-park-lodge-mountain-side.es.html?label=gen173nr-10CAEoggI46AdIM1gEaEaIAQGYATO4AQfIAQ3YAQPoAQH4AQGIAgGoAgG4AqrDucoGwAIB0gIkMGY4NDJiN2EtOTE0YS00MmU1LTg5MWItNzQwNThlYmYwNjdl2AIB4AIB&sid=5c0576d54ea6b4c1471230389d0f9e39&aid=304142&ucfs=1&checkin=2026-07-14&checkout=2026-07-15&dest_id=-238790&dest_type=city&group_adults=2&no_rooms=1&group_children=2&age=4&req_age=4&age=8&req_age=8&srpvid=a8305e5d1c56d05661bd2fabe70d5d35&srepoch=1766772517&matching_block_id=28187303_91917990_4_34_0&atlas_src=sr_iw_title#_"
+        },
         activities: [
-            { time: "10:00", name: "Parque Ueno", description: "Visita al zoo y áreas de juegos.", coordinates: [35.7156, 139.7745] },
-            { time: "13:00", name: "Comida", description: "Bento o ramen en familia." },
-            { time: "15:00", name: "Museo Nacional de Naturaleza y Ciencia", description: "Exhibiciones interactivas para niños." }
+            { time: "09:00", name: "Salir de Ichinoseki", description: "Viaje hacia Nikko.", importantInfo: "30000 yen (163€)" },
+            { time: "13:00", name: "Llegada a Nikko - Comer y check-in", description: "Llegada, almuerzo e instalarse en el alojamiento.", coordinates: [36.7500, 139.6000] },
+            { time: "15:00", name: "Visitar Shinkyo Bridge", description: "El puente sagrado rojo de Nikko.", coordinates: [36.7578, 139.5997] },
+            { time: "16:30", name: "Nikkozan Rinnoji Temple", description: "Templo budista histórico.", importantInfo: "Pendiente de confirmar", coordinates: [36.7581, 139.5986] },
+            { time: "17:30", name: "Nikko Toshogu", description: "Santuario más famoso de Nikko, patrimonio UNESCO.", coordinates: [36.7581, 139.5997] }
         ]
     },
     {
         title: "15 de Julio - Tokyo",
+        sleep: {
+            name: "Apartamento",
+            price: "210€",
+            link: "https://www.airbnb.es/rooms/1161393077315930218?adults=2&check_in=2026-07-15&check_out=2026-07-18&children=2&location=Tokio%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766841296_P3Wnsi5qU57C_Jm6&previous_page_section_name=1001&federated_search_id=fb73b18c-372c-459c-b40f-db01d2971d4f&federated_search_id=c5737083-d114-4a46-a48c-f706e0bc1341"
+        },
         activities: [
-            { time: "09:00", name: "Odaiba", description: "Visita a TeamLab Planets o Miraikan.", coordinates: [35.619, 139.776] },
-            { time: "13:00", name: "Comida en Odaiba", description: "Restaurantes con vistas a la bahía." },
-            { time: "15:00", name: "Legoland Discovery Center", description: "Diversión para niños pequeños." }
+            { time: "09:00", name: "Salida de Nikko dirección Tokyo", description: "Viaje en tren a Tokyo.", importantInfo: "8750 yen (50€)" },
+            { time: "12:00", name: "Llegada a Tokyo - Ir al piso", description: "Llegada e instalarse en el apartamento.", coordinates: [35.6812, 139.7671] },
+            { time: "13:00", name: "Comer y descansar", description: "Almuerzo y tiempo de descanso." },
+            { time: "15:00", name: "Tokyo SkyTree y tienda Pokémon", description: "Subida al mirador y visita a la tienda.", coordinates: [35.7101, 139.8107] },
+            { time: "17:00", name: "Parque infantil al lado", description: "Tiempo de juego para las niñas." },
+            { time: "19:00", name: "Cenar y dormir", description: "Cena y descanso." }
         ]
     },
     {
-        title: "16 de Julio - Tokyo",
+        title: "16 de Julio - Tokyo POKEPARK",
+        sleep: {
+            name: "Apartamento",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/1161393077315930218?adults=2&check_in=2026-07-15&check_out=2026-07-18&children=2&location=Tokio%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766841296_P3Wnsi5qU57C_Jm6&previous_page_section_name=1001&federated_search_id=fb73b18c-372c-459c-b40f-db01d2971d4f&federated_search_id=c5737083-d114-4a46-a48c-f706e0bc1341"
+        },
         activities: [
-            { time: "10:00", name: "Shibuya y Harajuku", description: "Paseo por zonas vibrantes." },
-            { time: "12:00", name: "Comida en Takeshita Street", description: "Snacks japoneses divertidos." },
-            { time: "14:00", name: "Yoyogi Park", description: "Picnic y juegos al aire libre." }
+            { time: "10:00", name: "POKEPARK", description: "Día completo en el parque temático de Pokémon.", coordinates: [35.6295, 139.8836] }
         ]
     },
     {
-        title: "17 de Julio - Nikko",
+        title: "17 de Julio - Tokyo Ghibli Museum",
+        sleep: {
+            name: "Apartamento",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/1161393077315930218?adults=2&check_in=2026-07-15&check_out=2026-07-18&children=2&location=Tokio%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766841296_P3Wnsi5qU57C_Jm6&previous_page_section_name=1001&federated_search_id=fb73b18c-372c-459c-b40f-db01d2971d4f&federated_search_id=c5737083-d114-4a46-a48c-f706e0bc1341"
+        },
         activities: [
-            { time: "09:00", name: "Viaje a Nikko", description: "Explorar templos y naturaleza.", coordinates: [36.75, 139.6] },
-            { time: "12:00", name: "Comida", description: "Comida típica de la región." },
-            { time: "14:00", name: "Cascadas Kegon", description: "Impresionante paisaje natural.", coordinates: [36.73, 139.5] }
+            { time: "10:00", name: "Museo Ghibli", description: "Museo del Studio Ghibli en Mitaka.", coordinates: [35.6962, 139.5704] },
+            { time: "13:00", name: "Comer", description: "Almuerzo en la zona." },
+            { time: "15:00", name: "Visitar Parque Inokashira", description: "Parque con lago y naturaleza.", coordinates: [35.6994, 139.5731] }
         ]
     },
     {
-        title: "18 de Julio - Ichinoseki",
+        title: "18 de Julio - Gujo Hachiman",
+        sleep: {
+            name: "Alojamiento Gujo",
+            price: "100€",
+            link: ""
+        },
         activities: [
-            { time: "10:00", name: "Viaje a Ichinoseki", description: "Llegada y check-in.", coordinates: [38.93, 141.13] },
-            { time: "13:00", name: "Comida", description: "Platos locales." },
-            { time: "15:00", name: "Gembikei Gorge", description: "Paisajes y dulces lanzados en bandejas por el río." }
+            { time: "09:00", name: "Shinkansen a Nagoya", description: "Viaje en tren bala.", importantInfo: "29000 yen (158€)", coordinates: [35.1815, 136.9066] },
+            { time: "11:00", name: "Tren a Gujo", description: "Conexión en tren local a Gujo Hachiman.", coordinates: [35.7431, 136.9595] },
+            { time: "14:00", name: "Comer", description: "Almuerzo en el pueblo." },
+            { time: "15:00", name: "Visitar pueblo y dormir", description: "Pasear por el río y el casco histórico." }
         ]
     },
     {
-        title: "19 de Julio - Ichinoseki",
+        title: "19 de Julio - Nagoya",
+        sleep: {
+            name: "Apartamento Osaka",
+            price: "380€",
+            link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e"
+        },
         activities: [
-            { time: "10:00", name: "Motsuji Temple y jardín", description: "Paseo tranquilo con espacio para niños.", coordinates: [38.98, 141.12] },
-            { time: "13:00", name: "Comida", description: "Almuerzo local." },
-            { time: "15:00", name: "Museo de Geoparques", description: "Actividades educativas para niños." }
+            { time: "10:00", name: "Explorar Nagoya", description: "Día libre en Nagoya.", coordinates: [35.1815, 136.9066] }
         ]
     },
     {
-        title: "20 de Julio - Tsurunoyu Onsen y Monte Akita",
+        title: "20 de Julio - Iga",
+        sleep: {
+            name: "Apartamento Osaka",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e"
+        },
         activities: [
-            { time: "09:00", name: "Tsurunoyu Onsen", description: "Disfrutar de uno de los onsen más famosos de Japón.", coordinates: [39.745, 140.786] },
-            { time: "13:00", name: "Comida local", description: "Almuerzo campestre." },
-            { time: "15:00", name: "Monte Akita-Komagatake", description: "Excursión sencilla con vistas." }
+            { time: "08:00", name: "Salir de Nagoya dirección Iga", description: "Viaje en tren a la ciudad ninja.", importantInfo: "6650 yen (36€)", coordinates: [34.7667, 136.1333] },
+            { time: "10:00", name: "Museo de los Ninjas", description: "Visitar el famoso museo ninja de Iga.", coordinates: [34.7694, 136.1306] },
+            { time: "13:00", name: "Comer", description: "Almuerzo en Iga." },
+            { time: "14:00", name: "Visitar castillo y parque", description: "Castillo de Iga Ueno y zonas verdes.", coordinates: [34.7694, 136.1306] },
+            { time: "18:00", name: "Tren dirección Osaka", description: "Viaje a Osaka.", importantInfo: "6650 yen (36€)", coordinates: [34.6937, 135.5023] }
         ]
     },
     {
-        title: "21 de Julio - Nagoya y Gujo Hachiman",
+        title: "21 de Julio - Osaka",
+        sleep: {
+            name: "Apartamento Osaka",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e"
+        },
         activities: [
-            { time: "09:00", name: "Viaje a Nagoya", description: "Traslado hacia la ciudad.", coordinates: [35.1815, 136.9066] },
-            { time: "12:00", name: "Comida en Nagoya", description: "Miso katsu o hitsumabushi." },
-            { time: "15:00", name: "Gujo Hachiman", description: "Paseo por el río y el casco histórico.", coordinates: [35.7431, 136.9595] }
+            { time: "10:00", name: "Mañana libre", description: "Tiempo libre para descansar o explorar." },
+            { time: "16:00", name: "Café Pokémon", description: "Visita al Pokémon Café de Osaka.", coordinates: [34.7025, 135.4959] }
         ]
     },
     {
-        title: "22 de Julio - Nagoya",
+        title: "22 de Julio - Osaka (Kurashiki?)",
+        sleep: {
+            name: "Apartamento Osaka",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e"
+        },
         activities: [
-            { time: "10:00", name: "Legoland Nagoya", description: "Diversión asegurada para los niños.", coordinates: [35.0494, 136.8431] },
-            { time: "13:00", name: "Comida en el parque", description: "Opciones para toda la familia." },
-            { time: "15:00", name: "Museo Ferroviario SCMAGLEV", description: "Trenes bala y actividades interactivas." }
+            { time: "10:00", name: "Día libre / Kurashiki", description: "Opción de visitar Kurashiki o día libre en Osaka.", importantInfo: "Pendiente de decidir", isOptional: true, coordinates: [34.5958, 133.7719] }
         ]
     },
     {
-        title: "23 de Julio",
+        title: "23 de Julio - Nara y Fushimi",
+        sleep: {
+            name: "Apartamento Osaka",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e"
+        },
         activities: [
-            { time: "10:00", name: "Parque local o descanso", description: "Día tranquilo tras muchos traslados." },
-            { time: "13:00", name: "Comida relajada", description: "Restaurante familiar." },
-            { time: "15:00", name: "Compras de recuerdos", description: "Souvenirs para casa." }
+            { time: "06:00", name: "Bon dia", description: "Despertar temprano." },
+            { time: "07:00", name: "Excursión a Nara", description: "Visitar el parque de los ciervos y el templo Todai-ji.", coordinates: [34.6851, 135.8050] },
+            { time: "12:00", name: "Comer", description: "Almuerzo en Nara." },
+            { time: "13:00", name: "Fushimi Inari Taisha", description: "Santuario con miles de torii rojos.", coordinates: [34.9671, 135.7727] },
+            { time: "17:00", name: "Lugar para jugar", description: "Buscar un parque para que las niñas jueguen." },
+            { time: "20:00", name: "Dormir", description: "Regreso al alojamiento y descanso." }
         ]
     },
     {
-        title: "24 de Julio",
+        title: "24 de Julio - Kyoto - GION MATSURI",
+        sleep: {
+            name: "Apartamento Osaka",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e"
+        },
         activities: [
-            { time: "09:00", name: "Visita cultural ligera", description: "Un templo cercano o museo interactivo." },
-            { time: "12:00", name: "Comida", description: "Almuerzo sencillo." },
-            { time: "14:00", name: "Tarde en parque acuático o piscina", description: "Diversión para niños." }
+            { time: "10:00", name: "GION MATSURI", description: "Uno de los festivales más importantes de Japón en Kyoto.", importantInfo: "Festival tradicional", coordinates: [35.0039, 135.7756] }
         ]
     },
     {
-        title: "25 de Julio",
+        title: "25 de Julio - Osaka - TENJIN MATSURI",
+        sleep: {
+            name: "Apartamento Osaka",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e"
+        },
         activities: [
-            { time: "10:00", name: "Excursión corta", description: "Pueblo cercano para pasear." },
-            { time: "12:00", name: "Comida local", description: "Almuerzo en un restaurante tradicional." },
-            { time: "15:00", name: "Tarde libre", description: "Descanso antes del regreso." }
+            { time: "10:00", name: "TENJIN MATSURI", description: "Uno de los tres grandes festivales de Japón, con procesión de barcos y fuegos artificiales.", importantInfo: "Festival tradicional de Osaka", coordinates: [34.6937, 135.5131] }
         ]
     },
     {
-        title: "26 de Julio",
+        title: "26 de Julio - Osaka",
+        sleep: {
+            name: "Apartamento Osaka",
+            price: "0€",
+            link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e"
+        },
         activities: [
-            { time: "09:00", name: "Últimas compras", description: "Buscar recuerdos o snacks para el viaje." },
-            { time: "12:00", name: "Comida final en Japón", description: "Disfrutar de una última comida japonesa." },
-            { time: "15:00", name: "Preparar maletas", description: "Organizar equipaje para el regreso." }
+            { time: "06:00", name: "Bon dia", description: "Despertar temprano." },
+            { time: "07:00", name: "Visitar Namba y Dotonbori", description: "Explorar la zona más famosa de Osaka.", coordinates: [34.6687, 135.5010] },
+            { time: "12:00", name: "Comer", description: "Almuerzo en Osaka." },
+            { time: "14:00", name: "Visitar Umeda y tienda Pokémon", description: "Zona comercial y Pokémon Center.", coordinates: [34.7055, 135.4892] },
+            { time: "16:00", name: "Ir al Acuario", description: "Visitar el Kaiyukan, uno de los acuarios más grandes del mundo.", coordinates: [34.6545, 135.4281] },
+            { time: "18:00", name: "Subir a la noria", description: "Noria Tempozan con vistas a la bahía.", coordinates: [34.6559, 135.4292] },
+            { time: "20:00", name: "Dormir", description: "Descanso." }
         ]
     },
     {
-        title: "27 de Julio - Vuelta a casa",
+        title: "27 de Julio - Osaka - Vuelta a casa",
         activities: [
-            { time: "18:10", name: "Vuelo de regreso", description: "Salida del vuelo desde Japón hacia Barcelona.", coordinates: [34.4342, 135.2324] }
+            { time: "12:30", name: "Comer", description: "Última comida en Japón." },
+            { time: "13:00", name: "Ir al aeropuerto", description: "Traslado al Aeropuerto Internacional de Kansai." },
+            { time: "15:00", name: "Aeropuerto", description: "Llegada al aeropuerto y facturación.", coordinates: [34.4342, 135.2324] },
+            { time: "18:10", name: "Sale el vuelo", description: "Vuelo de regreso a Barcelona." }
         ]
     }
 ];
