@@ -1,12 +1,3 @@
-// Clonamos la variable global 'days' (de data.js) para no modificarla directamente
-// Load from localStorage if available, otherwise use default data
-let daysData = loadFromStorage() || JSON.parse(JSON.stringify(days));
-let accommodationsData = loadAccommodationsFromStorage() || JSON.parse(JSON.stringify(accommodations));
-let currentDay = 0;
-let currentView = 'planning'; // Track current view: 'planning', 'budget', 'objects', 'account'
-let editingActivity = null; // Track editing state: { dayIndex, activityIndex } or null
-let editingAccommodation = null; // Track accommodation editing state: accommodationId or null
-
 // Utility function to sanitize HTML and prevent XSS
 function sanitizeHTML(str) {
     if (str === null || str === undefined) return '';
@@ -27,27 +18,23 @@ function escapeAttr(str) {
 }
 
 // LocalStorage persistence functions
-function saveToStorage() {
-    try {
-        localStorage.setItem('travelAssistantData', JSON.stringify(daysData));
-        localStorage.setItem('travelAssistantAccommodations', JSON.stringify(accommodationsData));
-        localStorage.setItem('travelAssistantCurrentDay', currentDay.toString());
-    } catch (e) {
-        console.error('Error saving to localStorage:', e);
-    }
-}
-
-function loadFromStorage() {
+function loadDaysFromStorage() {
     try {
         const data = localStorage.getItem('travelAssistantData');
-        const savedDay = localStorage.getItem('travelAssistantCurrentDay');
-        if (savedDay !== null) {
-            currentDay = parseInt(savedDay, 10) || 0;
-        }
         return data ? JSON.parse(data) : null;
     } catch (e) {
         console.error('Error loading from localStorage:', e);
         return null;
+    }
+}
+
+function loadCurrentDayFromStorage() {
+    try {
+        const savedDay = localStorage.getItem('travelAssistantCurrentDay');
+        return savedDay !== null ? (parseInt(savedDay, 10) || 0) : 0;
+    } catch (e) {
+        console.error('Error loading currentDay from localStorage:', e);
+        return 0;
     }
 }
 
@@ -58,6 +45,25 @@ function loadAccommodationsFromStorage() {
     } catch (e) {
         console.error('Error loading accommodations from localStorage:', e);
         return null;
+    }
+}
+
+// Clonamos la variable global 'days' (de data.js) para no modificarla directamente
+// Load from localStorage if available, otherwise use default data
+let daysData = loadDaysFromStorage() || JSON.parse(JSON.stringify(days));
+let accommodationsData = loadAccommodationsFromStorage() || JSON.parse(JSON.stringify(accommodations));
+let currentDay = loadCurrentDayFromStorage();
+let currentView = 'planning'; // Track current view: 'planning', 'budget', 'objects', 'account'
+let editingActivity = null; // Track editing state: { dayIndex, activityIndex } or null
+let editingAccommodation = null; // Track accommodation editing state: accommodationId or null
+
+function saveToStorage() {
+    try {
+        localStorage.setItem('travelAssistantData', JSON.stringify(daysData));
+        localStorage.setItem('travelAssistantAccommodations', JSON.stringify(accommodationsData));
+        localStorage.setItem('travelAssistantCurrentDay', currentDay.toString());
+    } catch (e) {
+        console.error('Error saving to localStorage:', e);
     }
 }
 
