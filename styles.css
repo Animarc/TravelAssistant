@@ -920,21 +920,179 @@ body {
     .search-filters {
         flex-direction: column;
     }
-    
+
     .search-filters select {
         min-width: auto;
     }
-    
+
     .result-meta {
         flex-direction: column;
         gap: 5px;
     }
-    
+
     .travel-actions {
         flex-direction: column;
     }
-    
+
     .travel-btn {
         width: 100%;
+    }
+}
+
+/* ==================== ACCOMMODATION SECTION ==================== */
+
+.accommodation-section {
+    background-color: #e8f4fd;
+    margin: 20px 0 10px 0;
+    border-radius: 8px;
+    border-left: 4px solid #17a2b8;
+    overflow: hidden;
+}
+
+.accommodation-header {
+    background-color: #d1ecf1;
+    padding: 12px 15px;
+    border-bottom: 1px solid #bee5eb;
+}
+
+.accommodation-header h3 {
+    margin: 0;
+    color: #0c5460;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.accommodation-header h3::before {
+    content: "🏨";
+}
+
+.accommodation-content {
+    padding: 12px 15px;
+}
+
+.no-accommodation {
+    color: #6c757d;
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    padding: 10px 0;
+}
+
+.accommodation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #bee5eb;
+    gap: 10px;
+}
+
+.accommodation-item:first-child {
+    margin-top: 0;
+}
+
+.accommodation-item:last-child {
+    margin-bottom: 0;
+}
+
+.accommodation-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.accommodation-name {
+    color: #0c5460;
+    font-size: 1.05em;
+}
+
+.accommodation-days {
+    background-color: #e9ecef;
+    color: #495057;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+}
+
+.accommodation-price {
+    background-color: #28a745;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+.accommodation-link {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.9em;
+    padding: 3px 8px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.accommodation-link:hover {
+    background-color: #e9ecef;
+    text-decoration: underline;
+}
+
+.accommodation-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.edit-accommodation-btn,
+.delete-accommodation-btn {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.edit-accommodation-btn:hover {
+    background-color: #f0f0f0;
+}
+
+.delete-accommodation-btn:hover {
+    background-color: #ffe6e6;
+}
+
+/* Responsive styles for accommodation */
+@media (max-width: 800px) {
+    .accommodation-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .accommodation-info {
+        width: 100%;
+    }
+
+    .accommodation-actions {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid #eee;
+    }
+}
+
+@media (max-width: 500px) {
+    .accommodation-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
     }
 }

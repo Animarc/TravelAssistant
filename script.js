@@ -1,9 +1,11 @@
 // Clonamos la variable global 'days' (de data.js) para no modificarla directamente
 // Load from localStorage if available, otherwise use default data
 let daysData = loadFromStorage() || JSON.parse(JSON.stringify(days));
+let accommodationsData = loadAccommodationsFromStorage() || JSON.parse(JSON.stringify(accommodations));
 let currentDay = 0;
 let currentView = 'planning'; // Track current view: 'planning', 'budget', 'objects', 'account'
 let editingActivity = null; // Track editing state: { dayIndex, activityIndex } or null
+let editingAccommodation = null; // Track accommodation editing state: accommodationId or null
 
 // Utility function to sanitize HTML and prevent XSS
 function sanitizeHTML(str) {
@@ -28,6 +30,7 @@ function escapeAttr(str) {
 function saveToStorage() {
     try {
         localStorage.setItem('travelAssistantData', JSON.stringify(daysData));
+        localStorage.setItem('travelAssistantAccommodations', JSON.stringify(accommodationsData));
         localStorage.setItem('travelAssistantCurrentDay', currentDay.toString());
     } catch (e) {
         console.error('Error saving to localStorage:', e);
@@ -46,6 +49,27 @@ function loadFromStorage() {
         console.error('Error loading from localStorage:', e);
         return null;
     }
+}
+
+function loadAccommodationsFromStorage() {
+    try {
+        const data = localStorage.getItem('travelAssistantAccommodations');
+        return data ? JSON.parse(data) : null;
+    } catch (e) {
+        console.error('Error loading accommodations from localStorage:', e);
+        return null;
+    }
+}
+
+// Get accommodations for a specific day
+function getAccommodationsForDay(dayIndex) {
+    return accommodationsData.filter(acc => dayIndex >= acc.fromDay && dayIndex <= acc.toDay);
+}
+
+// Generate next accommodation ID
+function getNextAccommodationId() {
+    if (accommodationsData.length === 0) return 1;
+    return Math.max(...accommodationsData.map(a => a.id)) + 1;
 }
 
 // Refresh the current view based on state
@@ -308,9 +332,12 @@ function renderDay() {
 
     // Renderizar actividades obligatorias primero
     renderActivityList(mandatoryActivities, false);
-    
+
     // Renderizar actividades opcionales al final
     renderActivityList(optionalActivities, true);
+
+    // Renderizar sección de alojamiento
+    renderAccommodationSection(currentDay);
 
     // Centrar mapa en la primera actividad con coordenadas si existe
     const firstRealAct = day.activities.find(activity => activity.coordinates);
@@ -318,6 +345,62 @@ function renderDay() {
         currentMarker = L.marker(firstRealAct.coordinates, { icon: redIcon }).addTo(map);
         map.setView(firstRealAct.coordinates, 13);
     }
+}
+
+// Render accommodation section for the day
+function renderAccommodationSection(dayIndex) {
+    const dayAccommodations = getAccommodationsForDay(dayIndex);
+
+    // Create accommodation section
+    const accommodationSection = document.createElement('li');
+    accommodationSection.className = 'accommodation-section';
+
+    let accommodationHTML = '<div class="accommodation-header"><h3>Donde dormimos esta noche</h3></div>';
+
+    if (dayAccommodations.length === 0) {
+        accommodationHTML += '<div class="accommodation-content"><p class="no-accommodation">No hay alojamiento registrado para este día</p></div>';
+    } else {
+        accommodationHTML += '<div class="accommodation-content">';
+        dayAccommodations.forEach(acc => {
+            const daysRange = acc.fromDay === acc.toDay
+                ? `Día ${acc.fromDay + 1}`
+                : `Días ${acc.fromDay + 1} - ${acc.toDay + 1}`;
+
+            accommodationHTML += `
+                <div class="accommodation-item" data-id="${acc.id}">
+                    <div class="accommodation-info">
+                        <strong class="accommodation-name">${sanitizeHTML(acc.name)}</strong>
+                        <span class="accommodation-days">${sanitizeHTML(daysRange)}</span>
+                        <span class="accommodation-price">${acc.price}€</span>
+                        ${acc.link ? `<a href="${escapeAttr(acc.link)}" target="_blank" class="accommodation-link">Ver reserva</a>` : ''}
+                    </div>
+                    <div class="accommodation-actions">
+                        <button class="edit-accommodation-btn" data-id="${acc.id}">✏️</button>
+                        <button class="delete-accommodation-btn" data-id="${acc.id}">🗑️</button>
+                    </div>
+                </div>
+            `;
+        });
+        accommodationHTML += '</div>';
+    }
+
+    accommodationSection.innerHTML = accommodationHTML;
+    activityListEl.appendChild(accommodationSection);
+
+    // Add event listeners for accommodation buttons
+    accommodationSection.querySelectorAll('.edit-accommodation-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            editAccommodation(parseInt(btn.dataset.id));
+        });
+    });
+
+    accommodationSection.querySelectorAll('.delete-accommodation-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            deleteAccommodation(parseInt(btn.dataset.id));
+        });
+    });
 }
 
 // Navegación días
@@ -1090,6 +1173,159 @@ function searchTravels() {
                 </div>
             </div>
         `).join('');
+    }
+}
+
+// ==================== ACCOMMODATION MODAL ====================
+
+const accommodationModal = document.getElementById('accommodationModal');
+const closeAccommodationModalBtn = document.getElementById('closeAccommodationModal');
+const accommodationForm = document.getElementById('accommodationForm');
+const addAccommodationBtn = document.getElementById('addAccommodationBtn');
+const fromDaySelect = document.getElementById('fromDaySelect');
+const toDaySelect = document.getElementById('toDaySelect');
+
+// Populate day select options
+function populateDaySelects() {
+    fromDaySelect.innerHTML = '';
+    toDaySelect.innerHTML = '';
+
+    daysData.forEach((day, index) => {
+        const optionFrom = document.createElement('option');
+        optionFrom.value = index;
+        optionFrom.textContent = `Día ${index + 1}: ${day.title}`;
+        fromDaySelect.appendChild(optionFrom);
+
+        const optionTo = document.createElement('option');
+        optionTo.value = index;
+        optionTo.textContent = `Día ${index + 1}: ${day.title}`;
+        toDaySelect.appendChild(optionTo);
+    });
+
+    // Set default to current day
+    fromDaySelect.value = currentDay;
+    toDaySelect.value = currentDay;
+}
+
+// Open accommodation modal
+addAccommodationBtn.addEventListener('click', () => {
+    accommodationForm.reset();
+    editingAccommodation = null;
+    populateDaySelects();
+    accommodationModal.style.display = 'block';
+    const submitBtn = accommodationForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Añadir Alojamiento';
+});
+
+// Close accommodation modal
+closeAccommodationModalBtn.addEventListener('click', () => {
+    accommodationModal.style.display = 'none';
+    editingAccommodation = null;
+    const submitBtn = accommodationForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Añadir Alojamiento';
+});
+
+// Close modal on outside click
+window.addEventListener('click', (e) => {
+    if (e.target === accommodationModal) {
+        accommodationModal.style.display = 'none';
+        editingAccommodation = null;
+        const submitBtn = accommodationForm.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = 'Añadir Alojamiento';
+    }
+});
+
+// Validate toDay >= fromDay
+fromDaySelect.addEventListener('change', () => {
+    const fromDay = parseInt(fromDaySelect.value);
+    const toDay = parseInt(toDaySelect.value);
+    if (toDay < fromDay) {
+        toDaySelect.value = fromDay;
+    }
+});
+
+// Handle accommodation form submission
+accommodationForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = accommodationForm.name.value.trim();
+    const fromDay = parseInt(accommodationForm.fromDay.value);
+    const toDay = parseInt(accommodationForm.toDay.value);
+    const price = parseFloat(accommodationForm.price.value) || 0;
+    const link = accommodationForm.link.value.trim();
+
+    if (!name) {
+        alert('Por favor introduce el nombre del alojamiento.');
+        return;
+    }
+
+    if (toDay < fromDay) {
+        alert('El día de salida debe ser igual o posterior al día de entrada.');
+        return;
+    }
+
+    if (editingAccommodation) {
+        // Update existing accommodation
+        const accIndex = accommodationsData.findIndex(a => a.id === editingAccommodation);
+        if (accIndex !== -1) {
+            accommodationsData[accIndex] = {
+                id: editingAccommodation,
+                name,
+                fromDay,
+                toDay,
+                price,
+                link
+            };
+        }
+        editingAccommodation = null;
+        const submitBtn = accommodationForm.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.textContent = 'Añadir Alojamiento';
+    } else {
+        // Add new accommodation
+        accommodationsData.push({
+            id: getNextAccommodationId(),
+            name,
+            fromDay,
+            toDay,
+            price,
+            link
+        });
+    }
+
+    accommodationModal.style.display = 'none';
+    saveToStorage();
+    refreshCurrentView();
+});
+
+// Edit accommodation
+function editAccommodation(accommodationId) {
+    const accommodation = accommodationsData.find(a => a.id === accommodationId);
+    if (!accommodation) {
+        console.error('Accommodation not found:', accommodationId);
+        return;
+    }
+
+    editingAccommodation = accommodationId;
+    populateDaySelects();
+
+    accommodationForm.name.value = accommodation.name || '';
+    accommodationForm.fromDay.value = accommodation.fromDay;
+    accommodationForm.toDay.value = accommodation.toDay;
+    accommodationForm.price.value = accommodation.price || 0;
+    accommodationForm.link.value = accommodation.link || '';
+
+    const submitBtn = accommodationForm.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Actualizar Alojamiento';
+
+    accommodationModal.style.display = 'block';
+}
+
+// Delete accommodation
+function deleteAccommodation(accommodationId) {
+    if (confirm('¿Estás seguro de que quieres eliminar este alojamiento?')) {
+        accommodationsData = accommodationsData.filter(a => a.id !== accommodationId);
+        saveToStorage();
+        refreshCurrentView();
     }
 }
 

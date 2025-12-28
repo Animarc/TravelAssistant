@@ -19,10 +19,11 @@
             <button id="accountBtn" title="Cuenta y Viajes">⚙️</button>
         </section>
         <section class="controls-row">
-            <button id="moveDayLeftBtn">← Mover día a la izquierda</button>
-            <button id="addDayBtn">+ Añadir Día</button>
-            <button id="addActivityBtn">+ Añadir Actividad</button>
-            <button id="moveDayRightBtn">Mover día a la derecha →</button>
+            <button id="moveDayLeftBtn">← Mover día</button>
+            <button id="addDayBtn">+ Día</button>
+            <button id="addActivityBtn">+ Actividad</button>
+            <button id="addAccommodationBtn">+ Dormir</button>
+            <button id="moveDayRightBtn">Mover día →</button>
         </section>
     </nav>
     <main class="container">
@@ -58,7 +59,7 @@
                     <textarea name="importantInfo" rows="2" placeholder="Opcional"></textarea>
                 </label><br>
                 <label>Precio: <input type="text" name="price" placeholder="Opcional (ej: 15, 20, etc.)"></label><br>
-                <label>Moneda: 
+                <label>Moneda:
                     <select name="currency" required>
                         <option value="EUR">EUR - Euro (€)</option>
                         <option value="USD">USD - US Dollar ($)</option>
@@ -85,6 +86,30 @@
                 <label>Latitud: <input type="number" step="any" name="lat" placeholder="Opcional"></label><br>
                 <label>Longitud: <input type="number" step="any" name="lng" placeholder="Opcional"></label><br>
                 <button type="submit">Añadir Actividad</button>
+            </form>
+        </section>
+    </dialog>
+
+    <!-- Modal para añadir alojamiento -->
+    <dialog id="accommodationModal" class="modal">
+        <section class="modal-content">
+            <span id="closeAccommodationModal" class="close">&times;</span>
+            <h2>Añadir Alojamiento</h2>
+            <form id="accommodationForm">
+                <label>Nombre del lugar: <input type="text" name="name" required placeholder="Ej: Hotel Sakura, Airbnb Tokyo..."></label><br>
+                <label>Desde día:
+                    <select name="fromDay" id="fromDaySelect" required>
+                    </select>
+                </label><br>
+                <label>Hasta día:
+                    <select name="toDay" id="toDaySelect" required>
+                    </select>
+                </label><br>
+                <label>Precio total (€): <input type="number" name="price" step="0.01" min="0" required placeholder="Ej: 150"></label><br>
+                <label>Enlace al proveedor:<br>
+                    <input type="url" name="link" placeholder="Opcional (ej: https://booking.com/...)">
+                </label><br>
+                <button type="submit">Añadir Alojamiento</button>
             </form>
         </section>
     </dialog>
