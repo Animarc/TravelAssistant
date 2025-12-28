@@ -366,13 +366,15 @@ function renderAccommodationSection(dayIndex) {
                 ? `Día ${acc.fromDay + 1}`
                 : `Días ${acc.fromDay + 1} - ${acc.toDay + 1}`;
 
+            const hasCoordinates = acc.coordinates && Array.isArray(acc.coordinates) && acc.coordinates.length === 2;
+
             accommodationHTML += `
                 <div class="accommodation-item" data-id="${acc.id}">
                     <div class="accommodation-info">
                         <strong class="accommodation-name">${sanitizeHTML(acc.name)}</strong>
                         <span class="accommodation-days">${sanitizeHTML(daysRange)}</span>
-                        <span class="accommodation-price">${acc.price}€</span>
                         ${acc.link ? `<a href="${escapeAttr(acc.link)}" target="_blank" class="accommodation-link">Ver reserva</a>` : ''}
+                        ${hasCoordinates ? `<button class="accommodation-gmaps-btn" data-lat="${acc.coordinates[0]}" data-lng="${acc.coordinates[1]}">Ir con Maps</button>` : ''}
                     </div>
                     <div class="accommodation-actions">
                         <button class="edit-accommodation-btn" data-id="${acc.id}">✏️</button>
@@ -399,6 +401,18 @@ function renderAccommodationSection(dayIndex) {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             deleteAccommodation(parseInt(btn.dataset.id));
+        });
+    });
+
+    // Add event listeners for Google Maps buttons
+    accommodationSection.querySelectorAll('.accommodation-gmaps-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const lat = btn.dataset.lat;
+            const lng = btn.dataset.lng;
+            // Open Google Maps with directions from current location to accommodation
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(lat)},${encodeURIComponent(lng)}&travelmode=transit`;
+            window.open(url, '_blank');
         });
     });
 }
@@ -1244,6 +1258,19 @@ fromDaySelect.addEventListener('change', () => {
     }
 });
 
+// Parse accommodation coordinates
+function parseAccommodationCoordinates(latStr, lngStr) {
+    const lat = parseFloat(latStr);
+    const lng = parseFloat(lngStr);
+    if (isNaN(lat) || isNaN(lng)) {
+        return null;
+    }
+    if (lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+        return null;
+    }
+    return [lat, lng];
+}
+
 // Handle accommodation form submission
 accommodationForm.addEventListener('submit', (e) => {
     e.preventDefault();
@@ -1253,6 +1280,7 @@ accommodationForm.addEventListener('submit', (e) => {
     const toDay = parseInt(accommodationForm.toDay.value);
     const price = parseFloat(accommodationForm.price.value) || 0;
     const link = accommodationForm.link.value.trim();
+    const coordinates = parseAccommodationCoordinates(accommodationForm.accLat.value, accommodationForm.accLng.value);
 
     if (!name) {
         alert('Por favor introduce el nombre del alojamiento.');
@@ -1274,7 +1302,8 @@ accommodationForm.addEventListener('submit', (e) => {
                 fromDay,
                 toDay,
                 price,
-                link
+                link,
+                coordinates
             };
         }
         editingAccommodation = null;
@@ -1288,7 +1317,8 @@ accommodationForm.addEventListener('submit', (e) => {
             fromDay,
             toDay,
             price,
-            link
+            link,
+            coordinates
         });
     }
 
@@ -1313,6 +1343,8 @@ function editAccommodation(accommodationId) {
     accommodationForm.toDay.value = accommodation.toDay;
     accommodationForm.price.value = accommodation.price || 0;
     accommodationForm.link.value = accommodation.link || '';
+    accommodationForm.accLat.value = accommodation.coordinates ? accommodation.coordinates[0] : '';
+    accommodationForm.accLng.value = accommodation.coordinates ? accommodation.coordinates[1] : '';
 
     const submitBtn = accommodationForm.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.textContent = 'Actualizar Alojamiento';

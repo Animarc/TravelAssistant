@@ -5,7 +5,8 @@ const accommodations = [
         price: 92,
         link: "https://www.airbnb.es/rooms/31774982?adults=2&check_in=2026-07-03&check_out=2026-07-04&children=2&location=Osaka%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766317504_P3b77foPsERBoXVj&previous_page_section_name=1001&federated_search_id=1823eed9-0f94-4b60-96d8-db901dca8fda",
         fromDay: 1,
-        toDay: 1
+        toDay: 1,
+        coordinates: [34.7336, 135.5001]
     },
     {
         id: 2,
@@ -13,7 +14,8 @@ const accommodations = [
         price: 220,
         link: "https://dormy-hotels.com/reserve/search-plan-room?keyword=城崎%20円山川温泉%20銀花&checkin=2026%2F07%2F04&search_by_tag=plan&number_of_nights=1&number_of_rooms=1&tags=&brands=&order_by=&hotelId=271&planId=4898&number_of_adults[]=2&number_of_children_need_futons[]=2&number_of_children_no_need_futons[]=0",
         fromDay: 2,
-        toDay: 2
+        toDay: 2,
+        coordinates: [35.6283, 134.8141]
     },
     {
         id: 3,
@@ -21,7 +23,8 @@ const accommodations = [
         price: 92,
         link: "https://www.airbnb.es/rooms/31774982?adults=2&check_in=2026-07-03&check_out=2026-07-04&children=2&location=Osaka%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766317504_P3b77foPsERBoXVj&previous_page_section_name=1001&federated_search_id=1823eed9-0f94-4b60-96d8-db901dca8fda",
         fromDay: 3,
-        toDay: 3
+        toDay: 3,
+        coordinates: [34.7336, 135.5001]
     },
     {
         id: 4,
@@ -29,7 +32,8 @@ const accommodations = [
         price: 100,
         link: "https://www.airbnb.es/rooms/46325248?adults=2&check_in=2026-07-06&check_out=2026-07-07&children=2&search_mode=regular_search&source_impression_id=p3_1766744958_P3slamj4HLrTlTKF&previous_page_section_name=1000&federated_search_id=9e056c25-318d-4f7b-b580-0e82719854b2",
         fromDay: 4,
-        toDay: 4
+        toDay: 4,
+        coordinates: [35.6812, 139.7671]
     },
     {
         id: 5,
@@ -37,7 +41,8 @@ const accommodations = [
         price: 200,
         link: "https://www.airbnb.es/rooms/19581084?check_in=2026-07-07&check_out=2026-07-09&guests=1&adults=2&children=2&s=67&unique_share_id=4e9bab46-99d4-45e6-a371-60bdc67bb9bb",
         fromDay: 5,
-        toDay: 6
+        toDay: 6,
+        coordinates: [36.2381, 137.9715]
     },
     {
         id: 6,
@@ -45,7 +50,8 @@ const accommodations = [
         price: 200,
         link: "https://www.booking.com/hotel/jp/bamboo-choju-yu-hakone.es.html?label=gen173nr-10CAEoggI46AdIM1gEaEaIAQGYATO4AQfIAQ3YAQPoAQH4AQGIAgGoAgG4AqrDucoGwAIB0gIkMGY4NDJiN2EtOTE0YS00MmU1LTg5MWItNzQwNThlYmYwNjdl2AIB4AIB&sid=5c0576d54ea6b4c1471230389d0f9e39&aid=304142&ucfs=1&checkin=2026-07-09&checkout=2026-07-10&dest_id=258925&dest_type=landmark&group_adults=2&no_rooms=1&group_children=2&age=4&req_age=4&age=8&req_age=8&srpvid=ce898e7fb7273a9992f11ddc15662e61&srepoch=1766753543&matching_block_id=126761001_423823373_3_0_0&atlas_src=sr_iw_title",
         fromDay: 7,
-        toDay: 7
+        toDay: 7,
+        coordinates: [35.2039, 139.0220]
     },
     {
         id: 7,
@@ -53,7 +59,8 @@ const accommodations = [
         price: 83,
         link: "https://www.tsurunoyu.com",
         fromDay: 8,
-        toDay: 9
+        toDay: 9,
+        coordinates: [39.7450, 140.7860]
     },
     {
         id: 8,
@@ -61,7 +68,8 @@ const accommodations = [
         price: 90,
         link: "",
         fromDay: 10,
-        toDay: 10
+        toDay: 10,
+        coordinates: [39.7036, 141.1527]
     },
     {
         id: 9,
@@ -69,7 +77,8 @@ const accommodations = [
         price: 90,
         link: "https://www.booking.com/hotel/jp/comfort-inn-iwate-ichinoseki-ic.es.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaEaIAQGYATO4AQfIAQ3YAQPoAQH4AQGIAgGoAgG4AqrDucoGwAIB0gIkMGY4NDJiN2EtOTE0YS00MmU1LTg5MWItNzQwNThlYmYwNjdl2AIB4AIB&sid=93cfe30cb393e684186c32dd5aca3382&age=4&age=8&all_sr_blocks=33296016_394322684_2_2_0%2C33296017_394322684_1_2_0&checkin=2026-07-13&checkout=2026-07-14&dest_id=-230081&dest_type=city&dist=0&group_adults=2&group_children=2&hapos=1&highlighted_blocks=33296016_394322684_2_2_0%2C33296017_394322684_1_2_0&hpos=1&matching_block_id=33296016_394322684_2_2_0&no_rooms=1&req_adults=2&req_age=4&req_age=8&req_children=2&room1=A%2CA%2C4%2C8&sb_price_type=total&sr_order=popularity&sr_pri_blocks=33296016_394322684_2_2_0__840000%2C33296017_394322684_1_2_0__690000&srepoch=1766769350&srpvid=f682fc9bf1a837bbb31acb4aab7381d3&type=total&ucfs=1&#_",
         fromDay: 11,
-        toDay: 11
+        toDay: 11,
+        coordinates: [38.9342, 141.1267]
     },
     {
         id: 10,
@@ -77,7 +86,8 @@ const accommodations = [
         price: 120,
         link: "https://www.booking.com/hotel/jp/nikko-park-lodge-mountain-side.es.html?label=gen173nr-10CAEoggI46AdIM1gEaEaIAQGYATO4AQfIAQ3YAQPoAQH4AQGIAgGoAgG4AqrDucoGwAIB0gIkMGY4NDJiN2EtOTE0YS00MmU1LTg5MWItNzQwNThlYmYwNjdl2AIB4AIB&sid=5c0576d54ea6b4c1471230389d0f9e39&aid=304142&ucfs=1&checkin=2026-07-14&checkout=2026-07-15&dest_id=-238790&dest_type=city&group_adults=2&no_rooms=1&group_children=2&age=4&req_age=4&age=8&req_age=8&srpvid=a8305e5d1c56d05661bd2fabe70d5d35&srepoch=1766772517&matching_block_id=28187303_91917990_4_34_0&atlas_src=sr_iw_title#_",
         fromDay: 12,
-        toDay: 12
+        toDay: 12,
+        coordinates: [36.7500, 139.6000]
     },
     {
         id: 11,
@@ -85,7 +95,8 @@ const accommodations = [
         price: 210,
         link: "https://www.airbnb.es/rooms/1161393077315930218?adults=2&check_in=2026-07-15&check_out=2026-07-18&children=2&location=Tokio%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766841296_P3Wnsi5qU57C_Jm6&previous_page_section_name=1001&federated_search_id=fb73b18c-372c-459c-b40f-db01d2971d4f&federated_search_id=c5737083-d114-4a46-a48c-f706e0bc1341",
         fromDay: 13,
-        toDay: 15
+        toDay: 15,
+        coordinates: [35.6812, 139.7671]
     },
     {
         id: 12,
@@ -93,7 +104,8 @@ const accommodations = [
         price: 100,
         link: "",
         fromDay: 16,
-        toDay: 16
+        toDay: 16,
+        coordinates: [35.7431, 136.9595]
     },
     {
         id: 13,
@@ -101,7 +113,8 @@ const accommodations = [
         price: 380,
         link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e",
         fromDay: 17,
-        toDay: 24
+        toDay: 24,
+        coordinates: [34.6937, 135.5023]
     }
 ];
 

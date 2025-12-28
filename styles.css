@@ -273,6 +273,7 @@ body {
 .activity-list {
     list-style: none;
     padding: 0;
+    margin: 0;
 }
 
 .activity-item {
@@ -378,10 +379,20 @@ body {
 
 /* Responsive styles for mobile */
 @media (max-width: 800px) {
+    body {
+        overflow: hidden;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .controls {
+        flex-shrink: 0;
+    }
     .container {
         flex-direction: column;
-        height: 100vh;
-        min-height: 100vh;
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
     }
     .right-panel {
         order: -1;
@@ -390,20 +401,23 @@ body {
         min-height: 100px;
         max-height: 20vh;
         padding: 0;
+        flex-shrink: 0;
     }
     #map {
         height: 100%;
         min-height: 100px;
         max-height: 20vh;
-        width: 100vw;
+        width: 100%;
     }
     .left-panel {
         width: 100%;
-        height: 80vh;
-        max-height: 80vh;
+        flex: 1;
         min-height: 0;
         overflow-y: auto;
+        overflow-x: hidden;
         padding: 10px;
+        box-sizing: border-box;
+        -webkit-overflow-scrolling: touch;
     }
     .day-header {
         flex-direction: row;
@@ -493,9 +507,6 @@ body {
         font-size: 1.1em;
         padding: 14px 0;
     }
-    body {
-        font-size: 1.05em;
-    }
 }
 
 @media (max-width: 500px) {
@@ -584,10 +595,6 @@ body {
         height: 100%;
         min-height: 80px;
         max-height: 20vh;
-    }
-    .left-panel {
-        height: 80vh;
-        max-height: 80vh;
     }
     .activity-item {
         font-size: 1em;
@@ -946,7 +953,8 @@ body {
     margin: 20px 0 10px 0;
     border-radius: 8px;
     border-left: 4px solid #17a2b8;
-    overflow: hidden;
+    overflow: visible;
+    list-style: none;
 }
 
 .accommodation-header {
@@ -1045,6 +1053,21 @@ body {
     text-decoration: underline;
 }
 
+.accommodation-gmaps-btn {
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.accommodation-gmaps-btn:hover {
+    background-color: #3367d6;
+}
+
 .accommodation-actions {
     display: flex;
     gap: 4px;
@@ -1071,6 +1094,12 @@ body {
 
 /* Responsive styles for accommodation */
 @media (max-width: 800px) {
+    .accommodation-section {
+        margin: 15px 0 10px 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
     .accommodation-item {
         flex-direction: column;
         align-items: flex-start;
@@ -1090,6 +1119,18 @@ body {
 }
 
 @media (max-width: 500px) {
+    .accommodation-section {
+        margin: 10px 0;
+    }
+
+    .accommodation-header {
+        padding: 10px 12px;
+    }
+
+    .accommodation-content {
+        padding: 10px 12px;
+    }
+
     .accommodation-info {
         flex-direction: column;
         align-items: flex-start;
