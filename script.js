@@ -48,10 +48,21 @@ function loadAccommodationsFromStorage() {
     }
 }
 
+function loadShoppingItemsFromStorage() {
+    try {
+        const data = localStorage.getItem('travelAssistantShoppingItems');
+        return data ? JSON.parse(data) : null;
+    } catch (e) {
+        console.error('Error loading shopping items from localStorage:', e);
+        return null;
+    }
+}
+
 // Clonamos la variable global 'days' (de data.js) para no modificarla directamente
 // Load from localStorage if available, otherwise use default data
 let daysData = loadDaysFromStorage() || JSON.parse(JSON.stringify(days));
 let accommodationsData = loadAccommodationsFromStorage() || JSON.parse(JSON.stringify(accommodations));
+let shoppingItemsData = loadShoppingItemsFromStorage() || JSON.parse(JSON.stringify(shoppingItems));
 let currentDay = loadCurrentDayFromStorage();
 let currentView = 'planning'; // Track current view: 'planning', 'budget', 'objects', 'account'
 let editingActivity = null; // Track editing state: { dayIndex, activityIndex } or null
@@ -61,6 +72,7 @@ function saveToStorage() {
     try {
         localStorage.setItem('travelAssistantData', JSON.stringify(daysData));
         localStorage.setItem('travelAssistantAccommodations', JSON.stringify(accommodationsData));
+        localStorage.setItem('travelAssistantShoppingItems', JSON.stringify(shoppingItemsData));
         localStorage.setItem('travelAssistantCurrentDay', currentDay.toString());
     } catch (e) {
         console.error('Error saving to localStorage:', e);
@@ -130,6 +142,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 let currentMarker = null;
 let currentPolyline = null;
+let accommodationMarker = null;
 
 const redIcon = L.icon({
     iconUrl: 'img/marker-icon-red.png',
@@ -138,6 +151,15 @@ const redIcon = L.icon({
     iconAnchor: [12, 41],
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
+});
+
+// Custom icon for accommodation (teal color with hotel emoji)
+const accommodationIcon = L.divIcon({
+    className: 'accommodation-marker',
+    html: '<div class="accommodation-marker-inner"></div>',
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -30]
 });
 
 function haversineDistance(coords1, coords2) {
@@ -172,12 +194,31 @@ function renderDay() {
 
     // Limpiar mapa
     if (currentMarker) {
-        map.removeLayer(currentMarker);
+        if (Array.isArray(currentMarker)) {
+            currentMarker.forEach(m => map.removeLayer(m));
+        } else {
+            map.removeLayer(currentMarker);
+        }
         currentMarker = null;
     }
     if (currentPolyline) {
         map.removeLayer(currentPolyline);
         currentPolyline = null;
+    }
+    if (accommodationMarker) {
+        map.removeLayer(accommodationMarker);
+        accommodationMarker = null;
+    }
+
+    // Añadir marcador del alojamiento para este día
+    const dayAccommodations = getAccommodationsForDay(currentDay);
+    if (dayAccommodations.length > 0) {
+        const acc = dayAccommodations[0]; // Usar el primer alojamiento del día
+        if (acc.coordinates && Array.isArray(acc.coordinates) && acc.coordinates.length === 2) {
+            accommodationMarker = L.marker(acc.coordinates, { icon: accommodationIcon })
+                .addTo(map)
+                .bindPopup(`<strong>🏨 ${sanitizeHTML(acc.name)}</strong><br>Donde dormimos esta noche`);
+        }
     }
 
     // Separar actividades obligatorias y opcionales, preservando índices originales
@@ -224,7 +265,20 @@ function renderDay() {
         // Renderizar actividades y traslados
         activitiesWithTransfers.forEach((act, i) => {
             const li = document.createElement('li');
-            li.className = isOptional ? 'activity-item optional-activity' : 'activity-item';
+
+            // Build class list based on activity type and optional status
+            let classNames = ['activity-item'];
+            if (isOptional) classNames.push('optional-activity');
+            if (act.isTransfer) {
+                classNames.push('transfer-item');
+            } else {
+                // Add activity type class
+                const activityType = act.type || 'normal';
+                classNames.push(`activity-type-${activityType}`);
+                // Add done state class
+                if (act.isDone) classNames.push('activity-done');
+            }
+            li.className = classNames.join(' ');
 
             if (act.isTransfer) {
                 li.innerHTML = `
@@ -459,6 +513,8 @@ addActivityBtn.addEventListener('click', () => {
     modal.style.display = 'block';
     // Reset time field requirement
     document.getElementById('timeInput').required = true;
+    // Reset activity type to default
+    document.getElementById('activityTypeSelect').value = 'normal';
     // Reset button text
     const submitBtn = activityForm.querySelector('button[type="submit"]');
     if (submitBtn) submitBtn.textContent = 'Añadir Actividad';
@@ -522,6 +578,7 @@ function handleFormSubmit(e) {
     const price = activityForm.price.value.trim();
     const currency = activityForm.currency.value;
     const isOptional = activityForm.isOptional.checked;
+    const activityType = activityForm.activityType.value || 'normal';
     const coordinates = parseCoordinates(activityForm.lat.value, activityForm.lng.value);
 
     if ((!isOptional && !time) || !name || !description) {
@@ -533,6 +590,7 @@ function handleFormSubmit(e) {
         time,
         name,
         description,
+        type: activityType,
         importantInfo: importantInfo || null,
         price: price || null,
         currency: price ? currency : null,
@@ -608,82 +666,373 @@ function showBudgetView() {
     activityListEl.innerHTML = '';
     activityListEl.className = 'activity-list budget-list';
 
-    // Group totals by currency
-    const totalsByCurrency = {};
+    // Totals tracking
+    const grandTotalsByCurrency = {};
+    const activityTotalsByCurrency = {};
+    const accommodationTotalsByCurrency = {};
+    const shoppingTotalsByCurrency = {};
+
+    // ==================== SECCIÓN 1: ACTIVIDADES ====================
+    const activitiesSection = document.createElement('li');
+    activitiesSection.className = 'budget-section';
+    activitiesSection.innerHTML = `
+        <div class="budget-section-header">
+            <h3>🎯 Actividades</h3>
+            <span class="budget-section-toggle">▼</span>
+        </div>
+        <div class="budget-section-content" id="activitiesContent"></div>
+    `;
+    activityListEl.appendChild(activitiesSection);
+
+    const activitiesContent = activitiesSection.querySelector('#activitiesContent');
     let activitiesWithPrice = 0;
 
     daysData.forEach((day, dayIndex) => {
-        // Find activities with price and track their original indices
         const dayActivitiesWithIndices = day.activities
             .map((activity, index) => ({ activity, originalIndex: index }))
             .filter(item => item.activity.price);
 
         if (dayActivitiesWithIndices.length > 0) {
-            const dayHeader = document.createElement('li');
+            const dayHeader = document.createElement('div');
             dayHeader.className = 'budget-day-header';
-            dayHeader.innerHTML = `<h3>Día ${dayIndex + 1}: ${sanitizeHTML(day.title)}</h3>`;
-            activityListEl.appendChild(dayHeader);
+            dayHeader.innerHTML = `<h4>Día ${dayIndex + 1}: ${sanitizeHTML(day.title)}</h4>`;
+            activitiesContent.appendChild(dayHeader);
 
             dayActivitiesWithIndices.forEach(({ activity, originalIndex }) => {
-                const li = document.createElement('li');
-                li.className = 'budget-item';
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'budget-item';
                 const currency = activity.currency || 'EUR';
                 const priceValue = parseFloat(activity.price) || 0;
 
-                // Add to currency totals
-                if (!totalsByCurrency[currency]) {
-                    totalsByCurrency[currency] = 0;
-                }
-                totalsByCurrency[currency] += priceValue;
+                // Add to totals
+                if (!activityTotalsByCurrency[currency]) activityTotalsByCurrency[currency] = 0;
+                activityTotalsByCurrency[currency] += priceValue;
+                if (!grandTotalsByCurrency[currency]) grandTotalsByCurrency[currency] = 0;
+                grandTotalsByCurrency[currency] += priceValue;
 
-                li.innerHTML = `
+                const typeIcon = getActivityTypeIcon(activity.type);
+                itemDiv.innerHTML = `
                     <div class="budget-activity">
                         <div class="budget-activity-info">
-                            <strong>${sanitizeHTML(activity.time) || 'Sin hora'}</strong> - ${sanitizeHTML(activity.name)}
+                            <span class="budget-type-icon">${typeIcon}</span>
+                            <span>${sanitizeHTML(activity.name)}</span>
                         </div>
                         <div class="budget-activity-actions">
-                            <span class="budget-price">${sanitizeHTML(activity.price)} ${sanitizeHTML(currency)}</span>
+                            <span class="budget-price">${priceValue.toFixed(2)} ${sanitizeHTML(currency)}</span>
                             <button class="edit-activity-btn" data-day="${dayIndex}" data-activity="${originalIndex}">✏️</button>
-                            <button class="delete-activity-btn" data-day="${dayIndex}" data-activity="${originalIndex}">🗑️</button>
                         </div>
                     </div>
                 `;
 
-                // Add event listener for edit button
-                const editBtn = li.querySelector('.edit-activity-btn');
+                const editBtn = itemDiv.querySelector('.edit-activity-btn');
                 editBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
                     editActivity(dayIndex, originalIndex);
                 });
 
-                // Add event listener for delete button
-                const deleteBtn = li.querySelector('.delete-activity-btn');
-                deleteBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    deleteActivity(dayIndex, originalIndex);
-                });
-
-                activityListEl.appendChild(li);
+                activitiesContent.appendChild(itemDiv);
                 activitiesWithPrice++;
             });
         }
     });
 
-    // Build totals summary string
-    const totalsArray = Object.entries(totalsByCurrency)
-        .map(([currency, total]) => `${total.toFixed(2)} ${sanitizeHTML(currency)}`)
+    // Activities subtotal
+    const activitySubtotal = document.createElement('div');
+    activitySubtotal.className = 'budget-subtotal';
+    const activityTotalsStr = Object.entries(activityTotalsByCurrency)
+        .map(([cur, total]) => `${total.toFixed(2)} ${cur}`).join(' + ');
+    activitySubtotal.innerHTML = `<strong>Subtotal Actividades:</strong> ${activityTotalsStr || '0.00 EUR'}`;
+    activitiesContent.appendChild(activitySubtotal);
+
+    // ==================== SECCIÓN 2: ALOJAMIENTOS ====================
+    const accommodationsSection = document.createElement('li');
+    accommodationsSection.className = 'budget-section';
+    accommodationsSection.innerHTML = `
+        <div class="budget-section-header accommodation-header-color">
+            <h3>🏨 Alojamientos</h3>
+            <span class="budget-section-toggle">▼</span>
+        </div>
+        <div class="budget-section-content" id="accommodationsContent"></div>
+    `;
+    activityListEl.appendChild(accommodationsSection);
+
+    const accommodationsContent = accommodationsSection.querySelector('#accommodationsContent');
+
+    accommodationsData.forEach(acc => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'budget-item';
+        const currency = 'EUR';
+        const priceValue = parseFloat(acc.price) || 0;
+
+        // Add to totals
+        if (!accommodationTotalsByCurrency[currency]) accommodationTotalsByCurrency[currency] = 0;
+        accommodationTotalsByCurrency[currency] += priceValue;
+        if (!grandTotalsByCurrency[currency]) grandTotalsByCurrency[currency] = 0;
+        grandTotalsByCurrency[currency] += priceValue;
+
+        const daysRange = acc.fromDay === acc.toDay
+            ? `Día ${acc.fromDay + 1}`
+            : `Días ${acc.fromDay + 1}-${acc.toDay + 1}`;
+        const nights = acc.toDay - acc.fromDay + 1;
+
+        itemDiv.innerHTML = `
+            <div class="budget-activity">
+                <div class="budget-activity-info">
+                    <span class="budget-acc-name">${sanitizeHTML(acc.name)}</span>
+                    <span class="budget-acc-days">${daysRange} (${nights} noche${nights > 1 ? 's' : ''})</span>
+                </div>
+                <div class="budget-activity-actions">
+                    <span class="budget-price accommodation-price">${priceValue.toFixed(2)} ${currency}</span>
+                    <button class="edit-accommodation-btn" data-id="${acc.id}">✏️</button>
+                </div>
+            </div>
+        `;
+
+        const editBtn = itemDiv.querySelector('.edit-accommodation-btn');
+        editBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            editAccommodation(acc.id);
+        });
+
+        accommodationsContent.appendChild(itemDiv);
+    });
+
+    // Accommodation subtotal
+    const accSubtotal = document.createElement('div');
+    accSubtotal.className = 'budget-subtotal';
+    const accTotalsStr = Object.entries(accommodationTotalsByCurrency)
+        .map(([cur, total]) => `${total.toFixed(2)} ${cur}`).join(' + ');
+    accSubtotal.innerHTML = `<strong>Subtotal Alojamientos:</strong> ${accTotalsStr || '0.00 EUR'}`;
+    accommodationsContent.appendChild(accSubtotal);
+
+    // ==================== SECCIÓN 3: COMPRAS ====================
+    const shoppingSection = document.createElement('li');
+    shoppingSection.className = 'budget-section';
+    shoppingSection.innerHTML = `
+        <div class="budget-section-header shopping-header-color">
+            <h3>🛒 Compras y Reservas</h3>
+            <span class="budget-section-toggle">▼</span>
+        </div>
+        <div class="budget-section-content" id="shoppingContent"></div>
+    `;
+    activityListEl.appendChild(shoppingSection);
+
+    const shoppingContent = shoppingSection.querySelector('#shoppingContent');
+
+    // Group by category
+    const categories = {
+        transporte: { icon: '🚆', name: 'Transporte', items: [] },
+        entradas: { icon: '🎟️', name: 'Entradas', items: [] },
+        electronica: { icon: '📱', name: 'Electrónica', items: [] },
+        documentos: { icon: '📄', name: 'Documentos', items: [] },
+        otros: { icon: '📦', name: 'Otros', items: [] }
+    };
+
+    shoppingItemsData.forEach(item => {
+        const cat = categories[item.category] || categories.otros;
+        cat.items.push(item);
+    });
+
+    Object.entries(categories).forEach(([key, cat]) => {
+        if (cat.items.length === 0) return;
+
+        const catHeader = document.createElement('div');
+        catHeader.className = 'budget-category-header';
+        catHeader.innerHTML = `<h4>${cat.icon} ${cat.name}</h4>`;
+        shoppingContent.appendChild(catHeader);
+
+        cat.items.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = `budget-item ${item.purchased ? 'purchased' : ''}`;
+            const currency = item.currency || 'EUR';
+            const priceValue = parseFloat(item.price) || 0;
+
+            // Add to totals
+            if (!shoppingTotalsByCurrency[currency]) shoppingTotalsByCurrency[currency] = 0;
+            shoppingTotalsByCurrency[currency] += priceValue;
+            if (!grandTotalsByCurrency[currency]) grandTotalsByCurrency[currency] = 0;
+            grandTotalsByCurrency[currency] += priceValue;
+
+            itemDiv.innerHTML = `
+                <div class="budget-activity">
+                    <div class="budget-activity-info">
+                        <input type="checkbox" class="shopping-checkbox" data-id="${item.id}" ${item.purchased ? 'checked' : ''}>
+                        <span class="${item.purchased ? 'purchased-text' : ''}">${sanitizeHTML(item.name)}</span>
+                        ${item.link ? `<a href="${escapeAttr(item.link)}" target="_blank" class="shopping-link">🔗</a>` : ''}
+                    </div>
+                    <div class="budget-activity-actions">
+                        <span class="budget-price shopping-price">${priceValue.toFixed(2)} ${currency}</span>
+                        <button class="edit-shopping-btn" data-id="${item.id}">✏️</button>
+                        <button class="delete-shopping-btn" data-id="${item.id}">🗑️</button>
+                    </div>
+                </div>
+            `;
+
+            // Event listeners
+            const checkbox = itemDiv.querySelector('.shopping-checkbox');
+            checkbox.addEventListener('change', () => toggleShoppingPurchased(item.id));
+
+            const editBtn = itemDiv.querySelector('.edit-shopping-btn');
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                editShoppingItem(item.id);
+            });
+
+            const deleteBtn = itemDiv.querySelector('.delete-shopping-btn');
+            deleteBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                deleteShoppingItem(item.id);
+            });
+
+            shoppingContent.appendChild(itemDiv);
+        });
+    });
+
+    // Add shopping item button
+    const addShoppingBtn = document.createElement('button');
+    addShoppingBtn.className = 'add-shopping-btn';
+    addShoppingBtn.innerHTML = '+ Añadir compra';
+    addShoppingBtn.addEventListener('click', () => openShoppingModal());
+    shoppingContent.appendChild(addShoppingBtn);
+
+    // Shopping subtotal
+    const shopSubtotal = document.createElement('div');
+    shopSubtotal.className = 'budget-subtotal';
+    const shopTotalsStr = Object.entries(shoppingTotalsByCurrency)
+        .map(([cur, total]) => `${total.toFixed(2)} ${cur}`).join(' + ');
+    shopSubtotal.innerHTML = `<strong>Subtotal Compras:</strong> ${shopTotalsStr || '0.00 EUR'}`;
+    shoppingContent.appendChild(shopSubtotal);
+
+    // ==================== RESUMEN TOTAL ====================
+    const summarySection = document.createElement('li');
+    summarySection.className = 'budget-grand-summary';
+
+    const grandTotalsStr = Object.entries(grandTotalsByCurrency)
+        .map(([cur, total]) => `<span class="grand-total-amount">${total.toFixed(2)} ${cur}</span>`)
         .join(' + ');
 
-    // Mostrar resumen total
-    const summaryLi = document.createElement('li');
-    summaryLi.className = 'budget-summary';
-    summaryLi.innerHTML = `
-        <div class="budget-total">
-            <strong>Resumen:</strong> ${activitiesWithPrice} actividades con precio
-            ${totalsArray ? `<br><strong>Total:</strong> ${totalsArray}` : ''}
+    // Calculate purchased vs pending for shopping
+    const purchasedItems = shoppingItemsData.filter(i => i.purchased).length;
+    const pendingItems = shoppingItemsData.length - purchasedItems;
+
+    summarySection.innerHTML = `
+        <div class="budget-grand-total">
+            <h3>💰 Presupuesto Total</h3>
+            <div class="grand-total-breakdown">
+                <div class="breakdown-row">
+                    <span>🎯 Actividades:</span>
+                    <span>${activityTotalsStr || '0.00 EUR'}</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>🏨 Alojamientos:</span>
+                    <span>${accTotalsStr || '0.00 EUR'}</span>
+                </div>
+                <div class="breakdown-row">
+                    <span>🛒 Compras:</span>
+                    <span>${shopTotalsStr || '0.00 EUR'}</span>
+                </div>
+                <div class="breakdown-divider"></div>
+                <div class="breakdown-row total-row">
+                    <span><strong>TOTAL:</strong></span>
+                    <span>${grandTotalsStr || '0.00 EUR'}</span>
+                </div>
+            </div>
+            <div class="shopping-status">
+                <span class="status-purchased">✅ ${purchasedItems} comprado${purchasedItems !== 1 ? 's' : ''}</span>
+                <span class="status-pending">⏳ ${pendingItems} pendiente${pendingItems !== 1 ? 's' : ''}</span>
+            </div>
         </div>
     `;
-    activityListEl.appendChild(summaryLi);
+    activityListEl.appendChild(summarySection);
+
+    // Setup section toggles
+    setupBudgetSectionToggles();
+}
+
+// Helper function to get activity type icon
+function getActivityTypeIcon(type) {
+    const icons = {
+        vuelo: '✈️',
+        transporte: '🚆',
+        comida: '🍽️',
+        visita: '🏛️',
+        normal: '📌'
+    };
+    return icons[type] || icons.normal;
+}
+
+// Setup collapsible sections
+function setupBudgetSectionToggles() {
+    document.querySelectorAll('.budget-section-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const section = header.parentElement;
+            const content = section.querySelector('.budget-section-content');
+            const toggle = header.querySelector('.budget-section-toggle');
+
+            if (content.style.display === 'none') {
+                content.style.display = 'block';
+                toggle.textContent = '▼';
+            } else {
+                content.style.display = 'none';
+                toggle.textContent = '▶';
+            }
+        });
+    });
+}
+
+// Shopping item functions
+function getNextShoppingId() {
+    if (shoppingItemsData.length === 0) return 1;
+    return Math.max(...shoppingItemsData.map(i => i.id)) + 1;
+}
+
+function toggleShoppingPurchased(itemId) {
+    const item = shoppingItemsData.find(i => i.id === itemId);
+    if (item) {
+        item.purchased = !item.purchased;
+        saveToStorage();
+        showBudgetView();
+    }
+}
+
+function deleteShoppingItem(itemId) {
+    if (confirm('¿Eliminar este elemento?')) {
+        shoppingItemsData = shoppingItemsData.filter(i => i.id !== itemId);
+        saveToStorage();
+        showBudgetView();
+    }
+}
+
+let editingShoppingItem = null;
+
+function editShoppingItem(itemId) {
+    const item = shoppingItemsData.find(i => i.id === itemId);
+    if (!item) return;
+
+    editingShoppingItem = itemId;
+
+    document.getElementById('shoppingName').value = item.name;
+    document.getElementById('shoppingCategory').value = item.category || 'otros';
+    document.getElementById('shoppingPrice').value = item.price || '';
+    document.getElementById('shoppingCurrency').value = item.currency || 'EUR';
+    document.getElementById('shoppingLink').value = item.link || '';
+
+    const submitBtn = document.querySelector('#shoppingForm button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Actualizar';
+
+    document.getElementById('shoppingModal').style.display = 'block';
+}
+
+function openShoppingModal() {
+    editingShoppingItem = null;
+    document.getElementById('shoppingForm').reset();
+    document.getElementById('shoppingCategory').value = 'otros';
+    document.getElementById('shoppingCurrency').value = 'EUR';
+
+    const submitBtn = document.querySelector('#shoppingForm button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Añadir';
+
+    document.getElementById('shoppingModal').style.display = 'block';
 }
 
 // Función para editar actividad - uses unified form handler
@@ -706,6 +1055,7 @@ function editActivity(dayIndex, activityIndex) {
     activityForm.price.value = activity.price || '';
     activityForm.currency.value = activity.currency || 'EUR';
     activityForm.isOptional.checked = activity.isOptional || false;
+    activityForm.activityType.value = activity.type || 'normal';
     activityForm.lat.value = activity.coordinates ? activity.coordinates[0] : '';
     activityForm.lng.value = activity.coordinates ? activity.coordinates[1] : '';
 
@@ -1366,6 +1716,73 @@ function deleteAccommodation(accommodationId) {
         refreshCurrentView();
     }
 }
+
+// ==================== SHOPPING MODAL ====================
+
+const shoppingModal = document.getElementById('shoppingModal');
+const closeShoppingModalBtn = document.getElementById('closeShoppingModal');
+const shoppingForm = document.getElementById('shoppingForm');
+
+// Close shopping modal
+closeShoppingModalBtn.addEventListener('click', () => {
+    shoppingModal.style.display = 'none';
+    editingShoppingItem = null;
+});
+
+// Close modal on outside click
+window.addEventListener('click', (e) => {
+    if (e.target === shoppingModal) {
+        shoppingModal.style.display = 'none';
+        editingShoppingItem = null;
+    }
+});
+
+// Handle shopping form submission
+shoppingForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('shoppingName').value.trim();
+    const category = document.getElementById('shoppingCategory').value;
+    const price = parseFloat(document.getElementById('shoppingPrice').value) || 0;
+    const currency = document.getElementById('shoppingCurrency').value;
+    const link = document.getElementById('shoppingLink').value.trim();
+
+    if (!name) {
+        alert('Por favor introduce el nombre del producto.');
+        return;
+    }
+
+    if (editingShoppingItem) {
+        // Update existing
+        const itemIndex = shoppingItemsData.findIndex(i => i.id === editingShoppingItem);
+        if (itemIndex !== -1) {
+            shoppingItemsData[itemIndex] = {
+                ...shoppingItemsData[itemIndex],
+                name,
+                category,
+                price,
+                currency,
+                link
+            };
+        }
+        editingShoppingItem = null;
+    } else {
+        // Add new
+        shoppingItemsData.push({
+            id: getNextShoppingId(),
+            name,
+            category,
+            price,
+            currency,
+            purchased: false,
+            link
+        });
+    }
+
+    shoppingModal.style.display = 'none';
+    saveToStorage();
+    showBudgetView();
+});
 
 // Render inicial
 renderDay();

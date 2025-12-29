@@ -50,6 +50,15 @@
                 <label>
                     <input type="checkbox" name="isOptional" value="true" id="isOptionalCheckbox"> Actividad opcional
                 </label><br>
+                <label>Tipo de actividad:
+                    <select name="activityType" id="activityTypeSelect">
+                        <option value="normal">📌 Normal</option>
+                        <option value="vuelo">✈️ Vuelo</option>
+                        <option value="transporte">🚆 Transporte</option>
+                        <option value="comida">🍽️ Comida</option>
+                        <option value="visita">🏛️ Visita</option>
+                    </select>
+                </label><br>
                 <label>Hora: <input type="time" name="time" id="timeInput" required></label><br>
                 <label>Nombre: <input type="text" name="name" required></label><br>
                 <label>Descripción:<br>
@@ -86,6 +95,39 @@
                 <label>Latitud: <input type="number" step="any" name="lat" placeholder="Opcional"></label><br>
                 <label>Longitud: <input type="number" step="any" name="lng" placeholder="Opcional"></label><br>
                 <button type="submit">Añadir Actividad</button>
+            </form>
+        </section>
+    </dialog>
+
+    <!-- Modal para añadir compra -->
+    <dialog id="shoppingModal" class="modal">
+        <section class="modal-content">
+            <span id="closeShoppingModal" class="close">&times;</span>
+            <h2>Añadir Compra</h2>
+            <form id="shoppingForm">
+                <label>Nombre: <input type="text" id="shoppingName" name="name" required placeholder="Ej: JR Pass, Seguro viaje..."></label><br>
+                <label>Categoría:
+                    <select id="shoppingCategory" name="category" required>
+                        <option value="transporte">🚆 Transporte</option>
+                        <option value="entradas">🎟️ Entradas</option>
+                        <option value="electronica">📱 Electrónica</option>
+                        <option value="documentos">📄 Documentos</option>
+                        <option value="otros">📦 Otros</option>
+                    </select>
+                </label><br>
+                <label>Precio: <input type="number" id="shoppingPrice" name="price" step="0.01" min="0" required placeholder="Ej: 150"></label><br>
+                <label>Moneda:
+                    <select id="shoppingCurrency" name="currency" required>
+                        <option value="EUR">EUR - Euro (€)</option>
+                        <option value="USD">USD - US Dollar ($)</option>
+                        <option value="JPY">JPY - Japanese Yen (¥)</option>
+                        <option value="GBP">GBP - British Pound (£)</option>
+                    </select>
+                </label><br>
+                <label>Enlace (opcional):<br>
+                    <input type="url" id="shoppingLink" name="link" placeholder="https://...">
+                </label><br>
+                <button type="submit">Añadir</button>
             </form>
         </section>
     </dialog>

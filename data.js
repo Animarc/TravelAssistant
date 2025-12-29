@@ -1,3 +1,61 @@
+// Objetos a comprar para el viaje
+const shoppingItems = [
+    {
+        id: 1,
+        name: "JR Pass 14 días",
+        category: "transporte",
+        price: 450,
+        currency: "EUR",
+        purchased: false,
+        link: "https://www.jrpass.com"
+    },
+    {
+        id: 2,
+        name: "Adaptador de enchufe japonés",
+        category: "electronica",
+        price: 12,
+        currency: "EUR",
+        purchased: true,
+        link: ""
+    },
+    {
+        id: 3,
+        name: "Pocket WiFi",
+        category: "electronica",
+        price: 80,
+        currency: "EUR",
+        purchased: false,
+        link: ""
+    },
+    {
+        id: 4,
+        name: "Seguro de viaje",
+        category: "documentos",
+        price: 150,
+        currency: "EUR",
+        purchased: false,
+        link: ""
+    },
+    {
+        id: 5,
+        name: "Entradas Museo Ghibli",
+        category: "entradas",
+        price: 40,
+        currency: "EUR",
+        purchased: false,
+        link: ""
+    },
+    {
+        id: 6,
+        name: "Entradas PokePark",
+        category: "entradas",
+        price: 120,
+        currency: "EUR",
+        purchased: false,
+        link: ""
+    }
+];
+
 const accommodations = [
     {
         id: 1,
@@ -118,17 +176,25 @@ const accommodations = [
     }
 ];
 
+// Tipos de actividad disponibles:
+// 'vuelo' - Actividades relacionadas con vuelos
+// 'transporte' - Trenes, buses, alquiler de coches
+// 'comida' - Restaurantes, cafés, comidas
+// 'visita' - Visitas turísticas, museos, templos
+// 'alojamiento' - Check-in, check-out de hoteles
+// 'normal' - Actividades generales (por defecto)
+
 const days = [
     {
         title: "2 de Julio - Vuelo",
         activities: [
             { time: "07:00", name: "Despertador", description: "Prepararse para el viaje hacia Japón." },
-            { time: "07:30", name: "Uber al aeropuerto", description: "Traslado reservado hacia el aeropuerto de Barcelona.", coordinates: [41.2974, 2.0833] },
-            { time: "08:00", name: "Facturar maletas", description: "Facturar maletas para el vuelo internacional." },
-            { time: "08:30", name: "Desayunar en el aeropuerto", description: "Comer algo antes del vuelo." },
-            { time: "10:45", name: "Vuelo a Abu Dhabi", description: "Salida del vuelo hacia Abu Dhabi.", coordinates: [24.433, 54.6511] },
-            { time: "19:10 (16:15 BCN)", name: "Llegada a Abu Dhabi", description: "Escala técnica antes de continuar hacia Osaka." },
-            { time: "21:15 (18:15 BCN)", name: "Vuelo a Osaka", description: "Conexión hacia Japón." }
+            { time: "07:30", name: "Uber al aeropuerto", description: "Traslado reservado hacia el aeropuerto de Barcelona.", type: "transporte", coordinates: [41.2974, 2.0833] },
+            { time: "08:00", name: "Facturar maletas", description: "Facturar maletas para el vuelo internacional.", type: "vuelo" },
+            { time: "08:30", name: "Desayunar en el aeropuerto", description: "Comer algo antes del vuelo.", type: "comida" },
+            { time: "10:45", name: "Vuelo a Abu Dhabi", description: "Salida del vuelo hacia Abu Dhabi.", type: "vuelo", coordinates: [24.433, 54.6511] },
+            { time: "19:10 (16:15 BCN)", name: "Llegada a Abu Dhabi", description: "Escala técnica antes de continuar hacia Osaka.", type: "vuelo" },
+            { time: "21:15 (18:15 BCN)", name: "Vuelo a Osaka", description: "Conexión hacia Japón.", type: "vuelo" }
         ]
     },
     {
@@ -357,10 +423,10 @@ const days = [
     {
         title: "27 de Julio - Osaka - Vuelta a casa",
         activities: [
-            { time: "12:30", name: "Comer", description: "Última comida en Japón." },
-            { time: "13:00", name: "Ir al aeropuerto", description: "Traslado al Aeropuerto Internacional de Kansai." },
-            { time: "15:00", name: "Aeropuerto", description: "Llegada al aeropuerto y facturación.", coordinates: [34.4342, 135.2324] },
-            { time: "18:10", name: "Sale el vuelo", description: "Vuelo de regreso a Barcelona." }
+            { time: "12:30", name: "Comer", description: "Última comida en Japón.", type: "comida" },
+            { time: "13:00", name: "Ir al aeropuerto", description: "Traslado al Aeropuerto Internacional de Kansai.", type: "transporte" },
+            { time: "15:00", name: "Aeropuerto", description: "Llegada al aeropuerto y facturación.", type: "vuelo", coordinates: [34.4342, 135.2324] },
+            { time: "18:10", name: "Sale el vuelo", description: "Vuelo de regreso a Barcelona.", type: "vuelo" }
         ]
     }
 ];

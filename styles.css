@@ -43,59 +43,381 @@ body {
     padding: 8px 12px;
 }
 
-/* Estilos para la vista de presupuesto */
+/* ==================== BUDGET VIEW STYLES ==================== */
+
 .budget-list {
     padding: 0;
+    list-style: none;
 }
 
-.budget-day-header {
-    background-color: #f0f0f0;
+/* Budget Sections */
+.budget-section {
+    background-color: #fff;
+    margin: 15px 0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    list-style: none;
+}
+
+.budget-section-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.budget-section-header:hover {
+    background: linear-gradient(135deg, #5a6fd6 0%, #6a4190 100%);
+}
+
+.budget-section-header h3 {
+    margin: 0;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.budget-section-header.accommodation-header-color {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+
+.budget-section-header.accommodation-header-color:hover {
+    background: linear-gradient(135deg, #148a9c 0%, #117a8b 100%);
+}
+
+.budget-section-header.shopping-header-color {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+.budget-section-header.shopping-header-color:hover {
+    background: linear-gradient(135deg, #229a3e 0%, #1a6f2e 100%);
+}
+
+.budget-section-toggle {
+    font-size: 0.9em;
+    transition: transform 0.3s;
+}
+
+.budget-section-content {
     padding: 15px;
-    margin: 10px 0;
-    border-radius: 8px;
-    border-left: 4px solid #007bff;
+    background-color: #fafafa;
 }
 
-.budget-day-header h3 {
+/* Day Headers within sections */
+.budget-day-header {
+    background-color: #e9ecef;
+    padding: 10px 15px;
+    margin: 10px -15px;
+    border-left: 4px solid #667eea;
+}
+
+.budget-day-header:first-child {
+    margin-top: 0;
+}
+
+.budget-day-header h4 {
     margin: 0;
-    color: #333;
-    font-size: 1.2em;
+    color: #495057;
+    font-size: 0.95em;
+    font-weight: 600;
 }
 
+/* Category Headers */
+.budget-category-header {
+    background-color: #f0f0f0;
+    padding: 8px 12px;
+    margin: 15px -15px 10px;
+    border-left: 4px solid #28a745;
+}
+
+.budget-category-header:first-child {
+    margin-top: 0;
+}
+
+.budget-category-header h4 {
+    margin: 0;
+    color: #495057;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+/* Budget Items */
 .budget-item {
-    border-bottom: 1px solid #eee;
-    padding: 12px 0;
-    margin: 0;
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s;
+}
+
+.budget-item:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    transform: translateX(3px);
+}
+
+.budget-item.purchased {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
 }
 
 .budget-activity {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 15px;
+    gap: 10px;
 }
 
+.budget-activity-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+}
+
+.budget-type-icon {
+    font-size: 1.2em;
+}
+
+.budget-acc-name {
+    font-weight: 500;
+    color: #0c5460;
+}
+
+.budget-acc-days {
+    font-size: 0.85em;
+    color: #6c757d;
+    background-color: #e9ecef;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.budget-activity-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+/* Prices */
 .budget-price {
     background-color: #28a745;
     color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-weight: bold;
-    font-size: 0.9em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85em;
+    white-space: nowrap;
 }
 
-.budget-summary {
+.budget-price.accommodation-price {
+    background-color: #17a2b8;
+}
+
+.budget-price.shopping-price {
+    background-color: #6c757d;
+}
+
+/* Subtotals */
+.budget-subtotal {
     background-color: #e9ecef;
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 8px;
-    border-left: 4px solid #6c757d;
+    padding: 12px 15px;
+    margin: 15px -15px -15px;
+    border-top: 2px dashed #ced4da;
+    text-align: right;
+    color: #495057;
 }
 
-.budget-total {
-    text-align: center;
+/* Shopping specific */
+.shopping-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.purchased-text {
+    text-decoration: line-through;
+    color: #6c757d;
+}
+
+.shopping-link {
+    text-decoration: none;
     font-size: 1.1em;
-    color: #495057;
+    transition: transform 0.2s;
+}
+
+.shopping-link:hover {
+    transform: scale(1.2);
+}
+
+.add-shopping-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-shopping-btn:hover {
+    background-color: #218838;
+}
+
+/* Grand Summary */
+.budget-grand-summary {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: white;
+    margin: 20px 0;
+    border-radius: 12px;
+    padding: 20px;
+    list-style: none;
+}
+
+.budget-grand-total h3 {
+    margin: 0 0 15px 0;
+    text-align: center;
+    font-size: 1.3em;
+}
+
+.grand-total-breakdown {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 0.95em;
+}
+
+.breakdown-row.total-row {
+    font-size: 1.2em;
+    padding-top: 12px;
+}
+
+.breakdown-divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: 10px 0;
+}
+
+.grand-total-amount {
+    background-color: #28a745;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.shopping-status {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-purchased {
+    color: #28a745;
+}
+
+.status-pending {
+    color: #ffc107;
+}
+
+/* Edit/Delete buttons in budget */
+.budget-item .edit-activity-btn,
+.budget-item .edit-accommodation-btn,
+.budget-item .edit-shopping-btn,
+.budget-item .delete-shopping-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.budget-item .edit-activity-btn:hover,
+.budget-item .edit-accommodation-btn:hover,
+.budget-item .edit-shopping-btn:hover {
+    background-color: #e9ecef;
+}
+
+.budget-item .delete-shopping-btn:hover {
+    background-color: #ffe6e6;
+}
+
+/* Responsive */
+@media (max-width: 800px) {
+    .budget-section {
+        margin: 10px 0;
+        border-radius: 8px;
+    }
+
+    .budget-section-header {
+        padding: 12px 15px;
+    }
+
+    .budget-section-content {
+        padding: 10px;
+    }
+
+    .budget-item {
+        padding: 10px 12px;
+    }
+
+    .budget-activity {
+        flex-wrap: wrap;
+    }
+
+    .budget-activity-info {
+        flex-basis: 100%;
+        margin-bottom: 8px;
+    }
+
+    .budget-activity-actions {
+        flex-basis: 100%;
+        justify-content: flex-end;
+    }
+
+    .shopping-status {
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 500px) {
+    .budget-grand-summary {
+        padding: 15px;
+    }
+
+    .budget-grand-total h3 {
+        font-size: 1.1em;
+    }
+
+    .breakdown-row {
+        font-size: 0.85em;
+    }
+
+    .grand-total-amount {
+        padding: 3px 8px;
+        font-size: 0.9em;
+    }
 }
 
 /* Estilos para botones de editar */
@@ -204,15 +526,7 @@ body {
     cursor: pointer;
 }
 
-.activity-done {
-    background-color: #d4edda !important;
-    border-left: 4px solid #28a745 !important;
-}
-
-.activity-done strong {
-    text-decoration: line-through;
-    color: #155724;
-}
+/* Activity done styles moved to ACTIVITY TYPE STYLES section */
 
 .container {
     display: flex;
@@ -276,11 +590,7 @@ body {
     margin: 0;
 }
 
-.activity-item {
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
-    cursor: pointer;
-}
+/* Activity item base styles moved to ACTIVITY TYPE STYLES section */
 
 .activity-details {
     display: none;
@@ -503,10 +813,7 @@ body {
         justify-content: center;
         z-index: 1001;
     }
-    .activity-item {
-        font-size: 1.1em;
-        padding: 14px 0;
-    }
+    /* Activity item responsive styles moved to ACTIVITY TYPE STYLES section */
 }
 
 @media (max-width: 500px) {
@@ -596,10 +903,7 @@ body {
         min-height: 80px;
         max-height: 20vh;
     }
-    .activity-item {
-        font-size: 1em;
-        padding: 10px 0;
-    }
+    /* Activity item responsive styles moved to ACTIVITY TYPE STYLES section */
 }
 
 /* Estilos para la vista de objetos */
@@ -946,6 +1250,34 @@ body {
     }
 }
 
+/* ==================== ACCOMMODATION MARKER ==================== */
+
+.accommodation-marker {
+    background: none !important;
+    border: none !important;
+}
+
+.accommodation-marker-inner {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    width: 36px;
+    height: 36px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    border: 3px solid white;
+    font-size: 18px;
+    line-height: 1;
+}
+
+.accommodation-marker-inner::before {
+    content: "🏨";
+    transform: rotate(45deg);
+    display: block;
+}
+
 /* ==================== ACCOMMODATION SECTION ==================== */
 
 .accommodation-section {
@@ -1135,5 +1467,195 @@ body {
         flex-direction: column;
         align-items: flex-start;
         gap: 6px;
+    }
+}
+
+/* ==================== ACTIVITY TYPE STYLES ==================== */
+
+/* Base activity item styles - enhanced */
+.activity-item {
+    background-color: #f8f9fa;
+    margin: 8px 0;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border-left: 4px solid #6c757d;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.activity-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateX(2px);
+}
+
+/* Activity type: Vuelo (Flight) - Sky blue theme */
+.activity-type-vuelo {
+    background-color: #e3f2fd;
+    border-left: 4px solid #1976d2;
+}
+
+.activity-type-vuelo .activity-header {
+    color: #0d47a1;
+}
+
+.activity-type-vuelo::before {
+    content: "✈️ ";
+}
+
+.activity-type-vuelo .activity-info strong {
+    color: #1565c0;
+}
+
+/* Activity type: Transporte (Transport) - Purple theme */
+.activity-type-transporte {
+    background-color: #f3e5f5;
+    border-left: 4px solid #7b1fa2;
+}
+
+.activity-type-transporte .activity-header {
+    color: #4a148c;
+}
+
+.activity-type-transporte::before {
+    content: "🚆 ";
+}
+
+.activity-type-transporte .activity-info strong {
+    color: #6a1b9a;
+}
+
+/* Activity type: Comida (Food) - Orange/warm theme */
+.activity-type-comida {
+    background-color: #fff3e0;
+    border-left: 4px solid #f57c00;
+}
+
+.activity-type-comida .activity-header {
+    color: #e65100;
+}
+
+.activity-type-comida::before {
+    content: "🍽️ ";
+}
+
+.activity-type-comida .activity-info strong {
+    color: #ef6c00;
+}
+
+/* Activity type: Visita (Visit/Tourism) - Green theme */
+.activity-type-visita {
+    background-color: #e8f5e9;
+    border-left: 4px solid #388e3c;
+}
+
+.activity-type-visita .activity-header {
+    color: #1b5e20;
+}
+
+.activity-type-visita::before {
+    content: "🏛️ ";
+}
+
+.activity-type-visita .activity-info strong {
+    color: #2e7d32;
+}
+
+/* Activity type: Normal - Gray theme (default) */
+.activity-type-normal {
+    background-color: #f5f5f5;
+    border-left: 4px solid #607d8b;
+}
+
+.activity-type-normal .activity-header {
+    color: #37474f;
+}
+
+.activity-type-normal .activity-info strong {
+    color: #455a64;
+}
+
+/* Activity type badge */
+.activity-type-badge {
+    display: inline-block;
+    font-size: 0.75em;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    font-weight: 500;
+    vertical-align: middle;
+}
+
+.activity-type-badge.vuelo {
+    background-color: #bbdefb;
+    color: #0d47a1;
+}
+
+.activity-type-badge.transporte {
+    background-color: #e1bee7;
+    color: #4a148c;
+}
+
+.activity-type-badge.comida {
+    background-color: #ffe0b2;
+    color: #e65100;
+}
+
+.activity-type-badge.visita {
+    background-color: #c8e6c9;
+    color: #1b5e20;
+}
+
+.activity-type-badge.normal {
+    background-color: #cfd8dc;
+    color: #37474f;
+}
+
+/* Override done state for typed activities */
+.activity-item.activity-done {
+    opacity: 0.7;
+}
+
+.activity-item.activity-done .activity-info strong {
+    text-decoration: line-through;
+}
+
+/* Transfer item styling */
+.activity-item.transfer-item {
+    background-color: #eceff1;
+    border-left: 4px solid #90a4ae;
+    font-style: italic;
+}
+
+.activity-item.transfer-item:hover {
+    background-color: #e0e0e0;
+}
+
+/* Optional activity with type */
+.activity-item.optional-activity {
+    opacity: 0.85;
+    border-style: dashed;
+}
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+    .activity-item {
+        padding: 10px 12px;
+        margin: 6px 0;
+    }
+
+    .activity-type-badge {
+        font-size: 0.7em;
+        padding: 2px 6px;
+    }
+}
+
+@media (max-width: 500px) {
+    .activity-item {
+        padding: 8px 10px;
+        margin: 4px 0;
+    }
+
+    .activity-type-badge {
+        display: none;
     }
 }
