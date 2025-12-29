@@ -178,4 +178,4 @@ const State = {
     }
 };
 
-Object.freeze(State);
+// Note: State is NOT frozen because its properties need to be mutable
