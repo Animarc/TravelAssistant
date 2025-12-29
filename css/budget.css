@@ -1,0 +1,338 @@
+/**
+ * Budget View Styles
+ * Budget sections, items, totals, and shopping
+ */
+
+/* ==================== BUDGET LIST ==================== */
+
+.budget-list {
+    padding: 0;
+    list-style: none;
+}
+
+/* ==================== BUDGET SECTIONS ==================== */
+
+.budget-section {
+    background-color: var(--color-white);
+    margin: var(--space-lg) 0;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    list-style: none;
+}
+
+/* ==================== SECTION HEADERS ==================== */
+
+.budget-section-header {
+    background: var(--gradient-primary);
+    color: var(--text-inverse);
+    padding: var(--space-lg) var(--space-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background var(--transition-slow);
+}
+
+.budget-section-header:hover {
+    background: var(--gradient-primary-hover);
+}
+
+.budget-section-header h3 {
+    margin: 0;
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Header color variants */
+.budget-section-header.accommodation-header-color {
+    background: var(--gradient-info);
+}
+
+.budget-section-header.accommodation-header-color:hover {
+    background: linear-gradient(135deg, #148a9c 0%, #117a8b 100%);
+}
+
+.budget-section-header.shopping-header-color {
+    background: var(--gradient-success);
+}
+
+.budget-section-header.shopping-header-color:hover {
+    background: linear-gradient(135deg, #229a3e 0%, #1a6f2e 100%);
+}
+
+.budget-section-toggle {
+    font-size: var(--font-size-sm);
+    transition: transform var(--transition-slow);
+}
+
+/* ==================== SECTION CONTENT ==================== */
+
+.budget-section-content {
+    padding: var(--space-lg);
+    background-color: var(--color-gray-50);
+}
+
+/* ==================== DAY HEADERS ==================== */
+
+.budget-day-header {
+    background-color: var(--color-gray-200);
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-md) calc(var(--space-lg) * -1);
+    border-left: var(--border-width-accent) solid var(--color-primary);
+}
+
+.budget-day-header:first-child {
+    margin-top: 0;
+}
+
+.budget-day-header h4 {
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: 0.95em;
+    font-weight: var(--font-weight-semibold);
+}
+
+/* ==================== CATEGORY HEADERS ==================== */
+
+.budget-category-header {
+    background-color: var(--color-gray-200);
+    padding: var(--space-sm) var(--space-md);
+    margin: var(--space-lg) calc(var(--space-lg) * -1) var(--space-md);
+    border-left: var(--border-width-accent) solid var(--color-success);
+}
+
+.budget-category-header:first-child {
+    margin-top: 0;
+}
+
+.budget-category-header h4 {
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+}
+
+/* ==================== BUDGET ITEMS ==================== */
+
+.budget-item {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-sm) 0;
+    border: var(--border-width) solid var(--color-gray-200);
+    transition: all var(--transition-base);
+}
+
+.budget-item:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateX(3px);
+}
+
+.budget-item.purchased {
+    background-color: var(--color-success-light);
+    border-color: #c3e6cb;
+}
+
+/* ==================== BUDGET ACTIVITY LAYOUT ==================== */
+
+.budget-activity {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.budget-activity-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    flex: 1;
+    min-width: 0;
+}
+
+.budget-type-icon {
+    font-size: var(--font-size-xl);
+}
+
+.budget-acc-name {
+    font-weight: var(--font-weight-medium);
+    color: #0c5460;
+}
+
+.budget-acc-days {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    background-color: var(--color-gray-200);
+    padding: 2px var(--space-sm);
+    border-radius: var(--radius-sm);
+}
+
+.budget-activity-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    flex-shrink: 0;
+}
+
+/* ==================== PRICES ==================== */
+
+.budget-price {
+    background-color: var(--color-success);
+    color: var(--text-inverse);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-pill);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+}
+
+.budget-price.accommodation-price {
+    background-color: var(--color-info);
+}
+
+.budget-price.shopping-price {
+    background-color: var(--color-gray-600);
+}
+
+/* ==================== SUBTOTALS ==================== */
+
+.budget-subtotal {
+    background-color: var(--color-gray-200);
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-lg) calc(var(--space-lg) * -1) calc(var(--space-lg) * -1);
+    border-top: var(--border-width-thick) dashed var(--color-gray-400);
+    text-align: right;
+    color: var(--color-gray-700);
+}
+
+/* ==================== SHOPPING SPECIFIC ==================== */
+
+.shopping-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.purchased-text {
+    text-decoration: line-through;
+    color: var(--text-secondary);
+}
+
+.shopping-link {
+    text-decoration: none;
+    font-size: var(--font-size-lg);
+    transition: transform var(--transition-base);
+}
+
+.shopping-link:hover {
+    transform: scale(1.2);
+}
+
+.add-shopping-btn {
+    width: 100%;
+    padding: var(--space-md);
+    margin-top: var(--space-lg);
+    background-color: var(--color-success);
+    color: var(--text-inverse);
+    border: none;
+    border-radius: var(--radius-lg);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: background-color var(--transition-base);
+}
+
+.add-shopping-btn:hover {
+    background-color: var(--color-success-dark);
+}
+
+/* ==================== GRAND SUMMARY ==================== */
+
+.budget-grand-summary {
+    background: var(--gradient-dark);
+    color: var(--text-inverse);
+    margin: var(--space-xl) 0;
+    border-radius: var(--radius-2xl);
+    padding: var(--space-xl);
+    list-style: none;
+}
+
+.budget-grand-total h3 {
+    margin: 0 0 var(--space-lg) 0;
+    text-align: center;
+    font-size: var(--font-size-2xl);
+}
+
+.grand-total-breakdown {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+}
+
+.breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    padding: var(--space-sm) 0;
+    font-size: 0.95em;
+}
+
+.breakdown-row.total-row {
+    font-size: var(--font-size-xl);
+    padding-top: var(--space-md);
+}
+
+.breakdown-divider {
+    height: 1px;
+    background-color: rgba(255, 255, 255, 0.3);
+    margin: var(--space-md) 0;
+}
+
+.grand-total-amount {
+    background-color: var(--color-success);
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-pill);
+    font-weight: var(--font-weight-semibold);
+}
+
+.shopping-status {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-xl);
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: var(--border-width) solid rgba(255, 255, 255, 0.2);
+}
+
+.status-purchased {
+    color: var(--color-success);
+}
+
+.status-pending {
+    color: var(--color-warning);
+}
+
+/* ==================== BUDGET ACTION BUTTONS ==================== */
+
+.budget-item .edit-activity-btn,
+.budget-item .edit-accommodation-btn,
+.budget-item .edit-shopping-btn,
+.budget-item .delete-shopping-btn {
+    background: none;
+    border: none;
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-base);
+}
+
+.budget-item .edit-activity-btn:hover,
+.budget-item .edit-accommodation-btn:hover,
+.budget-item .edit-shopping-btn:hover {
+    background-color: var(--color-gray-200);
+}
+
+.budget-item .delete-shopping-btn:hover {
+    background-color: var(--color-danger-light);
+}

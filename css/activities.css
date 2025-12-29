@@ -1,0 +1,287 @@
+/**
+ * Activity Styles
+ * Activity items, types, states, and related components
+ */
+
+/* ==================== BASE ACTIVITY ITEM ==================== */
+
+.activity-item {
+    background-color: var(--color-gray-100);
+    margin: var(--space-sm) 0;
+    padding: var(--space-md) var(--space-lg);
+    border-radius: var(--radius-lg);
+    border-left: var(--border-width-accent) solid var(--color-gray-600);
+    transition: all var(--transition-base);
+    cursor: pointer;
+}
+
+.activity-item:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateX(2px);
+}
+
+/* ==================== ACTIVITY STRUCTURE ==================== */
+
+.activity-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.activity-checkbox-container {
+    flex-shrink: 0;
+    margin-right: var(--space-sm);
+}
+
+.activity-checkbox {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.activity-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    cursor: pointer;
+    flex: 1;
+}
+
+.activity-info {
+    flex: 1;
+    cursor: pointer;
+    padding: var(--space-xs) 0;
+}
+
+.activity-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+}
+
+.activity-details {
+    display: none;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    margin-top: var(--space-sm);
+}
+
+/* ==================== ACTIVITY ACTION BUTTONS ==================== */
+
+.edit-activity-btn,
+.delete-activity-btn {
+    background: none;
+    border: none;
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-base);
+}
+
+.edit-activity-btn:hover {
+    background-color: var(--color-gray-200);
+}
+
+.delete-activity-btn:hover {
+    background-color: var(--color-danger-light);
+}
+
+/* ==================== ACTIVITY TYPES ==================== */
+
+/* Flight - Sky blue theme */
+.activity-type-vuelo {
+    background-color: var(--color-flight-bg);
+    border-left-color: var(--color-flight);
+}
+
+.activity-type-vuelo .activity-header {
+    color: var(--color-flight-dark);
+}
+
+.activity-type-vuelo::before {
+    content: "✈️ ";
+}
+
+.activity-type-vuelo .activity-info strong {
+    color: var(--color-flight);
+}
+
+/* Transport - Purple theme */
+.activity-type-transporte {
+    background-color: var(--color-transport-bg);
+    border-left-color: var(--color-transport);
+}
+
+.activity-type-transporte .activity-header {
+    color: var(--color-transport-dark);
+}
+
+.activity-type-transporte::before {
+    content: "🚆 ";
+}
+
+.activity-type-transporte .activity-info strong {
+    color: var(--color-transport);
+}
+
+/* Food - Orange/warm theme */
+.activity-type-comida {
+    background-color: var(--color-food-bg);
+    border-left-color: var(--color-food);
+}
+
+.activity-type-comida .activity-header {
+    color: var(--color-food-dark);
+}
+
+.activity-type-comida::before {
+    content: "🍽️ ";
+}
+
+.activity-type-comida .activity-info strong {
+    color: var(--color-food);
+}
+
+/* Visit/Tourism - Green theme */
+.activity-type-visita {
+    background-color: var(--color-visit-bg);
+    border-left-color: var(--color-visit);
+}
+
+.activity-type-visita .activity-header {
+    color: var(--color-visit-dark);
+}
+
+.activity-type-visita::before {
+    content: "🏛️ ";
+}
+
+.activity-type-visita .activity-info strong {
+    color: var(--color-visit);
+}
+
+/* Normal - Gray theme (default) */
+.activity-type-normal {
+    background-color: var(--color-normal-bg);
+    border-left-color: var(--color-normal);
+}
+
+.activity-type-normal .activity-header {
+    color: var(--color-normal-dark);
+}
+
+.activity-type-normal .activity-info strong {
+    color: #455a64;
+}
+
+/* ==================== ACTIVITY TYPE BADGES ==================== */
+
+.activity-type-badge {
+    display: inline-block;
+    font-size: var(--font-size-xs);
+    padding: 2px var(--space-sm);
+    border-radius: var(--radius-2xl);
+    margin-left: var(--space-sm);
+    font-weight: var(--font-weight-medium);
+    vertical-align: middle;
+}
+
+.activity-type-badge.vuelo {
+    background-color: #bbdefb;
+    color: var(--color-flight-dark);
+}
+
+.activity-type-badge.transporte {
+    background-color: #e1bee7;
+    color: var(--color-transport-dark);
+}
+
+.activity-type-badge.comida {
+    background-color: #ffe0b2;
+    color: var(--color-food-dark);
+}
+
+.activity-type-badge.visita {
+    background-color: #c8e6c9;
+    color: var(--color-visit-dark);
+}
+
+.activity-type-badge.normal {
+    background-color: #cfd8dc;
+    color: var(--color-normal-dark);
+}
+
+/* ==================== ACTIVITY STATES ==================== */
+
+/* Completed activity */
+.activity-item.activity-done {
+    opacity: 0.7;
+}
+
+.activity-item.activity-done .activity-info strong {
+    text-decoration: line-through;
+}
+
+/* Transfer item */
+.activity-item.transfer-item {
+    background-color: #eceff1;
+    border-left-color: #90a4ae;
+    font-style: italic;
+}
+
+.activity-item.transfer-item:hover {
+    background-color: #e0e0e0;
+}
+
+/* Optional activity */
+.activity-item.optional-activity {
+    opacity: 0.85;
+    border-style: dashed;
+}
+
+/* ==================== OPTIONAL ACTIVITIES SECTION ==================== */
+
+.optional-activities-header {
+    background-color: var(--color-gray-100);
+    padding: var(--space-lg);
+    margin: var(--space-xl) 0 var(--space-md) 0;
+    border-radius: var(--radius-lg);
+    border-left: var(--border-width-accent) solid var(--color-gray-600);
+}
+
+.optional-activities-header h3 {
+    margin: 0;
+    color: var(--color-gray-700);
+    font-size: var(--font-size-lg);
+}
+
+.optional-badge {
+    color: var(--color-gray-600);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    font-style: italic;
+}
+
+/* ==================== INFO BOXES ==================== */
+
+.important-info {
+    background-color: var(--color-danger-light);
+    color: #b30000;
+    padding: var(--space-md) var(--space-sm);
+    margin-top: var(--space-sm);
+    border-left: var(--border-width-accent) solid #b30000;
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-sm);
+}
+
+.price-info {
+    background-color: #e6f3ff;
+    color: #0066cc;
+    padding: var(--space-md) var(--space-sm);
+    margin-top: var(--space-sm);
+    border-left: var(--border-width-accent) solid #0066cc;
+    font-weight: var(--font-weight-semibold);
+    border-radius: var(--radius-sm);
+}

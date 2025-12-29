@@ -1,0 +1,190 @@
+/**
+ * Accommodation Styles
+ * Accommodation section, items, and map marker
+ */
+
+/* ==================== MAP MARKER ==================== */
+
+.accommodation-marker {
+    background: none !important;
+    border: none !important;
+}
+
+.accommodation-marker-inner {
+    background: var(--gradient-info);
+    width: 36px;
+    height: 36px;
+    border-radius: 50% 50% 50% 0;
+    transform: rotate(-45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    border: 3px solid var(--color-white);
+    font-size: 18px;
+    line-height: var(--line-height-tight);
+}
+
+.accommodation-marker-inner::before {
+    content: "🏨";
+    transform: rotate(45deg);
+    display: block;
+}
+
+/* ==================== ACCOMMODATION SECTION ==================== */
+
+.accommodation-section {
+    background-color: #e8f4fd;
+    margin: var(--space-xl) 0 var(--space-md) 0;
+    border-radius: var(--radius-lg);
+    border-left: var(--border-width-accent) solid var(--color-info);
+    overflow: visible;
+    list-style: none;
+}
+
+/* ==================== SECTION HEADER ==================== */
+
+.accommodation-header {
+    background-color: var(--color-info-light);
+    padding: var(--space-md) var(--space-lg);
+    border-bottom: var(--border-width) solid #bee5eb;
+}
+
+.accommodation-header h3 {
+    margin: 0;
+    color: #0c5460;
+    font-size: var(--font-size-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.accommodation-header h3::before {
+    content: "🏨";
+}
+
+/* ==================== SECTION CONTENT ==================== */
+
+.accommodation-content {
+    padding: var(--space-md) var(--space-lg);
+}
+
+.no-accommodation {
+    color: var(--text-secondary);
+    font-style: italic;
+    margin: 0;
+    text-align: center;
+    padding: var(--space-md) 0;
+}
+
+/* ==================== ACCOMMODATION ITEM ==================== */
+
+.accommodation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--color-white);
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-sm) 0;
+    border-radius: var(--radius-md);
+    border: var(--border-width) solid #bee5eb;
+    gap: var(--space-md);
+}
+
+.accommodation-item:first-child {
+    margin-top: 0;
+}
+
+.accommodation-item:last-child {
+    margin-bottom: 0;
+}
+
+/* ==================== ITEM INFO ==================== */
+
+.accommodation-info {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-md);
+    flex: 1;
+}
+
+.accommodation-name {
+    color: #0c5460;
+    font-size: 1.05em;
+}
+
+.accommodation-days {
+    background-color: var(--color-gray-200);
+    color: var(--color-gray-700);
+    padding: 3px var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+}
+
+.accommodation-price {
+    background-color: var(--color-success);
+    color: var(--text-inverse);
+    padding: 3px var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
+}
+
+.accommodation-link {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: var(--font-size-sm);
+    padding: 3px var(--space-sm);
+    background-color: var(--color-gray-100);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-base);
+}
+
+.accommodation-link:hover {
+    background-color: var(--color-gray-200);
+    text-decoration: underline;
+}
+
+/* ==================== GOOGLE MAPS BUTTON ==================== */
+
+.accommodation-gmaps-btn {
+    background-color: #4285f4;
+    color: var(--text-inverse);
+    border: none;
+    padding: var(--space-xs) var(--space-md);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    transition: background-color var(--transition-base);
+}
+
+.accommodation-gmaps-btn:hover {
+    background-color: #3367d6;
+}
+
+/* ==================== ITEM ACTIONS ==================== */
+
+.accommodation-actions {
+    display: flex;
+    gap: var(--space-xs);
+}
+
+.edit-accommodation-btn,
+.delete-accommodation-btn {
+    background: none;
+    border: none;
+    font-size: var(--font-size-lg);
+    cursor: pointer;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    transition: background-color var(--transition-base);
+}
+
+.edit-accommodation-btn:hover {
+    background-color: var(--color-gray-200);
+}
+
+.delete-accommodation-btn:hover {
+    background-color: var(--color-danger-light);
+}
