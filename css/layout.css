@@ -16,7 +16,7 @@ body {
     display: flex;
     height: calc(100vh - var(--header-height));
     padding: var(--container-padding);
-    padding-bottom: 2vh;
+    padding-bottom: 10vh;
     gap: var(--container-gap);
     overflow: hidden;
 }
