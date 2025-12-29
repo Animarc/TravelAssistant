@@ -60,6 +60,8 @@
         max-height: 20vh;
         padding: 0;
         flex-shrink: 0;
+        border: none;
+        border-bottom: 2px solid var(--color-gray-200);
         border-radius: 0;
         box-shadow: none;
     }
@@ -81,6 +83,7 @@
         overflow-x: hidden;
         padding: 0;
         -webkit-overflow-scrolling: touch;
+        border: none;
         border-radius: 0;
         box-shadow: none;
         display: block;
@@ -95,6 +98,7 @@
     .accommodation-container {
         padding: var(--space-md);
         border-top: none;
+        border-radius: 0;
     }
 
     /* Day Header */

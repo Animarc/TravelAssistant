@@ -16,6 +16,7 @@ body {
     display: flex;
     height: calc(100vh - var(--header-height));
     padding: var(--container-padding);
+    padding-bottom: var(--space-xl);
     gap: var(--container-gap);
     overflow: hidden;
 }
@@ -27,6 +28,7 @@ body {
     display: flex;
     flex-direction: column;
     background-color: var(--bg-panel);
+    border: 2px solid var(--color-gray-200);
     border-radius: var(--radius-3xl);
     box-shadow: var(--shadow-xl);
     overflow: hidden;
@@ -37,7 +39,7 @@ body {
 .right-panel {
     width: var(--panel-right-width);
     height: 100%;
-    border: none;
+    border: 2px solid var(--color-gray-200);
     border-radius: var(--radius-3xl);
     overflow: hidden;
     box-shadow: var(--shadow-xl);

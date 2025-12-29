@@ -7,9 +7,10 @@
 
 .accommodation-container {
     flex-shrink: 0;
-    padding: 0 var(--space-lg) var(--space-lg);
+    padding: var(--space-md) var(--space-lg) var(--space-lg);
     background-color: var(--bg-panel);
     border-top: 1px solid var(--color-gray-200);
+    border-radius: 0 0 var(--radius-3xl) var(--radius-3xl);
 }
 
 /* ==================== MAP MARKER ==================== */
