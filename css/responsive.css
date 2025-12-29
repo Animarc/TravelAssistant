@@ -79,17 +79,29 @@
         min-height: 0;
         overflow-y: auto;
         overflow-x: hidden;
-        padding: var(--space-md);
+        padding: 0;
         -webkit-overflow-scrolling: touch;
         border-radius: 0;
         box-shadow: none;
+        display: block;
+    }
+
+    .activity-list {
+        padding: var(--space-md);
+        overflow-y: visible;
+        flex: none;
+    }
+
+    .accommodation-container {
+        padding: var(--space-md);
+        border-top: none;
     }
 
     /* Day Header */
     .day-header {
         gap: var(--space-sm);
         padding: var(--space-md);
-        margin-bottom: var(--space-md);
+        margin: var(--space-md);
         border-radius: var(--radius-lg);
     }
 

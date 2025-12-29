@@ -36,6 +36,9 @@
             <ul id="activityList" class="activity-list">
                 <!-- Actividades aquí -->
             </ul>
+            <div id="accommodationContainer" class="accommodation-container">
+                <!-- Alojamiento fijo aquí -->
+            </div>
         </aside>
         <section class="right-panel">
             <article id="map"></article>
@@ -160,8 +163,23 @@
 
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <!-- Data -->
     <script src="data.js"></script>
-    <script src="script.js"></script>
+    <!-- Core modules -->
+    <script src="js/config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/state.js"></script>
+    <!-- Entity modules -->
+    <script src="js/activities.js"></script>
+    <script src="js/accommodations.js"></script>
+    <script src="js/shopping.js"></script>
+    <!-- UI modules -->
+    <script src="js/map.js"></script>
+    <script src="js/views.js"></script>
+    <script src="js/modals.js"></script>
+    <!-- App initialization -->
+    <script src="js/app.js"></script>
 </body>
 
 </html>
