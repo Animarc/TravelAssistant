@@ -18,7 +18,9 @@ const Views = {
             accommodationContainer: document.getElementById('accommodationContainer'),
             controlsRow2: document.querySelector('.controls-row:nth-child(2)'),
             rightPanel: document.querySelector('.right-panel'),
-            dayHeader: document.querySelector('.day-header')
+            dayHeader: document.querySelector('.day-header'),
+            leftPanel: document.querySelector('.left-panel'),
+            container: document.querySelector('.container')
         };
     },
 
@@ -52,6 +54,7 @@ const Views = {
         this.elements.dayHeader.style.display = 'flex';
         this.elements.accommodationContainer.style.display = 'block';
         this.elements.activityList.className = 'activity-list';
+        this.elements.container.classList.remove('centered-view');
     },
 
     /**
@@ -62,6 +65,7 @@ const Views = {
         this.elements.rightPanel.style.display = 'none';
         this.elements.dayHeader.style.display = 'none';
         this.elements.accommodationContainer.style.display = 'none';
+        this.elements.container.classList.add('centered-view');
     },
 
     /**

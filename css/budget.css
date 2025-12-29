@@ -6,7 +6,8 @@
 /* ==================== BUDGET LIST ==================== */
 
 .budget-list {
-    padding: 0;
+    padding: var(--space-lg);
+    padding-right: var(--space-xl);
     list-style: none;
 }
 
@@ -15,6 +16,7 @@
 .budget-section {
     background-color: var(--color-white);
     margin: var(--space-lg) 0;
+    margin-right: var(--space-sm);
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-md);
     overflow: hidden;
@@ -253,6 +255,7 @@
     background: var(--gradient-dark);
     color: var(--text-inverse);
     margin: var(--space-xl) 0;
+    margin-right: var(--space-sm);
     border-radius: var(--radius-2xl);
     padding: var(--space-xl);
     list-style: none;

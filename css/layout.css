@@ -21,6 +21,16 @@ body {
     overflow: hidden;
 }
 
+/* Centered view (when map is hidden) */
+.container.centered-view {
+    justify-content: center;
+}
+
+.container.centered-view .left-panel {
+    width: 100%;
+    max-width: 800px;
+}
+
 /* ==================== LEFT PANEL ==================== */
 
 .left-panel {
