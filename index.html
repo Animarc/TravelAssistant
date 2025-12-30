@@ -17,6 +17,8 @@
             <span class="navbar-title">Ani Travel Assistant</span>
         </div>
         <div class="navbar-center">
+            <span id="tripName" class="trip-name">Mi Viaje</span>
+            <span class="navbar-separator"></span>
             <button id="planificacionBtn" class="nav-btn active">Planificación</button>
             <button id="presupuestoBtn" class="nav-btn">Presupuesto</button>
             <button id="objetosBtn" class="nav-btn">Objetos</button>
@@ -27,11 +29,13 @@
         </div>
     </nav>
     <section class="toolbar">
-        <button id="moveDayLeftBtn">← Mover</button>
-        <button id="addDayBtn">+ Día</button>
-        <button id="addActivityBtn">+ Actividad</button>
-        <button id="addAccommodationBtn">+ Dormir</button>
-        <button id="moveDayRightBtn">Mover →</button>
+        <div class="toolbar-buttons">
+            <button id="moveDayLeftBtn">← Mover</button>
+            <button id="addDayBtn">+ Día</button>
+            <button id="addActivityBtn">+ Actividad</button>
+            <button id="addAccommodationBtn">+ Dormir</button>
+            <button id="moveDayRightBtn">Mover →</button>
+        </div>
     </section>
     <main class="container">
         <aside class="left-panel">
@@ -168,6 +172,10 @@
         </section>
     </dialog>
 
+
+    <footer class="site-footer">
+        <p id="footerText"></p>
+    </footer>
 
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <!-- Data -->

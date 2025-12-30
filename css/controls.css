@@ -41,7 +41,26 @@
     gap: var(--space-xs);
     background-color: var(--color-gray-100);
     padding: var(--space-xs);
+    padding-left: var(--space-lg);
     border-radius: var(--radius-xl);
+}
+
+.trip-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    padding: var(--space-sm) var(--space-md);
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.navbar-separator {
+    width: 1px;
+    height: 20px;
+    background-color: var(--color-gray-300);
+    margin: 0 var(--space-sm);
 }
 
 .nav-btn {
@@ -98,17 +117,25 @@
 
 .toolbar {
     display: flex;
-    gap: var(--space-sm);
+    justify-content: center;
     padding: var(--space-md) var(--space-xl);
     background-color: var(--bg-panel);
     border-bottom: 1px solid var(--color-gray-200);
 }
 
+.toolbar-buttons {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xs);
+    background-color: var(--color-gray-100);
+    padding: var(--space-xs);
+    border-radius: var(--radius-xl);
+}
+
 .toolbar button {
-    flex: 1;
-    padding: var(--space-sm) var(--space-md);
-    border: 1px solid var(--color-gray-300);
-    background: var(--color-white);
+    padding: var(--space-sm) var(--space-lg);
+    border: none;
+    background: transparent;
     border-radius: var(--radius-lg);
     cursor: pointer;
     font-size: var(--font-size-sm);
@@ -118,9 +145,8 @@
 }
 
 .toolbar button:hover {
-    background: var(--color-gray-50);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
+    color: var(--text-primary);
+    background-color: var(--color-gray-200);
 }
 
 .toolbar button:active {

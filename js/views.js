@@ -90,9 +90,12 @@ const Views = {
         const day = State.getCurrentDayData();
         this.elements.dayTitle.textContent = `${I18n.t('day')} ${State.currentDay + 1}: ${day.title}`;
 
-        // Update page title
+        // Update page title and trip name
         if (State.daysData.length > 0) {
-            this.elements.pageTitle.textContent = State.daysData[0].title || I18n.t('appTitle');
+            const tripName = State.daysData[0].title || I18n.t('appTitle');
+            this.elements.pageTitle.textContent = tripName;
+            const tripNameEl = document.getElementById('tripName');
+            if (tripNameEl) tripNameEl.textContent = tripName;
         }
 
         this.elements.activityList.innerHTML = '';

@@ -190,6 +190,10 @@ const I18n = {
             jsonInvalidFormat: 'Formato de día inválido',
             fileReadError: 'Error al leer el archivo',
 
+            // Footer
+            footerBeta: 'Beta v1.0',
+            footerContact: 'Para cualquier duda o sugerencia',
+
             // Language names
             langEs: 'Español',
             langEn: 'English',
@@ -359,6 +363,8 @@ const I18n = {
             jsonEmpty: 'The file contains no days',
             jsonInvalidFormat: 'Invalid day format',
             fileReadError: 'Error reading file',
+            footerBeta: 'Beta v1.0',
+            footerContact: 'For any questions or suggestions',
             langEs: 'Español',
             langEn: 'English',
             langFr: 'Français',
@@ -527,6 +533,8 @@ const I18n = {
             jsonEmpty: 'Le fichier ne contient aucun jour',
             jsonInvalidFormat: 'Format de jour invalide',
             fileReadError: 'Erreur de lecture du fichier',
+            footerBeta: 'Beta v1.0',
+            footerContact: 'Pour toute question ou suggestion',
             langEs: 'Español',
             langEn: 'English',
             langFr: 'Français',
@@ -695,6 +703,8 @@ const I18n = {
             jsonEmpty: 'Die Datei enthält keine Tage',
             jsonInvalidFormat: 'Ungültiges Tagesformat',
             fileReadError: 'Fehler beim Lesen der Datei',
+            footerBeta: 'Beta v1.0',
+            footerContact: 'Bei Fragen oder Anregungen',
             langEs: 'Español',
             langEn: 'English',
             langFr: 'Français',
@@ -863,6 +873,8 @@ const I18n = {
             jsonEmpty: '文件不包含任何天数',
             jsonInvalidFormat: '无效的日期格式',
             fileReadError: '读取文件时出错',
+            footerBeta: 'Beta v1.0',
+            footerContact: '如有任何问题或建议',
             langEs: 'Español',
             langEn: 'English',
             langFr: 'Français',
@@ -1031,6 +1043,8 @@ const I18n = {
             jsonEmpty: 'Файл не содержит дней',
             jsonInvalidFormat: 'Неверный формат дня',
             fileReadError: 'Ошибка чтения файла',
+            footerBeta: 'Beta v1.0',
+            footerContact: 'По любым вопросам или предложениям',
             langEs: 'Español',
             langEn: 'English',
             langFr: 'Français',
@@ -1199,6 +1213,8 @@ const I18n = {
             jsonEmpty: 'ファイルに日が含まれていません',
             jsonInvalidFormat: '無効な日のフォーマット',
             fileReadError: 'ファイル読み取りエラー',
+            footerBeta: 'Beta v1.0',
+            footerContact: 'ご質問やご提案は',
             langEs: 'Español',
             langEn: 'English',
             langFr: 'Français',
@@ -1256,6 +1272,18 @@ const I18n = {
         document.getElementById('addActivityBtn').textContent = this.t('addActivity');
         document.getElementById('addAccommodationBtn').textContent = this.t('addAccommodation');
         document.getElementById('moveDayRightBtn').textContent = this.t('moveRight');
+
+        // Update footer
+        const footerText = document.getElementById('footerText');
+        if (footerText) {
+            footerText.innerHTML = `${this.t('footerBeta')} | ${this.t('footerContact')}: <a href="mailto:animarc@gmail.com">animarc@gmail.com</a>`;
+        }
+
+        // Update trip name
+        const tripNameEl = document.getElementById('tripName');
+        if (tripNameEl && typeof State !== 'undefined' && State.daysData && State.daysData.length > 0) {
+            tripNameEl.textContent = State.daysData[0].title || this.t('appTitle');
+        }
 
         // Refresh current view
         if (typeof Views !== 'undefined') {
