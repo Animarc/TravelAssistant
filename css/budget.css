@@ -252,7 +252,7 @@
 /* ==================== GRAND SUMMARY ==================== */
 
 .budget-grand-summary {
-    background: var(--gradient-dark);
+    background: var(--gradient-primary);
     color: var(--text-inverse);
     margin: var(--space-xl) 0;
     margin-right: var(--space-sm);
