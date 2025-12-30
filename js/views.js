@@ -91,12 +91,10 @@ const Views = {
         this.elements.dayTitle.textContent = `${I18n.t('day')} ${State.currentDay + 1}: ${day.title}`;
 
         // Update page title and trip name
-        if (State.daysData.length > 0) {
-            const tripName = State.daysData[0].title || I18n.t('appTitle');
-            this.elements.pageTitle.textContent = tripName;
-            const tripNameEl = document.getElementById('tripName');
-            if (tripNameEl) tripNameEl.textContent = tripName;
-        }
+        const tripNameValue = State.tripName || I18n.t('appTitle');
+        this.elements.pageTitle.textContent = tripNameValue;
+        const tripNameEl = document.getElementById('tripName');
+        if (tripNameEl) tripNameEl.textContent = tripNameValue;
 
         this.elements.activityList.innerHTML = '';
         MapManager.clearAll();

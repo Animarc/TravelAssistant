@@ -166,6 +166,7 @@
     /* ==================== LAYOUT ==================== */
 
     --header-height: 110px;
+    --footer-height: 40px;
     --panel-left-width: 55%;
     --panel-right-width: 45%;
     --container-padding: 15px;

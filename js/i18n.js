@@ -1281,8 +1281,8 @@ const I18n = {
 
         // Update trip name
         const tripNameEl = document.getElementById('tripName');
-        if (tripNameEl && typeof State !== 'undefined' && State.daysData && State.daysData.length > 0) {
-            tripNameEl.textContent = State.daysData[0].title || this.t('appTitle');
+        if (tripNameEl && typeof State !== 'undefined') {
+            tripNameEl.textContent = State.tripName || this.t('appTitle');
         }
 
         // Refresh current view

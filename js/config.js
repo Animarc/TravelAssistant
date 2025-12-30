@@ -6,6 +6,7 @@
 const Config = {
     // Storage keys
     STORAGE_KEYS: {
+        TRIP_NAME: 'travelAssistantTripName',
         DAYS: 'travelAssistantData',
         ACCOMMODATIONS: 'travelAssistantAccommodations',
         SHOPPING: 'travelAssistantShoppingItems',

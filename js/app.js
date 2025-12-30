@@ -12,7 +12,7 @@ const App = {
         I18n.loadSavedLanguage();
 
         // Initialize state with default data from data.js
-        State.init(days, accommodations, shoppingItems);
+        State.init(tripName, days, accommodations, shoppingItems);
 
         // Initialize views
         Views.init();

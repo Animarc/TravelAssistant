@@ -5,6 +5,7 @@
 
 const State = {
     // Application data
+    tripName: null,
     daysData: null,
     accommodationsData: null,
     shoppingItemsData: null,
@@ -20,11 +21,13 @@ const State = {
 
     /**
      * Initialize state from storage or default data
+     * @param {string} defaultTripName - Default trip name from data.js
      * @param {Array} defaultDays - Default days from data.js
      * @param {Array} defaultAccommodations - Default accommodations from data.js
      * @param {Array} defaultShopping - Default shopping items from data.js
      */
-    init(defaultDays, defaultAccommodations, defaultShopping) {
+    init(defaultTripName, defaultDays, defaultAccommodations, defaultShopping) {
+        this.tripName = Storage.loadTripName() || defaultTripName;
         this.daysData = Storage.loadDays() || Utils.deepClone(defaultDays);
         this.accommodationsData = Storage.loadAccommodations() || Utils.deepClone(defaultAccommodations);
         this.shoppingItemsData = Storage.loadShoppingItems() || Utils.deepClone(defaultShopping);
@@ -37,6 +40,7 @@ const State = {
      */
     save() {
         return Storage.saveAll({
+            tripName: this.tripName,
             days: this.daysData,
             accommodations: this.accommodationsData,
             shopping: this.shoppingItemsData,

@@ -1,3 +1,6 @@
+// Nombre del viaje
+const tripName = "Japan Countryside Trip";
+
 // Objetos a comprar para el viaje
 const shoppingItems = [
     {

@@ -37,6 +37,14 @@ const Storage = {
     },
 
     /**
+     * Load trip name
+     * @returns {string|null} Trip name or null
+     */
+    loadTripName() {
+        return this._load(Config.STORAGE_KEYS.TRIP_NAME);
+    },
+
+    /**
      * Load days data
      * @returns {Array|null} Days array or null
      */
@@ -76,11 +84,12 @@ const Storage = {
 
     /**
      * Save all application data
-     * @param {Object} data - Object containing days, accommodations, shopping, currentDay
+     * @param {Object} data - Object containing tripName, days, accommodations, shopping, currentDay
      * @returns {boolean} Success status
      */
     saveAll(data) {
         try {
+            localStorage.setItem(Config.STORAGE_KEYS.TRIP_NAME, JSON.stringify(data.tripName));
             localStorage.setItem(Config.STORAGE_KEYS.DAYS, JSON.stringify(data.days));
             localStorage.setItem(Config.STORAGE_KEYS.ACCOMMODATIONS, JSON.stringify(data.accommodations));
             localStorage.setItem(Config.STORAGE_KEYS.SHOPPING, JSON.stringify(data.shopping));
