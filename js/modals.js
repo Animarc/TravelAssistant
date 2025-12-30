@@ -55,7 +55,7 @@ const Modals = {
             const timeInput = document.getElementById('timeInput');
             if (this.checked) {
                 timeInput.required = false;
-                timeInput.placeholder = "Opcional para actividades opcionales";
+                timeInput.placeholder = I18n.t('optionalTimeHint');
             } else {
                 timeInput.required = true;
                 timeInput.placeholder = "";
@@ -87,7 +87,7 @@ const Modals = {
         State.editingActivity = null;
         document.getElementById('timeInput').required = true;
         document.getElementById('activityTypeSelect').value = 'normal';
-        this._setActivitySubmitText('Añadir Actividad');
+        this._setActivitySubmitText(I18n.t('addActivityBtn'));
         this.elements.activityModal.style.display = 'block';
     },
 
@@ -117,13 +117,13 @@ const Modals = {
         const timeInput = document.getElementById('timeInput');
         if (activity.isOptional) {
             timeInput.required = false;
-            timeInput.placeholder = "Opcional para actividades opcionales";
+            timeInput.placeholder = I18n.t('optionalTimeHint');
         } else {
             timeInput.required = true;
             timeInput.placeholder = "";
         }
 
-        this._setActivitySubmitText('Actualizar Actividad');
+        this._setActivitySubmitText(I18n.t('updateActivityBtn'));
         this.elements.activityModal.style.display = 'block';
     },
 
@@ -133,7 +133,7 @@ const Modals = {
     closeActivity() {
         this.elements.activityModal.style.display = 'none';
         State.editingActivity = null;
-        this._setActivitySubmitText('Añadir Actividad');
+        this._setActivitySubmitText(I18n.t('addActivityBtn'));
     },
 
     /**
@@ -150,7 +150,7 @@ const Modals = {
         const description = form.description.value.trim();
 
         if ((!isOptional && !time) || !name || !description) {
-            alert('Por favor completa todos los campos obligatorios correctamente.');
+            alert(I18n.t('fillRequiredFields'));
             return;
         }
 
@@ -195,7 +195,7 @@ const Modals = {
         this.elements.accommodationForm.reset();
         State.editingAccommodation = null;
         this._populateDaySelects();
-        this._setAccommodationSubmitText('Añadir Alojamiento');
+        this._setAccommodationSubmitText(I18n.t('addAccommodationBtn'));
         this.elements.accommodationModal.style.display = 'block';
     },
 
@@ -219,7 +219,7 @@ const Modals = {
         form.accLat.value = accommodation.coordinates ? accommodation.coordinates[0] : '';
         form.accLng.value = accommodation.coordinates ? accommodation.coordinates[1] : '';
 
-        this._setAccommodationSubmitText('Actualizar Alojamiento');
+        this._setAccommodationSubmitText(I18n.t('updateAccommodationBtn'));
         this.elements.accommodationModal.style.display = 'block';
     },
 
@@ -229,7 +229,7 @@ const Modals = {
     closeAccommodation() {
         this.elements.accommodationModal.style.display = 'none';
         State.editingAccommodation = null;
-        this._setAccommodationSubmitText('Añadir Alojamiento');
+        this._setAccommodationSubmitText(I18n.t('addAccommodationBtn'));
     },
 
     /**
@@ -281,12 +281,12 @@ const Modals = {
         State.daysData.forEach((day, index) => {
             const optionFrom = document.createElement('option');
             optionFrom.value = index;
-            optionFrom.textContent = `Día ${index + 1}: ${day.title}`;
+            optionFrom.textContent = `${I18n.t('day')} ${index + 1}: ${day.title}`;
             fromSelect.appendChild(optionFrom);
 
             const optionTo = document.createElement('option');
             optionTo.value = index;
-            optionTo.textContent = `Día ${index + 1}: ${day.title}`;
+            optionTo.textContent = `${I18n.t('day')} ${index + 1}: ${day.title}`;
             toSelect.appendChild(optionTo);
         });
 
@@ -313,7 +313,7 @@ const Modals = {
         State.editingShoppingItem = null;
         document.getElementById('shoppingCategory').value = 'otros';
         document.getElementById('shoppingCurrency').value = 'EUR';
-        this._setShoppingSubmitText('Añadir');
+        this._setShoppingSubmitText(I18n.t('addBtn'));
         this.elements.shoppingModal.style.display = 'block';
     },
 
@@ -333,7 +333,7 @@ const Modals = {
         document.getElementById('shoppingCurrency').value = item.currency || 'EUR';
         document.getElementById('shoppingLink').value = item.link || '';
 
-        this._setShoppingSubmitText('Actualizar');
+        this._setShoppingSubmitText(I18n.t('updateBtn'));
         this.elements.shoppingModal.style.display = 'block';
     },
 

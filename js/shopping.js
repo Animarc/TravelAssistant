@@ -177,7 +177,7 @@ const Shopping = {
      */
     validate(data) {
         if (!data.name || !data.name.trim()) {
-            return { valid: false, error: 'Por favor introduce el nombre del producto.' };
+            return { valid: false, error: I18n.t('enterProductName') };
         }
         return { valid: true };
     }

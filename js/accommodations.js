@@ -135,10 +135,10 @@ const Accommodations = {
      */
     validate(data) {
         if (!data.name || !data.name.trim()) {
-            return { valid: false, error: 'Por favor introduce el nombre del alojamiento.' };
+            return { valid: false, error: I18n.t('enterAccommodationName') };
         }
         if (data.toDay < data.fromDay) {
-            return { valid: false, error: 'El día de salida debe ser igual o posterior al día de entrada.' };
+            return { valid: false, error: I18n.t('checkoutAfterCheckin') };
         }
         return { valid: true };
     }
