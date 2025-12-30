@@ -16,11 +16,12 @@ const Views = {
             activityList: document.getElementById('activityList'),
             pageTitle: document.getElementById('pageTitle'),
             accommodationContainer: document.getElementById('accommodationContainer'),
-            controlsRow2: document.querySelector('.controls-row:nth-child(2)'),
+            toolbar: document.querySelector('.toolbar'),
             rightPanel: document.querySelector('.right-panel'),
             dayHeader: document.querySelector('.day-header'),
             leftPanel: document.querySelector('.left-panel'),
-            container: document.querySelector('.container')
+            container: document.querySelector('.container'),
+            navButtons: document.querySelectorAll('.nav-btn')
         };
     },
 
@@ -49,23 +50,34 @@ const Views = {
      * Show planning view elements
      */
     showPlanningElements() {
-        this.elements.controlsRow2.style.display = 'flex';
+        this.elements.toolbar.style.display = 'flex';
         this.elements.rightPanel.style.display = 'block';
         this.elements.dayHeader.style.display = 'flex';
         this.elements.accommodationContainer.style.display = 'block';
         this.elements.activityList.className = 'activity-list';
         this.elements.container.classList.remove('centered-view');
+        this._setActiveNavButton('planificacionBtn');
     },
 
     /**
      * Hide planning view elements
      */
     hidePlanningElements() {
-        this.elements.controlsRow2.style.display = 'none';
+        this.elements.toolbar.style.display = 'none';
         this.elements.rightPanel.style.display = 'none';
         this.elements.dayHeader.style.display = 'none';
         this.elements.accommodationContainer.style.display = 'none';
         this.elements.container.classList.add('centered-view');
+    },
+
+    /**
+     * Set active navigation button
+     * @param {string} buttonId - ID of the button to activate
+     */
+    _setActiveNavButton(buttonId) {
+        this.elements.navButtons.forEach(btn => btn.classList.remove('active'));
+        const activeBtn = document.getElementById(buttonId);
+        if (activeBtn) activeBtn.classList.add('active');
     },
 
     /**
@@ -327,6 +339,7 @@ const Views = {
     showBudget() {
         State.setView(Config.VIEWS.BUDGET);
         this.hidePlanningElements();
+        this._setActiveNavButton('presupuestoBtn');
         this.elements.activityList.innerHTML = '';
         this.elements.activityList.className = 'activity-list budget-list';
 
@@ -644,6 +657,7 @@ const Views = {
     showObjects() {
         State.setView(Config.VIEWS.OBJECTS);
         this.hidePlanningElements();
+        this._setActiveNavButton('objetosBtn');
         this.elements.activityList.innerHTML = '';
         this.elements.activityList.className = 'activity-list objects-list';
 

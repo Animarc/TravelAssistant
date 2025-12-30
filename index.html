@@ -11,21 +11,28 @@
 </head>
 
 <body>
-    <nav class="controls">
-        <section class="controls-row">
-            <button id="planificacionBtn">Planificación</button>
-            <button id="presupuestoBtn">Presupuesto</button>
-            <button id="objetosBtn">Objetos</button>
-            <button id="accountBtn" title="Cuenta y Viajes">⚙️</button>
-        </section>
-        <section class="controls-row">
-            <button id="moveDayLeftBtn">← Mover día</button>
-            <button id="addDayBtn">+ Día</button>
-            <button id="addActivityBtn">+ Actividad</button>
-            <button id="addAccommodationBtn">+ Dormir</button>
-            <button id="moveDayRightBtn">Mover día →</button>
-        </section>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <img src="favicon.svg" alt="Logo" class="navbar-logo">
+            <span class="navbar-title">Ani Travel Assistant</span>
+        </div>
+        <div class="navbar-center">
+            <button id="planificacionBtn" class="nav-btn active">Planificación</button>
+            <button id="presupuestoBtn" class="nav-btn">Presupuesto</button>
+            <button id="objetosBtn" class="nav-btn">Objetos</button>
+        </div>
+        <div class="navbar-right">
+            <button id="languageBtn" class="nav-icon-btn" title="Idioma">🌐</button>
+            <button id="accountBtn" class="nav-icon-btn" title="Opciones">⚙️</button>
+        </div>
     </nav>
+    <section class="toolbar">
+        <button id="moveDayLeftBtn">← Mover</button>
+        <button id="addDayBtn">+ Día</button>
+        <button id="addActivityBtn">+ Actividad</button>
+        <button id="addAccommodationBtn">+ Dormir</button>
+        <button id="moveDayRightBtn">Mover →</button>
+    </section>
     <main class="container">
         <aside class="left-panel">
             <header class="day-header">

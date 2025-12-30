@@ -16,29 +16,41 @@
         background-color: var(--color-white);
     }
 
-    /* Controls */
-    .controls {
+    /* Navbar */
+    .navbar {
         flex-shrink: 0;
-        padding: var(--space-md);
-        border-radius: 0;
-    }
-
-    .controls-row {
-        gap: var(--space-sm);
-        margin-bottom: var(--space-sm);
-    }
-
-    .controls-row button {
-        flex: 1 1 0;
-        min-width: 0;
-        font-size: var(--font-size-sm);
-        padding: var(--space-md) var(--space-sm);
-        border-radius: var(--radius-lg);
-    }
-
-    #exportBtn {
-        font-size: 16px;
         padding: var(--space-sm) var(--space-md);
+    }
+
+    .navbar-title {
+        display: none;
+    }
+
+    .navbar-center {
+        gap: 2px;
+        padding: 2px;
+    }
+
+    .nav-btn {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-size-xs);
+    }
+
+    .nav-icon-btn {
+        width: 36px;
+        height: 36px;
+        font-size: var(--font-size-md);
+    }
+
+    /* Toolbar */
+    .toolbar {
+        padding: var(--space-sm) var(--space-md);
+        gap: var(--space-xs);
+    }
+
+    .toolbar button {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-size-xs);
     }
 
     /* Container */
