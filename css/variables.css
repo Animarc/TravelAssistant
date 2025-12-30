@@ -69,7 +69,7 @@
     --color-gray-900: #212529;
 
     /* Background colors */
-    --bg-body: #f0f2f5;
+    --bg-body: var(--color-white);
     --bg-panel: var(--color-white);
     --bg-card: var(--color-white);
     --bg-muted: var(--color-gray-100);
