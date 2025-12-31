@@ -14,7 +14,7 @@ body {
 
 .container {
     display: flex;
-    height: calc(100vh - var(--header-height) - var(--footer-height));
+    height: calc(100vh - var(--header-height) - var(--footer-height) - 20px);
     padding: var(--container-padding);
     padding-bottom: var(--space-md);
     gap: var(--container-gap);
