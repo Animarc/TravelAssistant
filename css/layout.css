@@ -29,6 +29,8 @@ body {
 .container.centered-view .left-panel {
     width: 100%;
     max-width: 1050px;
+    border: none;
+    box-shadow: none;
 }
 
 /* ==================== LEFT PANEL ==================== */

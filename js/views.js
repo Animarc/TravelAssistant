@@ -344,6 +344,24 @@ const Views = {
         this.elements.activityList.innerHTML = '';
         this.elements.activityList.className = 'activity-list budget-list';
 
+        // Create two-column layout
+        const budgetWrapper = document.createElement('div');
+        budgetWrapper.className = 'budget-wrapper';
+
+        const budgetBreakdown = document.createElement('div');
+        budgetBreakdown.className = 'budget-breakdown';
+
+        const budgetSidebar = document.createElement('div');
+        budgetSidebar.className = 'budget-sidebar';
+
+        budgetWrapper.appendChild(budgetBreakdown);
+        budgetWrapper.appendChild(budgetSidebar);
+        this.elements.activityList.appendChild(budgetWrapper);
+
+        // Store references for rendering
+        this._budgetBreakdown = budgetBreakdown;
+        this._budgetSidebar = budgetSidebar;
+
         const grandTotals = {};
         const activityTotals = {};
         const accommodationTotals = {};
@@ -370,7 +388,7 @@ const Views = {
      * @private
      */
     _renderBudgetActivities(activityTotals, grandTotals) {
-        const section = document.createElement('li');
+        const section = document.createElement('div');
         section.className = 'budget-section';
         section.innerHTML = `
             <div class="budget-section-header">
@@ -379,7 +397,7 @@ const Views = {
             </div>
             <div class="budget-section-content" id="activitiesContent"></div>
         `;
-        this.elements.activityList.appendChild(section);
+        this._budgetBreakdown.appendChild(section);
 
         const content = section.querySelector('#activitiesContent');
         const activitiesWithPrices = Activities.getWithPrices();
@@ -434,7 +452,7 @@ const Views = {
      * @private
      */
     _renderBudgetAccommodations(accommodationTotals, grandTotals) {
-        const section = document.createElement('li');
+        const section = document.createElement('div');
         section.className = 'budget-section';
         section.innerHTML = `
             <div class="budget-section-header accommodation-header-color">
@@ -443,7 +461,7 @@ const Views = {
             </div>
             <div class="budget-section-content" id="accommodationsContent"></div>
         `;
-        this.elements.activityList.appendChild(section);
+        this._budgetBreakdown.appendChild(section);
 
         const content = section.querySelector('#accommodationsContent');
 
@@ -492,7 +510,7 @@ const Views = {
      * @private
      */
     _renderBudgetShopping(shoppingTotals, grandTotals) {
-        const section = document.createElement('li');
+        const section = document.createElement('div');
         section.className = 'budget-section';
         section.innerHTML = `
             <div class="budget-section-header shopping-header-color">
@@ -501,7 +519,7 @@ const Views = {
             </div>
             <div class="budget-section-content" id="shoppingContent"></div>
         `;
-        this.elements.activityList.appendChild(section);
+        this._budgetBreakdown.appendChild(section);
 
         const content = section.querySelector('#shoppingContent');
         const categories = Shopping.getByCategory();
@@ -579,7 +597,7 @@ const Views = {
      * @private
      */
     _renderBudgetSummary(activityTotals, accommodationTotals, shoppingTotals, grandTotals) {
-        const summary = document.createElement('li');
+        const summary = document.createElement('div');
         summary.className = 'budget-grand-summary';
 
         const grandTotalsStr = Object.entries(grandTotals)
@@ -617,7 +635,7 @@ const Views = {
             </div>
         `;
 
-        this.elements.activityList.appendChild(summary);
+        this._budgetSidebar.appendChild(summary);
     },
 
     /**

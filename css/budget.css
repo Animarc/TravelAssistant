@@ -11,16 +11,39 @@
     list-style: none;
 }
 
+/* ==================== BUDGET TWO-COLUMN LAYOUT ==================== */
+
+.budget-wrapper {
+    display: flex;
+    gap: var(--space-xl);
+    align-items: flex-start;
+}
+
+.budget-breakdown {
+    flex: 1;
+    min-width: 0;
+}
+
+.budget-sidebar {
+    width: 320px;
+    flex-shrink: 0;
+    position: sticky;
+    top: var(--space-lg);
+}
+
 /* ==================== BUDGET SECTIONS ==================== */
 
 .budget-section {
     background-color: var(--color-white);
     margin: var(--space-lg) 0;
-    margin-right: var(--space-sm);
     border-radius: var(--radius-2xl);
     box-shadow: var(--shadow-md);
     overflow: hidden;
     list-style: none;
+}
+
+.budget-section:first-child {
+    margin-top: 0;
 }
 
 /* ==================== SECTION HEADERS ==================== */
@@ -254,8 +277,7 @@
 .budget-grand-summary {
     background: var(--gradient-primary);
     color: var(--text-inverse);
-    margin: var(--space-xl) 0;
-    margin-right: var(--space-sm);
+    margin: 0;
     border-radius: var(--radius-2xl);
     padding: var(--space-xl);
     list-style: none;

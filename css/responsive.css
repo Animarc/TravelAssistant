@@ -190,6 +190,15 @@
     }
 
     /* Budget */
+    .budget-wrapper {
+        flex-direction: column;
+    }
+
+    .budget-sidebar {
+        width: 100%;
+        position: static;
+    }
+
     .budget-section {
         margin: var(--space-md) 0;
         border-radius: var(--radius-lg);
