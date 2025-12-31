@@ -21,15 +21,16 @@
     }
 
     .navbar-center {
-        gap: 2px;
+        gap: 4px;
         padding: var(--space-xs);
         padding-left: var(--space-md);
     }
 
     .trip-name {
-        max-width: 120px;
+        max-width: 180px;
+        min-width: 100px;
         padding: var(--space-xs) var(--space-sm);
-        font-size: var(--font-size-xs);
+        font-size: var(--font-size-sm);
     }
 
     .nav-btn {
@@ -78,6 +79,7 @@
         padding: var(--space-sm) var(--space-md);
         gap: var(--space-sm);
         height: auto;
+        border-bottom: 3px solid var(--color-primary);
     }
 
     .navbar-left {
@@ -86,25 +88,49 @@
 
     .navbar-center {
         width: 100%;
+        display: flex;
+        flex-wrap: wrap;
         justify-content: center;
-        padding: var(--space-xs);
+        padding: 0;
         gap: var(--space-xs);
         order: 1;
+        background-color: transparent;
+        border-radius: 0;
+        padding-left: 0;
     }
 
+    /* Show trip name on mobile - full width */
     .trip-name {
-        display: none;
+        display: block;
+        width: 100%;
+        flex-basis: 100%;
+        text-align: center;
+        max-width: none;
+        min-width: auto;
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--font-size-base);
+        background-color: var(--color-primary-subtle);
+        border-radius: var(--radius-lg);
+        margin-bottom: var(--space-xs);
     }
 
     .navbar-separator {
         display: none;
     }
 
+    /* Navigation buttons in a row */
     .nav-btn {
         flex: 1;
         text-align: center;
-        padding: var(--space-sm) var(--space-xs);
+        padding: var(--space-sm) var(--space-md);
         font-size: var(--font-size-xs);
+        background-color: var(--color-gray-100);
+        border-radius: var(--radius-pill);
+    }
+
+    .nav-btn.active {
+        background-color: var(--color-primary);
+        color: var(--text-inverse);
     }
 
     .navbar-right {
@@ -380,12 +406,18 @@
     }
 
     .navbar-center {
-        padding: 2px;
+        padding: 0;
+        gap: 4px;
+    }
+
+    .trip-name {
+        font-size: var(--font-size-sm);
+        padding: var(--space-xs) var(--space-sm);
     }
 
     .nav-btn {
         padding: var(--space-xs) var(--space-sm);
-        font-size: 10px;
+        font-size: 11px;
     }
 
     .navbar-right {
@@ -523,6 +555,10 @@
 /* ==================== VERY SMALL SCREENS (max-width: 360px) ==================== */
 
 @media (max-width: 360px) {
+    .trip-name {
+        font-size: var(--font-size-xs);
+    }
+
     .nav-btn {
         padding: var(--space-xs) 6px;
         font-size: 9px;
