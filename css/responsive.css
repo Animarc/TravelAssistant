@@ -1,24 +1,18 @@
 /**
  * Responsive Styles
- * Media queries for tablet and mobile devices
+ * Media queries for tablet and mobile devices - Navy Blue OTA Theme
  */
 
-/* ==================== TABLET (max-width: 800px) ==================== */
+/* ==================== TABLET (max-width: 900px) ==================== */
 
-@media (max-width: 800px) {
-
-    /* Body */
-    body {
-        overflow: hidden;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        background-color: var(--color-white);
+@media (max-width: 900px) {
+    :root {
+        --header-height: 60px;
+        --toolbar-height: 48px;
     }
 
-    /* Navbar */
+    /* Navbar adjustments */
     .navbar {
-        flex-shrink: 0;
         padding: var(--space-sm) var(--space-md);
     }
 
@@ -28,11 +22,18 @@
 
     .navbar-center {
         gap: 2px;
-        padding: 2px;
+        padding: var(--space-xs);
+        padding-left: var(--space-md);
+    }
+
+    .trip-name {
+        max-width: 120px;
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--font-size-xs);
     }
 
     .nav-btn {
-        padding: var(--space-xs) var(--space-sm);
+        padding: var(--space-xs) var(--space-md);
         font-size: var(--font-size-xs);
     }
 
@@ -44,13 +45,94 @@
 
     /* Toolbar */
     .toolbar {
+        padding: var(--space-xs) var(--space-md);
+    }
+
+    .toolbar button {
+        padding: var(--space-xs) var(--space-md);
+        font-size: var(--font-size-xs);
+    }
+}
+
+/* ==================== MOBILE LANDSCAPE + SMALL TABLETS (max-width: 800px) ==================== */
+
+@media (max-width: 800px) {
+    :root {
+        --header-height: auto;
+        --toolbar-height: 44px;
+    }
+
+    /* Body */
+    body {
+        overflow: hidden;
+        height: 100vh;
+        height: 100dvh;
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-white);
+    }
+
+    /* Navbar - Stack vertically on mobile */
+    .navbar {
+        flex-direction: column;
         padding: var(--space-sm) var(--space-md);
+        gap: var(--space-sm);
+        height: auto;
+    }
+
+    .navbar-left {
+        display: none;
+    }
+
+    .navbar-center {
+        width: 100%;
+        justify-content: center;
+        padding: var(--space-xs);
         gap: var(--space-xs);
+        order: 1;
+    }
+
+    .trip-name {
+        display: none;
+    }
+
+    .navbar-separator {
+        display: none;
+    }
+
+    .nav-btn {
+        flex: 1;
+        text-align: center;
+        padding: var(--space-sm) var(--space-xs);
+        font-size: var(--font-size-xs);
+    }
+
+    .navbar-right {
+        position: absolute;
+        top: var(--space-sm);
+        right: var(--space-md);
+    }
+
+    .nav-icon-btn {
+        width: 32px;
+        height: 32px;
+        font-size: var(--font-size-sm);
+    }
+
+    /* Toolbar */
+    .toolbar {
+        padding: var(--space-xs) var(--space-sm);
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .toolbar-buttons {
+        flex-wrap: nowrap;
     }
 
     .toolbar button {
         padding: var(--space-xs) var(--space-sm);
-        font-size: var(--font-size-xs);
+        font-size: 11px;
     }
 
     /* Container */
@@ -61,27 +143,28 @@
         overflow: hidden;
         padding: 0;
         gap: 0;
+        height: auto;
     }
 
     /* Right Panel (Map) */
     .right-panel {
         order: -1;
         width: 100%;
-        height: 20vh;
-        min-height: 100px;
-        max-height: 20vh;
+        height: 25vh;
+        min-height: 120px;
+        max-height: 25vh;
         padding: 0;
         flex-shrink: 0;
         border: none;
-        border-bottom: 2px solid var(--color-gray-200);
+        border-bottom: 2px solid var(--color-primary);
         border-radius: 0;
         box-shadow: none;
     }
 
     #map {
         height: 100%;
-        min-height: 100px;
-        max-height: 20vh;
+        min-height: 120px;
+        max-height: 25vh;
         width: 100%;
         border-radius: 0;
     }
@@ -122,8 +205,8 @@
     }
 
     .day-header button {
-        min-width: 35px;
-        padding: var(--space-sm) var(--space-md);
+        min-width: 40px;
+        height: 40px;
         font-size: var(--font-size-md);
     }
 
@@ -133,12 +216,12 @@
 
     /* Activities */
     .activity-item {
-        padding: var(--space-md) var(--space-md);
+        padding: var(--space-md);
         margin: var(--space-sm) 0;
     }
 
     .activity-type-badge {
-        font-size: 0.7em;
+        font-size: 10px;
         padding: 2px var(--space-sm);
     }
 
@@ -146,6 +229,7 @@
     .modal-content {
         width: 100vw;
         height: 100vh;
+        height: 100dvh;
         margin: 0;
         padding: var(--space-xl);
         border-radius: 0;
@@ -179,14 +263,15 @@
         right: var(--space-lg);
         font-size: 28px;
         color: var(--text-secondary);
-        background: rgba(255, 255, 255, 0.9);
+        background: rgba(255, 255, 255, 0.95);
         border-radius: 50%;
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         display: flex;
         align-items: center;
         justify-content: center;
         z-index: var(--z-modal-content);
+        box-shadow: var(--shadow-md);
     }
 
     /* Budget */
@@ -213,7 +298,7 @@
     }
 
     .budget-item {
-        padding: var(--space-md) var(--space-md);
+        padding: var(--space-md);
     }
 
     .budget-activity {
@@ -282,34 +367,63 @@
     }
 }
 
-/* ==================== MOBILE (max-width: 500px) ==================== */
+/* ==================== MOBILE PORTRAIT (max-width: 500px) ==================== */
 
 @media (max-width: 500px) {
-
-    /* Controls */
-    .controls {
-        padding: var(--space-sm);
+    :root {
+        --toolbar-height: 40px;
     }
 
-    .controls-row {
+    /* Navbar */
+    .navbar {
+        padding: var(--space-xs) var(--space-sm);
+    }
+
+    .navbar-center {
+        padding: 2px;
+    }
+
+    .nav-btn {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 10px;
+    }
+
+    .navbar-right {
+        top: var(--space-xs);
+        right: var(--space-sm);
         gap: var(--space-xs);
-        margin-bottom: var(--space-xs);
     }
 
-    .controls-row button {
-        font-size: var(--font-size-sm);
-        padding: var(--space-sm) 2px;
+    .nav-icon-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 12px;
     }
 
-    #exportBtn {
-        font-size: 14px;
+    /* Toolbar */
+    .toolbar {
+        padding: var(--space-xs);
+    }
+
+    .toolbar-buttons {
+        gap: 2px;
+        padding: 2px;
+    }
+
+    .toolbar button {
+        font-size: 10px;
         padding: var(--space-xs) var(--space-sm);
     }
 
     /* Day Header */
+    .day-header {
+        padding: var(--space-sm) var(--space-md);
+        margin: var(--space-sm);
+    }
+
     .day-header button {
-        min-width: 30px;
-        padding: var(--space-xs) var(--space-sm);
+        min-width: 36px;
+        height: 36px;
         font-size: var(--font-size-sm);
     }
 
@@ -320,12 +434,12 @@
     /* Right Panel */
     .right-panel {
         height: 20vh;
-        min-height: 80px;
+        min-height: 100px;
         max-height: 20vh;
     }
 
     #map {
-        min-height: 80px;
+        min-height: 100px;
         max-height: 20vh;
     }
 
@@ -354,8 +468,8 @@
         top: var(--space-md);
         right: var(--space-md);
         font-size: 24px;
-        width: 35px;
-        height: 35px;
+        width: 40px;
+        height: 40px;
     }
 
     /* Activities */
@@ -392,16 +506,63 @@
     }
 
     .accommodation-header {
-        padding: var(--space-md) var(--space-md);
+        padding: var(--space-md);
     }
 
     .accommodation-content {
-        padding: var(--space-md) var(--space-md);
+        padding: var(--space-md);
     }
 
     .accommodation-info {
         flex-direction: column;
         align-items: flex-start;
         gap: var(--space-sm);
+    }
+}
+
+/* ==================== VERY SMALL SCREENS (max-width: 360px) ==================== */
+
+@media (max-width: 360px) {
+    .nav-btn {
+        padding: var(--space-xs) 6px;
+        font-size: 9px;
+    }
+
+    .toolbar button {
+        font-size: 9px;
+        padding: 4px 6px;
+    }
+
+    .day-header h2 {
+        font-size: var(--font-size-sm);
+    }
+
+    .day-header button {
+        min-width: 32px;
+        height: 32px;
+    }
+}
+
+/* ==================== SAFE AREA INSETS (iPhone X+) ==================== */
+
+@supports (padding: max(0px)) {
+    @media (max-width: 800px) {
+        .navbar {
+            padding-top: max(var(--space-sm), env(safe-area-inset-top));
+            padding-left: max(var(--space-md), env(safe-area-inset-left));
+            padding-right: max(var(--space-md), env(safe-area-inset-right));
+        }
+
+        .site-footer {
+            padding-bottom: max(0px, env(safe-area-inset-bottom));
+            height: calc(var(--footer-height) + env(safe-area-inset-bottom));
+        }
+
+        .modal-content {
+            padding-top: max(var(--space-xl), env(safe-area-inset-top));
+            padding-bottom: max(var(--space-xl), env(safe-area-inset-bottom));
+            padding-left: max(var(--space-xl), env(safe-area-inset-left));
+            padding-right: max(var(--space-xl), env(safe-area-inset-right));
+        }
     }
 }

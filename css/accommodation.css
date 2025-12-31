@@ -1,17 +1,16 @@
 /**
  * Accommodation Styles
- * Accommodation section, items, and map marker
+ * Accommodation section, items, and map marker - Navy Blue OTA Theme
  */
 
 /* ==================== ACCOMMODATION CONTAINER (Fixed at bottom) ==================== */
 
 .accommodation-container {
     flex-shrink: 0;
-    padding: var(--space-lg) var(--space-lg) var(--space-lg);
-    background: linear-gradient(to bottom, var(--color-gray-100), var(--bg-panel) 30%);
-    border-top: 3px solid var(--color-info);
-    border-radius: 0 0 var(--radius-3xl) var(--radius-3xl);
-    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+    padding: var(--space-lg);
+    background-color: var(--color-white);
+    border-top: 2px solid var(--color-primary);
+    border-radius: 0 0 var(--radius-2xl) var(--radius-2xl);
     margin-top: var(--space-sm);
 }
 
@@ -23,7 +22,7 @@
 }
 
 .accommodation-marker-inner {
-    background: var(--gradient-info);
+    background: var(--gradient-primary);
     width: 36px;
     height: 36px;
     border-radius: 50% 50% 50% 0;
@@ -31,7 +30,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: var(--shadow-lg);
     border: 3px solid var(--color-white);
     font-size: 18px;
     line-height: var(--line-height-tight);
@@ -46,24 +45,26 @@
 /* ==================== ACCOMMODATION SECTION ==================== */
 
 .accommodation-section {
-    background-color: #e8f4fd;
+    background-color: var(--color-white);
     margin: var(--space-md) 0 0 0;
     border-radius: var(--radius-lg);
-    border-left: var(--border-width-accent) solid var(--color-info);
+    border: 1px solid var(--border-color);
+    border-left: var(--border-width-accent) solid var(--color-primary);
     overflow: visible;
 }
 
 /* ==================== SECTION HEADER ==================== */
 
 .accommodation-header {
-    background-color: var(--color-info-light);
+    background-color: var(--bg-subtle);
     padding: var(--space-md) var(--space-lg);
-    border-bottom: var(--border-width) solid #bee5eb;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .accommodation-header h3 {
     margin: 0;
-    color: #0c5460;
+    font-family: var(--font-family-heading);
+    color: var(--color-primary);
     font-size: var(--font-size-lg);
     display: flex;
     align-items: center;
@@ -78,10 +79,11 @@
 
 .accommodation-content {
     padding: var(--space-md) var(--space-lg);
+    background-color: var(--color-white);
 }
 
 .no-accommodation {
-    color: var(--text-secondary);
+    color: var(--text-muted);
     font-style: italic;
     margin: 0;
     text-align: center;
@@ -98,8 +100,14 @@
     padding: var(--space-md) var(--space-lg);
     margin: var(--space-sm) 0;
     border-radius: var(--radius-md);
-    border: var(--border-width) solid #bee5eb;
+    border: 1px solid var(--border-color);
     gap: var(--space-md);
+    transition: all var(--transition-base);
+}
+
+.accommodation-item:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary-light);
 }
 
 .accommodation-item:first-child {
@@ -121,57 +129,64 @@
 }
 
 .accommodation-name {
-    color: #0c5460;
-    font-size: 1.05em;
+    font-family: var(--font-family-heading);
+    color: var(--color-primary);
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
 }
 
 .accommodation-days {
-    background-color: var(--color-gray-200);
-    color: var(--color-gray-700);
-    padding: 3px var(--space-sm);
-    border-radius: var(--radius-sm);
+    background-color: var(--color-gray-100);
+    color: var(--text-secondary);
+    padding: 4px var(--space-sm);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
 }
 
 .accommodation-price {
-    background-color: var(--color-success);
+    background-color: var(--color-primary);
     color: var(--text-inverse);
-    padding: 3px var(--space-sm);
-    border-radius: var(--radius-sm);
+    padding: 4px var(--space-md);
+    border-radius: var(--radius-pill);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-sm);
 }
 
 .accommodation-link {
-    color: var(--color-primary);
+    color: var(--color-secondary);
     text-decoration: none;
     font-size: var(--font-size-sm);
-    padding: 3px var(--space-sm);
-    background-color: var(--color-gray-100);
-    border-radius: var(--radius-sm);
-    transition: background-color var(--transition-base);
+    padding: 4px var(--space-sm);
+    background-color: var(--color-gray-50);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
+    font-weight: var(--font-weight-medium);
 }
 
 .accommodation-link:hover {
-    background-color: var(--color-gray-200);
-    text-decoration: underline;
+    background-color: var(--color-primary-subtle);
+    color: var(--color-primary);
+    text-decoration: none;
 }
 
 /* ==================== GOOGLE MAPS BUTTON ==================== */
 
 .accommodation-gmaps-btn {
-    background-color: #4285f4;
+    background-color: var(--color-secondary);
     color: var(--text-inverse);
     border: none;
     padding: var(--space-xs) var(--space-md);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-sm);
     cursor: pointer;
-    transition: background-color var(--transition-base);
+    transition: all var(--transition-base);
+    font-weight: var(--font-weight-medium);
 }
 
 .accommodation-gmaps-btn:hover {
-    background-color: #3367d6;
+    background-color: var(--color-secondary-dark);
+    transform: translateY(-1px);
 }
 
 /* ==================== ITEM ACTIONS ==================== */
@@ -188,14 +203,16 @@
     font-size: var(--font-size-lg);
     cursor: pointer;
     padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-    transition: background-color var(--transition-base);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
 }
 
 .edit-accommodation-btn:hover {
-    background-color: var(--color-gray-200);
+    background-color: var(--color-primary-subtle);
+    color: var(--color-primary);
 }
 
 .delete-accommodation-btn:hover {
     background-color: var(--color-danger-light);
+    color: var(--color-danger);
 }

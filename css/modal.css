@@ -1,6 +1,6 @@
 /**
  * Modal Styles
- * Dialog boxes and form modals
+ * Dialog boxes and form modals - Navy Blue OTA Theme
  */
 
 /* ==================== MODAL OVERLAY ==================== */
@@ -14,44 +14,75 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(26, 54, 93, 0.6);
+    backdrop-filter: blur(4px);
 }
 
 /* ==================== MODAL CONTENT ==================== */
 
 .modal-content {
     background-color: var(--color-white);
-    margin: 10% auto;
-    padding: var(--space-xl);
-    border-radius: var(--radius-lg);
-    width: 300px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin: 8% auto;
+    padding: var(--space-2xl);
+    border-radius: var(--radius-2xl);
+    width: 340px;
+    max-width: 90vw;
+    box-shadow: var(--shadow-2xl);
     position: relative;
+    animation: modalSlideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-content h2 {
+    font-family: var(--font-family-heading);
+    color: var(--color-primary);
+    font-size: var(--font-size-xl);
+    margin-bottom: var(--space-xl);
+    padding-right: var(--space-xl);
 }
 
 /* ==================== CLOSE BUTTON ==================== */
 
 .close {
-    color: var(--color-gray-500);
+    color: var(--text-muted);
     position: absolute;
-    right: var(--space-md);
-    top: var(--space-md);
+    right: var(--space-lg);
+    top: var(--space-lg);
     font-size: 24px;
     font-weight: var(--font-weight-bold);
     cursor: pointer;
-    transition: color var(--transition-base);
+    transition: all var(--transition-base);
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-full);
 }
 
 .close:hover {
-    color: var(--text-primary);
+    color: var(--color-primary);
+    background-color: var(--color-primary-subtle);
 }
 
 /* ==================== FORM ELEMENTS ==================== */
 
 .modal-content label {
     display: block;
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
     font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    font-size: var(--font-size-sm);
 }
 
 .modal-content input,
@@ -60,10 +91,13 @@
     width: 100%;
     box-sizing: border-box;
     margin-top: var(--space-xs);
-    padding: var(--space-sm);
-    border: var(--border-width) solid var(--color-gray-400);
-    border-radius: var(--radius-sm);
+    padding: var(--space-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
     font-size: var(--font-size-base);
+    font-family: var(--font-family);
+    background-color: var(--color-white);
+    transition: all var(--transition-base);
 }
 
 .modal-content input:focus,
@@ -71,31 +105,44 @@
 .modal-content select:focus {
     outline: none;
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 0 0 3px rgba(26, 54, 93, 0.15);
+}
+
+.modal-content input::placeholder,
+.modal-content textarea::placeholder {
+    color: var(--text-muted);
 }
 
 .modal-content select {
     background-color: var(--color-white);
+    cursor: pointer;
 }
 
 /* ==================== SUBMIT BUTTON ==================== */
 
 .modal-content button[type="submit"] {
     width: 100%;
-    padding: var(--space-md);
-    margin-top: var(--space-md);
-    background-color: var(--color-primary);
+    padding: var(--space-md) var(--space-lg);
+    margin-top: var(--space-lg);
+    background: var(--gradient-primary);
     color: var(--text-inverse);
     border: none;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
+    font-family: var(--font-family);
     font-size: var(--font-size-md);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-semibold);
     cursor: pointer;
-    transition: background-color var(--transition-base);
+    transition: all var(--transition-base);
 }
 
 .modal-content button[type="submit"]:hover {
-    background-color: var(--color-primary-dark);
+    background: var(--gradient-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-primary);
+}
+
+.modal-content button[type="submit"]:active {
+    transform: translateY(0);
 }
 
 /* ==================== CHECKBOX LABEL ==================== */
@@ -105,22 +152,27 @@
     align-items: center;
     gap: var(--space-sm);
     cursor: pointer;
+    padding: var(--space-sm) 0;
 }
 
 .modal-content input[type="checkbox"] {
-    width: auto;
+    width: 18px;
+    height: 18px;
     margin: 0;
+    accent-color: var(--color-primary);
+    cursor: pointer;
 }
 
 /* ==================== LANGUAGE SELECTOR ==================== */
 
 .language-modal-content {
-    width: 280px;
+    width: 300px;
     text-align: center;
 }
 
 .language-modal-content h2 {
-    margin-bottom: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    padding-right: 0;
 }
 
 .language-list {
@@ -132,17 +184,19 @@
 .language-option {
     width: 100%;
     padding: var(--space-md) var(--space-lg);
-    border: 2px solid var(--color-gray-200);
+    border: 2px solid var(--border-color);
     background: var(--color-white);
     border-radius: var(--radius-lg);
+    font-family: var(--font-family);
     font-size: var(--font-size-md);
+    font-weight: var(--font-weight-medium);
     cursor: pointer;
     transition: all var(--transition-base);
 }
 
 .language-option:hover {
     border-color: var(--color-primary);
-    background: var(--color-gray-50);
+    background: var(--color-primary-subtle);
 }
 
 .language-option.active {

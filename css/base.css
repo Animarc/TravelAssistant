@@ -1,12 +1,19 @@
 /**
  * Base Styles
  * Reset and foundational styles for the application
+ * Typography: Poppins (headings) + Nunito (body)
  */
 
 /* ==================== RESET ==================== */
 
 * {
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 
 body {
@@ -16,11 +23,17 @@ body {
     line-height: var(--line-height-normal);
     color: var(--text-primary);
     background-color: var(--bg-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 h1, h2, h3, h4, h5, h6 {
     margin: 0;
+    font-family: var(--font-family-heading);
     font-weight: var(--font-weight-semibold);
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--text-primary);
 }
 
 p {
@@ -165,20 +178,79 @@ select {
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--color-gray-100);
-    border-radius: var(--radius-sm);
+    background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: var(--color-gray-400);
-    border-radius: var(--radius-sm);
+    background: var(--color-gray-300);
+    border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: var(--color-gray-500);
+    background: var(--color-gray-400);
+}
+
+/* ==================== ANIMATIONS ==================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Animation utilities */
+.animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slideUp {
+    animation: slideUp 0.3s ease-out;
+}
+
+/* ==================== FOCUS STATES ==================== */
+
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* ==================== SELECTION ==================== */
+
+::selection {
+    background-color: var(--color-primary);
+    color: var(--text-inverse);
 }

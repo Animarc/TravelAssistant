@@ -1,23 +1,26 @@
 /**
  * Activity Styles
- * Activity items, types, states, and related components
+ * Activity items, types, states, and related components - Navy Blue OTA Theme
  */
 
 /* ==================== BASE ACTIVITY ITEM ==================== */
 
 .activity-item {
-    background-color: var(--color-gray-100);
+    background-color: var(--color-white);
     margin: var(--space-sm) 0;
     padding: var(--space-md) var(--space-lg);
     border-radius: var(--radius-lg);
-    border-left: var(--border-width-accent) solid var(--color-gray-600);
+    border-left: var(--border-width-accent) solid var(--color-gray-400);
+    border: 1px solid var(--border-color);
+    border-left-width: var(--border-width-accent);
     transition: all var(--transition-base);
     cursor: pointer;
 }
 
 .activity-item:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateX(2px);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+    border-color: var(--color-primary-light);
 }
 
 /* ==================== ACTIVITY STRUCTURE ==================== */
@@ -35,9 +38,10 @@
 }
 
 .activity-checkbox {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     cursor: pointer;
+    accent-color: var(--color-primary);
 }
 
 .activity-checkbox-label {
@@ -52,6 +56,11 @@
     flex: 1;
     cursor: pointer;
     padding: var(--space-xs) 0;
+}
+
+.activity-info strong {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-semibold);
 }
 
 .activity-actions {
@@ -76,24 +85,30 @@
     font-size: var(--font-size-lg);
     cursor: pointer;
     padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--radius-sm);
-    transition: background-color var(--transition-base);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-base);
 }
 
 .edit-activity-btn:hover {
-    background-color: var(--color-gray-200);
+    background-color: var(--color-primary-subtle);
+    color: var(--color-primary);
 }
 
 .delete-activity-btn:hover {
     background-color: var(--color-danger-light);
+    color: var(--color-danger);
 }
 
 /* ==================== ACTIVITY TYPES ==================== */
 
-/* Flight - Sky blue theme */
+/* Flight - Blue theme */
 .activity-type-vuelo {
-    background-color: var(--color-flight-bg);
+    background-color: var(--color-white);
     border-left-color: var(--color-flight);
+}
+
+.activity-type-vuelo:hover {
+    background-color: var(--color-flight-bg);
 }
 
 .activity-type-vuelo .activity-header {
@@ -110,8 +125,12 @@
 
 /* Transport - Purple theme */
 .activity-type-transporte {
-    background-color: var(--color-transport-bg);
+    background-color: var(--color-white);
     border-left-color: var(--color-transport);
+}
+
+.activity-type-transporte:hover {
+    background-color: var(--color-transport-bg);
 }
 
 .activity-type-transporte .activity-header {
@@ -128,8 +147,12 @@
 
 /* Food - Orange/warm theme */
 .activity-type-comida {
-    background-color: var(--color-food-bg);
+    background-color: var(--color-white);
     border-left-color: var(--color-food);
+}
+
+.activity-type-comida:hover {
+    background-color: var(--color-food-bg);
 }
 
 .activity-type-comida .activity-header {
@@ -146,8 +169,12 @@
 
 /* Visit/Tourism - Green theme */
 .activity-type-visita {
-    background-color: var(--color-visit-bg);
+    background-color: var(--color-white);
     border-left-color: var(--color-visit);
+}
+
+.activity-type-visita:hover {
+    background-color: var(--color-visit-bg);
 }
 
 .activity-type-visita .activity-header {
@@ -164,8 +191,12 @@
 
 /* Normal - Gray theme (default) */
 .activity-type-normal {
-    background-color: var(--color-normal-bg);
+    background-color: var(--color-white);
     border-left-color: var(--color-normal);
+}
+
+.activity-type-normal:hover {
+    background-color: var(--color-normal-bg);
 }
 
 .activity-type-normal .activity-header {
@@ -173,7 +204,7 @@
 }
 
 .activity-type-normal .activity-info strong {
-    color: #455a64;
+    color: var(--color-normal-dark);
 }
 
 /* ==================== ACTIVITY TYPE BADGES ==================== */
@@ -181,35 +212,35 @@
 .activity-type-badge {
     display: inline-block;
     font-size: var(--font-size-xs);
-    padding: 2px var(--space-sm);
-    border-radius: var(--radius-2xl);
+    padding: 3px var(--space-sm);
+    border-radius: var(--radius-pill);
     margin-left: var(--space-sm);
-    font-weight: var(--font-weight-medium);
+    font-weight: var(--font-weight-semibold);
     vertical-align: middle;
 }
 
 .activity-type-badge.vuelo {
-    background-color: #bbdefb;
+    background-color: var(--color-flight-bg);
     color: var(--color-flight-dark);
 }
 
 .activity-type-badge.transporte {
-    background-color: #e1bee7;
+    background-color: var(--color-transport-bg);
     color: var(--color-transport-dark);
 }
 
 .activity-type-badge.comida {
-    background-color: #ffe0b2;
+    background-color: var(--color-food-bg);
     color: var(--color-food-dark);
 }
 
 .activity-type-badge.visita {
-    background-color: #c8e6c9;
+    background-color: var(--color-visit-bg);
     color: var(--color-visit-dark);
 }
 
 .activity-type-badge.normal {
-    background-color: #cfd8dc;
+    background-color: var(--color-normal-bg);
     color: var(--color-normal-dark);
 }
 
@@ -217,22 +248,23 @@
 
 /* Completed activity */
 .activity-item.activity-done {
-    opacity: 0.7;
+    opacity: 0.65;
 }
 
 .activity-item.activity-done .activity-info strong {
     text-decoration: line-through;
+    color: var(--text-muted);
 }
 
 /* Transfer item */
 .activity-item.transfer-item {
-    background-color: #eceff1;
-    border-left-color: #90a4ae;
+    background-color: var(--color-gray-50);
+    border-left-color: var(--color-gray-400);
     font-style: italic;
 }
 
 .activity-item.transfer-item:hover {
-    background-color: #e0e0e0;
+    background-color: var(--color-gray-100);
 }
 
 /* Optional activity */
@@ -244,21 +276,25 @@
 /* ==================== OPTIONAL ACTIVITIES SECTION ==================== */
 
 .optional-activities-header {
-    background-color: var(--color-gray-100);
+    background-color: var(--color-white);
     padding: var(--space-lg);
     margin: var(--space-xl) 0 var(--space-md) 0;
     border-radius: var(--radius-lg);
-    border-left: var(--border-width-accent) solid var(--color-gray-600);
+    border-left: var(--border-width-accent) solid var(--color-gray-500);
+    border: 1px solid var(--border-color);
+    border-left-width: var(--border-width-accent);
+    border-left-color: var(--color-gray-500);
 }
 
 .optional-activities-header h3 {
     margin: 0;
-    color: var(--color-gray-700);
+    font-family: var(--font-family-heading);
+    color: var(--text-secondary);
     font-size: var(--font-size-lg);
 }
 
 .optional-badge {
-    color: var(--color-gray-600);
+    color: var(--text-muted);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-normal);
     font-style: italic;
@@ -268,20 +304,22 @@
 
 .important-info {
     background-color: var(--color-danger-light);
-    color: #b30000;
-    padding: var(--space-md) var(--space-sm);
+    color: var(--color-danger-dark);
+    padding: var(--space-md) var(--space-md);
     margin-top: var(--space-sm);
-    border-left: var(--border-width-accent) solid #b30000;
+    border-left: var(--border-width-accent) solid var(--color-danger);
     font-weight: var(--font-weight-semibold);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
 }
 
 .price-info {
-    background-color: #e6f3ff;
-    color: #0066cc;
-    padding: var(--space-md) var(--space-sm);
+    background-color: var(--color-info-light);
+    color: var(--color-info-dark);
+    padding: var(--space-md) var(--space-md);
     margin-top: var(--space-sm);
-    border-left: var(--border-width-accent) solid #0066cc;
+    border-left: var(--border-width-accent) solid var(--color-info);
     font-weight: var(--font-weight-semibold);
-    border-radius: var(--radius-sm);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
 }

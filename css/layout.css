@@ -1,6 +1,6 @@
 /**
  * Layout Styles
- * Main container structure and panel layouts
+ * Main container structure and panel layouts - Navy Blue OTA Theme
  */
 
 /* ==================== BODY FIXED ==================== */
@@ -8,17 +8,19 @@
 body {
     overflow: hidden;
     height: 100vh;
+    height: 100dvh;
 }
 
 /* ==================== MAIN CONTAINER ==================== */
 
 .container {
     display: flex;
-    height: calc(100vh - var(--header-height) - var(--footer-height) - 20px);
+    height: calc(100vh - var(--header-height) - var(--toolbar-height) - var(--footer-height));
+    height: calc(100dvh - var(--header-height) - var(--toolbar-height) - var(--footer-height));
     padding: var(--container-padding);
-    padding-bottom: var(--space-md);
     gap: var(--container-gap);
     overflow: hidden;
+    background-color: var(--bg-body);
 }
 
 /* Centered view (when map is hidden) */
@@ -40,9 +42,9 @@ body {
     display: flex;
     flex-direction: column;
     background-color: var(--bg-panel);
-    border: 2px solid var(--color-gray-200);
-    border-radius: var(--radius-3xl);
-    box-shadow: var(--shadow-xl);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-card);
     overflow: hidden;
 }
 
@@ -51,10 +53,10 @@ body {
 .right-panel {
     width: var(--panel-right-width);
     height: 100%;
-    border: 2px solid var(--color-gray-200);
-    border-radius: var(--radius-3xl);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-2xl);
     overflow: hidden;
-    box-shadow: var(--shadow-xl);
+    box-shadow: var(--shadow-card);
 }
 
 /* ==================== DAY HEADER ==================== */
@@ -64,11 +66,11 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: var(--space-md);
-    background: var(--gradient-subtle);
+    background: var(--bg-subtle);
     padding: var(--space-lg);
     margin: var(--space-lg);
-    border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-xs);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-color);
     flex-shrink: 0;
 }
 
@@ -79,20 +81,26 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: var(--font-size-2xl);
-    color: var(--text-primary);
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-xl);
+    color: var(--color-primary);
 }
 
 .day-header button {
     flex-shrink: 0;
-    min-width: 45px;
-    padding: var(--space-md) var(--space-lg);
-    font-size: var(--font-size-xl);
+    min-width: 44px;
+    height: 44px;
+    padding: 0;
+    font-size: var(--font-size-lg);
     border: none;
     background: var(--color-white);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary);
 }
 
 .day-header button:hover {
@@ -115,21 +123,20 @@ body {
 
 /* Custom scrollbar for activity list */
 .activity-list::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .activity-list::-webkit-scrollbar-track {
-    background: var(--color-gray-100);
-    border-radius: var(--radius-sm);
+    background: transparent;
 }
 
 .activity-list::-webkit-scrollbar-thumb {
-    background: var(--color-gray-400);
-    border-radius: var(--radius-sm);
+    background: var(--color-gray-300);
+    border-radius: var(--radius-full);
 }
 
 .activity-list::-webkit-scrollbar-thumb:hover {
-    background: var(--color-gray-500);
+    background: var(--color-gray-400);
 }
 
 /* ==================== FOOTER ==================== */
@@ -144,7 +151,7 @@ body {
     align-items: center;
     justify-content: center;
     background-color: var(--bg-panel);
-    border-top: 1px solid var(--color-gray-200);
+    border-top: 1px solid var(--border-color);
 }
 
 .site-footer p {
@@ -156,6 +163,7 @@ body {
 .site-footer a {
     color: var(--color-primary);
     text-decoration: none;
+    font-weight: var(--font-weight-medium);
 }
 
 .site-footer a:hover {

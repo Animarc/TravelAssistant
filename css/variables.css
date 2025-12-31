@@ -1,88 +1,94 @@
 /**
  * CSS Variables / Design Tokens
  * Central configuration for colors, spacing, typography, and effects
+ * Brand: Navy Blue (#1a365d) - Travel Assistant OTA Style
  */
 
 :root {
     /* ==================== COLORS ==================== */
 
-    /* Primary palette */
-    --color-primary: #667eea;
-    --color-primary-dark: #5a6fd6;
-    --color-primary-light: #8b9df0;
+    /* Primary palette - Navy Blue Brand */
+    --color-primary: #1a365d;
+    --color-primary-dark: #0f2847;
+    --color-primary-light: #2c5282;
+    --color-primary-lighter: #3d6ba3;
+    --color-primary-subtle: #e8eef5;
 
-    /* Secondary palette */
-    --color-secondary: #764ba2;
-    --color-secondary-dark: #6a4190;
-    --color-secondary-light: #9b6fc4;
+    /* Secondary palette - Complementary Blues */
+    --color-secondary: #2b6cb0;
+    --color-secondary-dark: #1e4e8c;
+    --color-secondary-light: #4299e1;
 
     /* Accent colors */
-    --color-success: #28a745;
-    --color-success-dark: #218838;
-    --color-success-light: #d4edda;
+    --color-success: #38a169;
+    --color-success-dark: #2f855a;
+    --color-success-light: #c6f6d5;
 
-    --color-danger: #dc3545;
-    --color-danger-dark: #c82333;
-    --color-danger-light: #ffe6e6;
+    --color-danger: #e53e3e;
+    --color-danger-dark: #c53030;
+    --color-danger-light: #fed7d7;
 
-    --color-warning: #ffc107;
-    --color-warning-dark: #e0a800;
-    --color-warning-light: #fff3cd;
+    --color-warning: #dd6b20;
+    --color-warning-dark: #c05621;
+    --color-warning-light: #feebc8;
 
-    --color-info: #17a2b8;
-    --color-info-dark: #138496;
-    --color-info-light: #d1ecf1;
+    --color-info: #3182ce;
+    --color-info-dark: #2b6cb0;
+    --color-info-light: #bee3f8;
 
-    /* Activity type colors */
-    --color-flight: #1976d2;
-    --color-flight-bg: #e3f2fd;
-    --color-flight-dark: #0d47a1;
+    /* Activity type colors - Refined palette */
+    --color-flight: #2b6cb0;
+    --color-flight-bg: #ebf4ff;
+    --color-flight-dark: #1a4971;
 
-    --color-transport: #7b1fa2;
-    --color-transport-bg: #f3e5f5;
-    --color-transport-dark: #4a148c;
+    --color-transport: #6b46c1;
+    --color-transport-bg: #f3e8ff;
+    --color-transport-dark: #44337a;
 
-    --color-food: #f57c00;
-    --color-food-bg: #fff3e0;
-    --color-food-dark: #e65100;
+    --color-food: #c05621;
+    --color-food-bg: #fffaf0;
+    --color-food-dark: #9c4221;
 
-    --color-visit: #388e3c;
-    --color-visit-bg: #e8f5e9;
-    --color-visit-dark: #1b5e20;
+    --color-visit: #276749;
+    --color-visit-bg: #f0fff4;
+    --color-visit-dark: #1c4532;
 
-    --color-normal: #607d8b;
-    --color-normal-bg: #f5f5f5;
-    --color-normal-dark: #37474f;
+    --color-normal: #4a5568;
+    --color-normal-bg: #f7fafc;
+    --color-normal-dark: #2d3748;
 
-    /* Neutral colors */
+    /* Neutral colors - Refined grays */
     --color-white: #ffffff;
     --color-black: #000000;
-    --color-gray-50: #fafafa;
-    --color-gray-100: #f8f9fa;
-    --color-gray-200: #e9ecef;
-    --color-gray-300: #dee2e6;
-    --color-gray-400: #ced4da;
-    --color-gray-500: #adb5bd;
-    --color-gray-600: #6c757d;
-    --color-gray-700: #495057;
-    --color-gray-800: #343a40;
-    --color-gray-900: #212529;
+    --color-gray-50: #fafbfc;
+    --color-gray-100: #f7fafc;
+    --color-gray-200: #edf2f7;
+    --color-gray-300: #e2e8f0;
+    --color-gray-400: #cbd5e0;
+    --color-gray-500: #a0aec0;
+    --color-gray-600: #718096;
+    --color-gray-700: #4a5568;
+    --color-gray-800: #2d3748;
+    --color-gray-900: #1a202c;
 
-    /* Background colors */
+    /* Background colors - Clean whites */
     --bg-body: var(--color-white);
     --bg-panel: var(--color-white);
     --bg-card: var(--color-white);
-    --bg-muted: var(--color-gray-100);
+    --bg-muted: var(--color-gray-50);
+    --bg-subtle: var(--color-primary-subtle);
 
     /* Text colors */
-    --text-primary: #333333;
-    --text-secondary: var(--color-gray-600);
-    --text-muted: var(--color-gray-500);
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-muted: #718096;
     --text-inverse: var(--color-white);
+    --text-brand: var(--color-primary);
 
     /* Border colors */
-    --border-color: var(--color-gray-300);
-    --border-light: var(--color-gray-200);
+    --border-color: var(--color-gray-200);
+    --border-light: var(--color-gray-100);
+    --border-brand: var(--color-primary-light);
 
     /* ==================== GRADIENTS ==================== */
 
@@ -90,8 +96,9 @@
     --gradient-primary-hover: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-secondary-dark) 100%);
     --gradient-info: linear-gradient(135deg, var(--color-info) 0%, var(--color-info-dark) 100%);
     --gradient-success: linear-gradient(135deg, var(--color-success) 0%, var(--color-success-dark) 100%);
-    --gradient-dark: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    --gradient-subtle: linear-gradient(135deg, var(--color-gray-100) 0%, var(--color-gray-200) 100%);
+    --gradient-dark: linear-gradient(135deg, #1a365d 0%, #0f2847 100%);
+    --gradient-subtle: linear-gradient(135deg, var(--color-gray-50) 0%, var(--color-gray-100) 100%);
+    --gradient-brand: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
 
     /* ==================== SPACING ==================== */
 
@@ -105,54 +112,62 @@
 
     /* ==================== TYPOGRAPHY ==================== */
 
-    --font-family: Arial, sans-serif;
-    --font-size-xs: 0.75em;
-    --font-size-sm: 0.85em;
-    --font-size-base: 14px;
-    --font-size-md: 1em;
-    --font-size-lg: 1.1em;
-    --font-size-xl: 1.2em;
-    --font-size-2xl: 1.3em;
+    /* Poppins for headings, Nunito for body - OTA industry standard */
+    --font-family-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 0.9375rem;
+    --font-size-md: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
 
     --font-weight-normal: 400;
     --font-weight-medium: 500;
     --font-weight-semibold: 600;
     --font-weight-bold: 700;
 
-    --line-height-tight: 1;
-    --line-height-normal: 1.5;
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.6;
+    --letter-spacing-tight: -0.025em;
 
     /* ==================== BORDERS ==================== */
 
-    --radius-sm: 4px;
-    --radius-md: 6px;
-    --radius-lg: 8px;
-    --radius-xl: 10px;
-    --radius-2xl: 12px;
-    --radius-3xl: 16px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 20px;
+    --radius-3xl: 24px;
     --radius-full: 9999px;
-    --radius-pill: 20px;
+    --radius-pill: 50px;
 
     --border-width: 1px;
     --border-width-thick: 2px;
-    --border-width-accent: 4px;
+    --border-width-accent: 3px;
 
     /* ==================== SHADOWS ==================== */
 
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-sm: 0 2px 5px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.15);
-    --shadow-xl: 0 4px 20px rgba(0, 0, 0, 0.08);
-    --shadow-2xl: 0 8px 30px rgba(0, 0, 0, 0.12);
-    --shadow-primary: 0 4px 10px rgba(102, 126, 234, 0.3);
-    --shadow-controls: 0 2px 10px rgba(0, 0, 0, 0.15);
+    --shadow-xs: 0 1px 2px rgba(26, 54, 93, 0.04);
+    --shadow-sm: 0 2px 4px rgba(26, 54, 93, 0.06);
+    --shadow-md: 0 4px 8px rgba(26, 54, 93, 0.08);
+    --shadow-lg: 0 8px 16px rgba(26, 54, 93, 0.1);
+    --shadow-xl: 0 12px 24px rgba(26, 54, 93, 0.12);
+    --shadow-2xl: 0 20px 40px rgba(26, 54, 93, 0.15);
+    --shadow-primary: 0 4px 14px rgba(26, 54, 93, 0.25);
+    --shadow-controls: 0 2px 8px rgba(26, 54, 93, 0.1);
+    --shadow-card: 0 2px 12px rgba(26, 54, 93, 0.08);
+    --shadow-hover: 0 8px 24px rgba(26, 54, 93, 0.15);
 
     /* ==================== TRANSITIONS ==================== */
 
-    --transition-fast: 0.15s ease;
-    --transition-base: 0.2s ease;
-    --transition-slow: 0.3s ease;
+    --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 
     /* ==================== Z-INDEX ==================== */
 
@@ -165,10 +180,11 @@
 
     /* ==================== LAYOUT ==================== */
 
-    --header-height: 110px;
+    --header-height: 70px;
+    --toolbar-height: 52px;
     --footer-height: 40px;
     --panel-left-width: 55%;
     --panel-right-width: 45%;
-    --container-padding: 15px;
-    --container-gap: 15px;
+    --container-padding: 16px;
+    --container-gap: 16px;
 }
