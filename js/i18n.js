@@ -20,6 +20,9 @@ const I18n = {
             // Toolbar
             moveLeft: '← Mover',
             addDay: '+ Día',
+            addDayFull: 'Añadir día',
+            moveDayBack: 'Atrasar día',
+            moveDayForward: 'Adelantar día',
             addActivity: '+ Actividad',
             addAccommodation: '+ Dormir',
             moveRight: 'Mover →',
@@ -214,6 +217,9 @@ const I18n = {
             options: 'Options',
             moveLeft: '← Move',
             addDay: '+ Day',
+            addDayFull: 'Add day',
+            moveDayBack: 'Move day back',
+            moveDayForward: 'Move day forward',
             addActivity: '+ Activity',
             addAccommodation: '+ Stay',
             moveRight: 'Move →',
@@ -384,6 +390,9 @@ const I18n = {
             options: 'Options',
             moveLeft: '← Déplacer',
             addDay: '+ Jour',
+            addDayFull: 'Ajouter jour',
+            moveDayBack: 'Reculer jour',
+            moveDayForward: 'Avancer jour',
             addActivity: '+ Activité',
             addAccommodation: '+ Hébergement',
             moveRight: 'Déplacer →',
@@ -554,6 +563,9 @@ const I18n = {
             options: 'Optionen',
             moveLeft: '← Verschieben',
             addDay: '+ Tag',
+            addDayFull: 'Tag hinzufügen',
+            moveDayBack: 'Tag zurück',
+            moveDayForward: 'Tag vorwärts',
             addActivity: '+ Aktivität',
             addAccommodation: '+ Unterkunft',
             moveRight: 'Verschieben →',
@@ -724,6 +736,9 @@ const I18n = {
             options: '选项',
             moveLeft: '← 移动',
             addDay: '+ 天',
+            addDayFull: '添加日期',
+            moveDayBack: '后移日期',
+            moveDayForward: '前移日期',
             addActivity: '+ 活动',
             addAccommodation: '+ 住宿',
             moveRight: '移动 →',
@@ -894,6 +909,9 @@ const I18n = {
             options: 'Настройки',
             moveLeft: '← Переместить',
             addDay: '+ День',
+            addDayFull: 'Добавить день',
+            moveDayBack: 'Отодвинуть день',
+            moveDayForward: 'Передвинуть день',
             addActivity: '+ Активность',
             addAccommodation: '+ Жильё',
             moveRight: 'Переместить →',
@@ -1064,6 +1082,9 @@ const I18n = {
             options: 'オプション',
             moveLeft: '← 移動',
             addDay: '+ 日',
+            addDayFull: '日を追加',
+            moveDayBack: '日を後ろへ',
+            moveDayForward: '日を前へ',
             addActivity: '+ アクティビティ',
             addAccommodation: '+ 宿泊',
             moveRight: '移動 →',
@@ -1267,11 +1288,13 @@ const I18n = {
         document.getElementById('objetosBtn').textContent = this.t('objects');
 
         // Update toolbar
-        document.getElementById('moveDayLeftBtn').textContent = this.t('moveLeft');
-        document.getElementById('addDayBtn').textContent = this.t('addDay');
         document.getElementById('addActivityBtn').textContent = this.t('addActivity');
         document.getElementById('addAccommodationBtn').textContent = this.t('addAccommodation');
-        document.getElementById('moveDayRightBtn').textContent = this.t('moveRight');
+
+        // Update day header buttons
+        document.getElementById('moveDayLeftBtn').textContent = this.t('moveDayBack');
+        document.getElementById('addDayBtn').textContent = this.t('addDayFull');
+        document.getElementById('moveDayRightBtn').textContent = this.t('moveDayForward');
 
         // Update footer
         const footerText = document.getElementById('footerText');
