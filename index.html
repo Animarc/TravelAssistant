@@ -34,19 +34,25 @@
     </nav>
     <section class="toolbar">
         <div class="toolbar-buttons">
-            <button id="moveDayLeftBtn">← Mover</button>
-            <button id="addDayBtn">+ Día</button>
             <button id="addActivityBtn">+ Actividad</button>
             <button id="addAccommodationBtn">+ Dormir</button>
-            <button id="moveDayRightBtn">Mover →</button>
         </div>
     </section>
     <main class="container">
         <aside class="left-panel">
             <header class="day-header">
-                <button id="prevDay">←</button>
-                <h2 id="dayTitle">Día 1: Llegada</h2>
-                <button id="nextDay">→</button>
+                <div class="day-nav-group">
+                    <button id="prevDay" class="day-nav-btn" title="Día anterior">←</button>
+                    <button id="moveDayLeftBtn" class="day-action-btn" title="Mover día a la izquierda">⇤</button>
+                </div>
+                <div class="day-title-group">
+                    <h2 id="dayTitle">Día 1: Llegada</h2>
+                    <button id="addDayBtn" class="add-day-btn" title="Añadir día">+ Día</button>
+                </div>
+                <div class="day-nav-group">
+                    <button id="moveDayRightBtn" class="day-action-btn" title="Mover día a la derecha">⇥</button>
+                    <button id="nextDay" class="day-nav-btn" title="Día siguiente">→</button>
+                </div>
             </header>
             <ul id="activityList" class="activity-list">
                 <!-- Actividades aquí -->

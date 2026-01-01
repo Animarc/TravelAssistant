@@ -85,6 +85,7 @@ const Views = {
      */
     renderDay() {
         State.setView(Config.VIEWS.PLANNING);
+        document.body.classList.remove('account-view-active');
         this.showPlanningElements();
 
         const day = State.getCurrentDayData();
@@ -339,6 +340,7 @@ const Views = {
      */
     showBudget() {
         State.setView(Config.VIEWS.BUDGET);
+        document.body.classList.remove('account-view-active');
         this.hidePlanningElements();
         this._setActiveNavButton('presupuestoBtn');
         this.elements.activityList.innerHTML = '';
@@ -675,6 +677,7 @@ const Views = {
      */
     showObjects() {
         State.setView(Config.VIEWS.OBJECTS);
+        document.body.classList.remove('account-view-active');
         this.hidePlanningElements();
         this._setActiveNavButton('objetosBtn');
         this.elements.activityList.innerHTML = '';
@@ -760,6 +763,7 @@ const Views = {
     showAccount() {
         State.setView(Config.VIEWS.ACCOUNT);
         this.hidePlanningElements();
+        document.body.classList.add('account-view-active');
         this.elements.activityList.innerHTML = '';
         this.elements.activityList.className = 'activity-list account-list';
 

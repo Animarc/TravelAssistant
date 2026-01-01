@@ -73,6 +73,15 @@
         background-color: var(--color-white);
     }
 
+    /* Footer - Hidden by default on mobile, shown only in account view */
+    .site-footer {
+        display: none;
+    }
+
+    body.account-view-active .site-footer {
+        display: flex;
+    }
+
     /* Navbar - Stack vertically on mobile */
     .navbar {
         flex-direction: column;
@@ -99,19 +108,21 @@
         padding-left: 0;
     }
 
-    /* Show trip name on mobile - full width */
+    /* Show trip name on mobile - with space for icon buttons */
     .trip-name {
         display: block;
-        width: 100%;
-        flex-basis: 100%;
+        width: auto;
+        flex-basis: auto;
+        flex-grow: 1;
         text-align: center;
-        max-width: none;
+        max-width: calc(100% - 80px);
         min-width: auto;
         padding: var(--space-sm) var(--space-md);
         font-size: var(--font-size-base);
         background-color: var(--color-primary-subtle);
         border-radius: var(--radius-lg);
         margin-bottom: var(--space-xs);
+        margin-right: 70px;
     }
 
     .navbar-separator {
@@ -222,22 +233,48 @@
         border-radius: 0;
     }
 
-    /* Day Header */
+    /* Day Header - Fixed on mobile */
     .day-header {
-        gap: var(--space-sm);
-        padding: var(--space-md);
-        margin: var(--space-md);
-        border-radius: var(--radius-lg);
+        position: sticky;
+        top: 0;
+        z-index: var(--z-sticky);
+        gap: var(--space-xs);
+        padding: var(--space-sm) var(--space-md);
+        margin: 0;
+        margin-bottom: var(--space-md);
+        border-radius: 0;
+        background-color: var(--color-primary);
+        border-bottom: none;
+        box-shadow: var(--shadow-lg);
     }
 
-    .day-header button {
-        min-width: 40px;
-        height: 40px;
-        font-size: var(--font-size-md);
+    .day-nav-group {
+        gap: 2px;
+    }
+
+    .day-title-group {
+        gap: var(--space-sm);
     }
 
     .day-header h2 {
-        font-size: var(--font-size-lg);
+        font-size: var(--font-size-base);
+    }
+
+    .day-nav-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: var(--font-size-md);
+    }
+
+    .day-action-btn {
+        min-width: 28px;
+        height: 28px;
+        font-size: var(--font-size-sm);
+    }
+
+    .add-day-btn {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: 10px;
     }
 
     /* Activities */
@@ -413,6 +450,8 @@
     .trip-name {
         font-size: var(--font-size-sm);
         padding: var(--space-xs) var(--space-sm);
+        margin-right: 62px;
+        max-width: calc(100% - 70px);
     }
 
     .nav-btn {
@@ -447,20 +486,33 @@
         padding: var(--space-xs) var(--space-sm);
     }
 
-    /* Day Header */
+    /* Day Header - Keep sticky styling */
     .day-header {
-        padding: var(--space-sm) var(--space-md);
-        margin: var(--space-sm);
-    }
-
-    .day-header button {
-        min-width: 36px;
-        height: 36px;
-        font-size: var(--font-size-sm);
+        padding: var(--space-xs) var(--space-sm);
+        margin: 0;
+        margin-bottom: var(--space-sm);
+        gap: 2px;
     }
 
     .day-header h2 {
-        font-size: var(--font-size-md);
+        font-size: var(--font-size-sm);
+    }
+
+    .day-nav-btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: var(--font-size-sm);
+    }
+
+    .day-action-btn {
+        min-width: 24px;
+        height: 24px;
+        font-size: 11px;
+    }
+
+    .add-day-btn {
+        padding: 2px var(--space-xs);
+        font-size: 9px;
     }
 
     /* Right Panel */
@@ -557,6 +609,8 @@
 @media (max-width: 360px) {
     .trip-name {
         font-size: var(--font-size-xs);
+        margin-right: 58px;
+        max-width: calc(100% - 65px);
     }
 
     .nav-btn {
@@ -569,13 +623,30 @@
         padding: 4px 6px;
     }
 
-    .day-header h2 {
-        font-size: var(--font-size-sm);
+    /* Day header for very small screens */
+    .day-header {
+        gap: 2px;
+        padding: 4px var(--space-xs);
     }
 
-    .day-header button {
-        min-width: 32px;
-        height: 32px;
+    .day-header h2 {
+        font-size: var(--font-size-xs);
+    }
+
+    .day-nav-btn {
+        min-width: 28px;
+        height: 28px;
+        font-size: var(--font-size-xs);
+    }
+
+    .day-action-btn {
+        min-width: 22px;
+        height: 22px;
+        font-size: 10px;
+    }
+
+    .add-day-btn {
+        display: none;
     }
 }
 
