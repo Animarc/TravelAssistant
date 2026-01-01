@@ -67,7 +67,7 @@ const accommodations = [
         link: "https://www.airbnb.es/rooms/31774982?adults=2&check_in=2026-07-03&check_out=2026-07-04&children=2&location=Osaka%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766317504_P3b77foPsERBoXVj&previous_page_section_name=1001&federated_search_id=1823eed9-0f94-4b60-96d8-db901dca8fda",
         fromDay: 1,
         toDay: 1,
-        coordinates: [34.7336, 135.5001]
+        coordinates: [34.7060, 135.4910]
     },
     {
         id: 2,
@@ -85,7 +85,7 @@ const accommodations = [
         link: "https://www.airbnb.es/rooms/31774982?adults=2&check_in=2026-07-03&check_out=2026-07-04&children=2&location=Osaka%2C%20Japón&search_mode=regular_search&source_impression_id=p3_1766317504_P3b77foPsERBoXVj&previous_page_section_name=1001&federated_search_id=1823eed9-0f94-4b60-96d8-db901dca8fda",
         fromDay: 3,
         toDay: 3,
-        coordinates: [34.7336, 135.5001]
+        coordinates: [34.7055, 135.4910]
     },
     {
         id: 4,
@@ -175,7 +175,7 @@ const accommodations = [
         link: "https://www.airbnb.es/rooms/23456224?adults=2&check_in=2026-07-19&check_out=2026-07-27&children=2&search_mode=regular_search&source_impression_id=p3_1766313739_P3uNVSk2TqIBHETX&previous_page_section_name=1000&federated_search_id=cd60147b-d38f-4eee-94ee-85879cb2802e",
         fromDay: 17,
         toDay: 24,
-        coordinates: [34.6937, 135.5023]
+        coordinates: [34.7050, 135.4905]
     }
 ];
 

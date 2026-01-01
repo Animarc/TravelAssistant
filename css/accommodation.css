@@ -37,7 +37,7 @@
 }
 
 .accommodation-marker-inner::before {
-    content: "🏨";
+    content: "🏠";
     transform: rotate(45deg);
     display: block;
 }
