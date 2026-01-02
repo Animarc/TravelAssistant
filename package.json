@@ -12,6 +12,7 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@grafana/faro-react": "^2.1.0",
     "@grafana/faro-web-sdk": "^1.10.0",
     "@grafana/faro-web-tracing": "^1.10.0",
     "leaflet": "^1.9.4",
