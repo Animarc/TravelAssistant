@@ -1,5 +1,4 @@
 import { AppProvider, useApp } from './context/AppContext';
-import { useTranslation } from './hooks/useTranslation';
 import Navbar from './components/Navbar';
 import Toolbar from './components/Toolbar';
 import PlanningView from './components/PlanningView';
@@ -11,8 +10,6 @@ import './styles/main.css';
 
 const AppContent = () => {
   const { state } = useApp();
-  const { t } = useTranslation(state.language);
-
   const renderView = () => {
     switch (state.currentView) {
       case 'planning':

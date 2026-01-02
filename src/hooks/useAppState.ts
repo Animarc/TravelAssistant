@@ -1,8 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { AppState, Day, Activity, Accommodation, ShoppingItem, ViewType, Language } from '../types';
+import { AppState, Activity, Accommodation, ShoppingItem, ViewType, Language } from '../types';
 import { initialData, initialAccommodations, initialShoppingItems, tripName as initialTripName } from '../data';
-
-const STORAGE_KEY = 'travelAssistantState';
 
 const getInitialState = (): AppState => {
   const savedLang = localStorage.getItem('travelAssistantLang') as Language | null;
