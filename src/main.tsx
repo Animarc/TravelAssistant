@@ -1,7 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { initializeFaro, getWebInstrumentations } from '@grafana/faro-react';
-import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import App from './App';
 
 // Initialize Grafana Faro observability
@@ -14,7 +13,6 @@ initializeFaro({
   },
   instrumentations: [
     ...getWebInstrumentations(),
-    new TracingInstrumentation(),
   ],
 });
 
