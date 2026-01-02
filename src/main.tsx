@@ -1,13 +1,15 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { initializeFaro, getWebInstrumentations } from '@grafana/faro-web-sdk';
+import { initializeFaro, getWebInstrumentations, FetchTransport } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import App from './App';
+
+const FARO_URL = 'https://faro-collector-prod-eu-central-0.grafana.net/collect/ae481174b4df41a8999d83483413597f';
 
 // Initialize Grafana Faro observability
 try {
   initializeFaro({
-    url: 'https://faro-collector-prod-eu-central-0.grafana.net/collect/ae481174b4df41a8999d83483413597f',
+    url: FARO_URL,
     app: {
       name: 'TravelAssistant',
       version: '1.0.0',
@@ -18,6 +20,15 @@ try {
       itemLimit: 150,
       sendTimeout: 1000,
     },
+    transports: [
+      new FetchTransport({
+        url: FARO_URL,
+        requestOptions: {
+          keepalive: true,
+          mode: 'cors',
+        },
+      }),
+    ],
     ignoreErrors: [
       'NS_ERROR_CORRUPTED_CONTENT',
       'NetworkError',
