@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { getActivityTypeIcon, isValidCoordinates, createGoogleMapsUrl } from '../utils';
 import ActivityModal from './modals/ActivityModal';
+import AccommodationModal from './modals/AccommodationModal';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -21,6 +22,8 @@ const PlanningView = () => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<L.Map | null>(null);
   const [editingActivity, setEditingActivity] = useState<number | null>(null);
+  const [showActivityModal, setShowActivityModal] = useState(false);
+  const [showAccommodationModal, setShowAccommodationModal] = useState(false);
 
   const currentDay = state.days[state.currentDay];
   const accommodations = getAccommodationsForDay(state.currentDay);
@@ -139,9 +142,17 @@ const PlanningView = () => {
           </div>
           <div className="day-title-group">
             <h2>{t('day')} {state.currentDay + 1}: {currentDay?.title}</h2>
-            <button className="add-day-btn" onClick={handleAddDay}>
-              {t('addDayFull')}
-            </button>
+            <div className="day-action-buttons">
+              <button className="add-activity-btn" onClick={() => setShowActivityModal(true)}>
+                {t('addActivity')}
+              </button>
+              <button className="add-accommodation-btn" onClick={() => setShowAccommodationModal(true)}>
+                {t('addAccommodation')}
+              </button>
+              <button className="add-day-btn" onClick={handleAddDay}>
+                {t('addDayFull')}
+              </button>
+            </div>
           </div>
           <div className="day-nav-group">
             <button
@@ -322,6 +333,14 @@ const PlanningView = () => {
           editIndex={editingActivity}
           onClose={() => setEditingActivity(null)}
         />
+      )}
+
+      {showActivityModal && (
+        <ActivityModal onClose={() => setShowActivityModal(false)} />
+      )}
+
+      {showAccommodationModal && (
+        <AccommodationModal onClose={() => setShowAccommodationModal(false)} />
       )}
     </>
   );

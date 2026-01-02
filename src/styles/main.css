@@ -95,7 +95,6 @@
 
   /* Layout */
   --header-height: 70px;
-  --toolbar-height: 52px;
   --footer-height: 40px;
   --panel-left-width: 55%;
   --panel-right-width: 45%;
@@ -278,41 +277,6 @@ body {
   font-weight: var(--font-weight-semibold);
 }
 
-/* ==================== TOOLBAR ==================== */
-
-.toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: var(--toolbar-height);
-  padding: 0 var(--space-xl);
-  background-color: var(--color-gray-50);
-  border-bottom: 1px solid var(--border-color);
-}
-
-.toolbar-buttons {
-  display: flex;
-  gap: var(--space-sm);
-}
-
-.toolbar button {
-  padding: var(--space-sm) var(--space-lg);
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-primary);
-  background-color: var(--color-white);
-  border: 1px solid var(--color-primary);
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  transition: all var(--transition-base);
-}
-
-.toolbar button:hover {
-  background-color: var(--color-primary);
-  color: var(--text-inverse);
-}
-
 /* ==================== CONTAINER ==================== */
 
 .container {
@@ -386,10 +350,39 @@ body {
 .day-title-group {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-xl);
+  gap: var(--space-sm);
   min-width: 0;
+}
+
+.day-action-buttons {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.add-activity-btn,
+.add-accommodation-btn {
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-xs);
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-semibold);
+  border: none;
+  background: var(--color-white);
+  border-radius: var(--radius-pill);
+  color: var(--color-primary);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  white-space: nowrap;
+}
+
+.add-activity-btn:hover,
+.add-accommodation-btn:hover {
+  background: var(--color-gray-100);
+  box-shadow: var(--shadow-sm);
 }
 
 .day-header h2 {
@@ -1283,7 +1276,6 @@ body {
 @media (max-width: 800px) {
   :root {
     --header-height: auto;
-    --toolbar-height: 44px;
   }
 
   body {

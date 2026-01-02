@@ -1,6 +1,5 @@
 import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
-import Toolbar from './components/Toolbar';
 import PlanningView from './components/PlanningView';
 import BudgetView from './components/BudgetView';
 import ObjectsView from './components/ObjectsView';
@@ -28,7 +27,6 @@ const AppContent = () => {
   return (
     <div className={`app ${state.currentView === 'account' ? 'account-view-active' : ''}`}>
       <Navbar />
-      {state.currentView === 'planning' && <Toolbar />}
       <main className={`container ${state.currentView !== 'planning' ? 'centered-view' : ''}`}>
         {renderView()}
       </main>
