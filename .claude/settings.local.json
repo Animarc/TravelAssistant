@@ -4,7 +4,8 @@
       "Bash(grep:*)",
       "Bash(npm install:*)",
       "Bash(npm uninstall:*)",
-      "Bash(npm run build)"
+      "Bash(npm run build)",
+      "WebFetch(domain:animarc.github.io)"
     ]
   }
 }
