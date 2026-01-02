@@ -12,6 +12,11 @@ initializeFaro({
     version: '1.0.0',
     environment: 'production'
   },
+  batching: {
+    enabled: true,
+    itemLimit: 150,
+    sendTimeout: 1000,
+  },
   instrumentations: [
     ...getWebInstrumentations(),
     new TracingInstrumentation(),
