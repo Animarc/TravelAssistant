@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Language } from '../types';
@@ -7,6 +7,23 @@ const Navbar = () => {
   const { state, setCurrentView, setLanguage } = useApp();
   const { t } = useTranslation(state.language);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowLanguageMenu(false);
+      }
+    };
+
+    if (showLanguageMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showLanguageMenu]);
 
   const languages: { code: Language; name: string }[] = [
     { code: 'es', name: 'Español' },
@@ -21,7 +38,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-left">
-        <img src="/favicon.svg" alt="Logo" className="navbar-logo" />
+        <img src={`${import.meta.env.BASE_URL}favicon.svg`} alt="Logo" className="navbar-logo" />
         <span className="navbar-title">{t('appTitle')}</span>
       </div>
       <div className="navbar-center">
@@ -47,7 +64,7 @@ const Navbar = () => {
         </button>
       </div>
       <div className="navbar-right">
-        <div className="language-dropdown">
+        <div className="language-dropdown" ref={dropdownRef}>
           <button
             className="nav-icon-btn"
             title={t('language')}
