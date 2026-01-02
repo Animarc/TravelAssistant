@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { initializeFaro, getWebInstrumentations, FetchTransport } from '@grafana/faro-web-sdk';
+import { initializeFaro, getWebInstrumentations } from '@grafana/faro-web-sdk';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import App from './App';
 
@@ -20,15 +20,6 @@ try {
       itemLimit: 150,
       sendTimeout: 1000,
     },
-    transports: [
-      new FetchTransport({
-        url: FARO_URL,
-        requestOptions: {
-          keepalive: true,
-          mode: 'cors',
-        },
-      }),
-    ],
     ignoreErrors: [
       'NS_ERROR_CORRUPTED_CONTENT',
       'NetworkError',
