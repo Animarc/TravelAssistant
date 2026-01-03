@@ -1390,15 +1390,20 @@ body {
 .phone-input-group {
   display: flex;
   gap: var(--space-sm);
+  max-width: 100%;
 }
 
 .phone-prefix-input {
-  width: 80px;
+  width: 55px;
+  min-width: 55px;
+  max-width: 55px;
   flex-shrink: 0;
+  text-align: center;
 }
 
 .phone-number-input {
   flex: 1;
+  min-width: 0;
 }
 
 /* Documents section in modal */
