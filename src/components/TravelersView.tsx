@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
+import { DocumentType } from '../types';
 import TravelerModal from './modals/TravelerModal';
 
 const TravelersView = () => {
@@ -31,13 +32,13 @@ const TravelersView = () => {
     setEditingId(undefined);
   };
 
-  const getDocumentTypeName = (type?: string) => {
+  const getDocumentTypeName = (type: DocumentType) => {
     switch (type) {
       case 'passport': return t('docPassport');
       case 'id': return t('docId');
       case 'driverLicense': return t('docDriverLicense');
       case 'other': return t('docOther');
-      default: return '-';
+      default: return type;
     }
   };
 
@@ -104,16 +105,16 @@ const TravelersView = () => {
                     </span>
                   </div>
                 )}
-                {traveler.documentType && (
-                  <div className="traveler-detail-row">
-                    <span className="detail-label">{t('documentType')}:</span>
-                    <span className="detail-value">{getDocumentTypeName(traveler.documentType)}</span>
-                  </div>
-                )}
-                {traveler.documentNumber && (
-                  <div className="traveler-detail-row">
-                    <span className="detail-label">{t('documentNumber')}:</span>
-                    <span className="detail-value">{traveler.documentNumber}</span>
+                {traveler.documents && traveler.documents.length > 0 && (
+                  <div className="traveler-documents">
+                    <span className="detail-label">{t('documents')}:</span>
+                    <ul className="documents-display-list">
+                      {traveler.documents.map((doc, index) => (
+                        <li key={index} className="document-display-item">
+                          <strong>{getDocumentTypeName(doc.type)}:</strong> {doc.number}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 )}
                 <div className="traveler-actions">

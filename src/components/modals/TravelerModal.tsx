@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
-import { Traveler } from '../../types';
+import { Traveler, TravelerDocument, DocumentType } from '../../types';
 
 interface TravelerModalProps {
   editId?: number;
@@ -20,10 +20,12 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
     email: '',
     phonePrefix: '',
     phone: '',
-    documentType: '' as '' | 'passport' | 'id' | 'driverLicense' | 'other',
-    documentNumber: '',
     paysBudget: true
   });
+
+  const [documents, setDocuments] = useState<TravelerDocument[]>([]);
+  const [newDocType, setNewDocType] = useState<DocumentType | ''>('');
+  const [newDocNumber, setNewDocNumber] = useState('');
 
   useEffect(() => {
     if (isEditing) {
@@ -36,10 +38,9 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
           email: traveler.email || '',
           phonePrefix: traveler.phonePrefix || '',
           phone: traveler.phone || '',
-          documentType: traveler.documentType || '',
-          documentNumber: traveler.documentNumber || '',
           paysBudget: traveler.paysBudget
         });
+        setDocuments(traveler.documents || []);
       }
     }
   }, [isEditing, editId, state.travelers]);
@@ -64,8 +65,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
       email: formData.email || undefined,
       phonePrefix: formData.phonePrefix || undefined,
       phone: formData.phone || undefined,
-      documentType: formData.documentType || undefined,
-      documentNumber: formData.documentNumber || undefined,
+      documents: documents,
       paysBudget: formData.paysBudget
     };
 
@@ -88,6 +88,28 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+  };
+
+  const handleAddDocument = () => {
+    if (newDocType && newDocNumber.trim()) {
+      setDocuments(prev => [...prev, { type: newDocType, number: newDocNumber.trim() }]);
+      setNewDocType('');
+      setNewDocNumber('');
+    }
+  };
+
+  const handleRemoveDocument = (index: number) => {
+    setDocuments(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const getDocumentTypeName = (type: DocumentType) => {
+    switch (type) {
+      case 'passport': return t('docPassport');
+      case 'id': return t('docId');
+      case 'driverLicense': return t('docDriverLicense');
+      case 'other': return t('docOther');
+      default: return type;
+    }
   };
 
   return (
@@ -159,25 +181,57 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
             </div>
           </label><br />
 
-          <label>{t('documentType')}:
-            <select name="documentType" value={formData.documentType} onChange={handleChange}>
-              <option value="">{t('selectOption')}</option>
-              <option value="passport">{t('docPassport')}</option>
-              <option value="id">{t('docId')}</option>
-              <option value="driverLicense">{t('docDriverLicense')}</option>
-              <option value="other">{t('docOther')}</option>
-            </select>
-          </label><br />
+          <div className="documents-section">
+            <label>{t('documents')}:</label>
 
-          <label>{t('documentNumber')}:
-            <input
-              type="text"
-              name="documentNumber"
-              placeholder={t('optional')}
-              value={formData.documentNumber}
-              onChange={handleChange}
-            />
-          </label><br />
+            {documents.length > 0 && (
+              <ul className="documents-list">
+                {documents.map((doc, index) => (
+                  <li key={index} className="document-item">
+                    <span className="document-info">
+                      <strong>{getDocumentTypeName(doc.type)}:</strong> {doc.number}
+                    </span>
+                    <button
+                      type="button"
+                      className="remove-document-btn"
+                      onClick={() => handleRemoveDocument(index)}
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="add-document-row">
+              <select
+                value={newDocType}
+                onChange={(e) => setNewDocType(e.target.value as DocumentType | '')}
+                className="document-type-select"
+              >
+                <option value="">{t('selectOption')}</option>
+                <option value="passport">{t('docPassport')}</option>
+                <option value="id">{t('docId')}</option>
+                <option value="driverLicense">{t('docDriverLicense')}</option>
+                <option value="other">{t('docOther')}</option>
+              </select>
+              <input
+                type="text"
+                value={newDocNumber}
+                onChange={(e) => setNewDocNumber(e.target.value)}
+                placeholder={t('documentNumber')}
+                className="document-number-input"
+              />
+              <button
+                type="button"
+                className="add-document-btn"
+                onClick={handleAddDocument}
+                disabled={!newDocType || !newDocNumber.trim()}
+              >
+                +
+              </button>
+            </div>
+          </div>
 
           <label className="checkbox-label">
             <input

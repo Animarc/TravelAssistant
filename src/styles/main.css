@@ -191,6 +191,12 @@ body {
   margin: 0 var(--space-sm);
 }
 
+.nav-buttons-scroll {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
 .nav-btn {
   padding: var(--space-sm) var(--space-lg);
   font-family: var(--font-family);
@@ -1395,6 +1401,111 @@ body {
   flex: 1;
 }
 
+/* Documents section in modal */
+.documents-section {
+  margin: var(--space-md) 0;
+}
+
+.documents-section > label {
+  display: block;
+  margin-bottom: var(--space-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.documents-list {
+  list-style: none;
+  margin: var(--space-sm) 0;
+  padding: 0;
+}
+
+.document-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-sm);
+  background: var(--color-gray-50);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-xs);
+}
+
+.document-info {
+  font-size: var(--font-size-sm);
+}
+
+.remove-document-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: var(--color-error);
+  color: var(--text-inverse);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: var(--font-size-lg);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.remove-document-btn:hover {
+  background: var(--color-error-dark, #c53030);
+}
+
+.add-document-row {
+  display: flex;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+.document-type-select {
+  flex: 1;
+  min-width: 120px;
+}
+
+.document-number-input {
+  flex: 2;
+}
+
+.add-document-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-document-btn:hover:not(:disabled) {
+  background: var(--color-primary-dark);
+}
+
+.add-document-btn:disabled {
+  background: var(--color-gray-300);
+  cursor: not-allowed;
+}
+
+/* Documents display in traveler card */
+.traveler-documents {
+  margin: var(--space-sm) 0;
+}
+
+.documents-display-list {
+  list-style: none;
+  margin: var(--space-xs) 0 0 0;
+  padding: 0;
+}
+
+.document-display-item {
+  font-size: var(--font-size-sm);
+  padding: var(--space-xs) 0;
+  color: var(--text-primary);
+}
+
 /* ==================== ACCOUNT VIEW ==================== */
 
 .account-view {
@@ -1611,13 +1722,29 @@ body {
     font-size: var(--font-size-sm);
   }
 
-  /* Second row: view buttons spanning full width */
-  .nav-btn {
+  /* Second row: horizontal scrollable nav buttons */
+  .nav-buttons-scroll {
     order: 3;
-    flex: 1 1 30%;
+    width: 100%;
+    display: flex;
+    gap: var(--space-xs);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: var(--space-xs) 0;
+  }
+
+  .nav-buttons-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-btn {
+    flex: 0 0 auto;
     text-align: center;
-    min-width: 0;
-    padding: var(--space-xs) var(--space-sm);
+    min-width: max-content;
+    padding: var(--space-xs) var(--space-md);
+    white-space: nowrap;
   }
 
   .container {

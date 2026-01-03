@@ -44,30 +44,32 @@ const Navbar = () => {
       <div className="navbar-center">
         <span className="trip-name">{state.tripName}</span>
         <span className="navbar-separator"></span>
-        <button
-          className={`nav-btn ${state.currentView === 'planning' ? 'active' : ''}`}
-          onClick={() => setCurrentView('planning')}
-        >
-          {t('planning')}
-        </button>
-        <button
-          className={`nav-btn ${state.currentView === 'budget' ? 'active' : ''}`}
-          onClick={() => setCurrentView('budget')}
-        >
-          {t('budget')}
-        </button>
-        <button
-          className={`nav-btn ${state.currentView === 'objects' ? 'active' : ''}`}
-          onClick={() => setCurrentView('objects')}
-        >
-          {t('objects')}
-        </button>
-        <button
-          className={`nav-btn ${state.currentView === 'travelers' ? 'active' : ''}`}
-          onClick={() => setCurrentView('travelers')}
-        >
-          {t('travelers')}
-        </button>
+        <div className="nav-buttons-scroll">
+          <button
+            className={`nav-btn ${state.currentView === 'planning' ? 'active' : ''}`}
+            onClick={() => setCurrentView('planning')}
+          >
+            {t('planning')}
+          </button>
+          <button
+            className={`nav-btn ${state.currentView === 'budget' ? 'active' : ''}`}
+            onClick={() => setCurrentView('budget')}
+          >
+            {t('budget')}
+          </button>
+          <button
+            className={`nav-btn ${state.currentView === 'objects' ? 'active' : ''}`}
+            onClick={() => setCurrentView('objects')}
+          >
+            {t('objects')}
+          </button>
+          <button
+            className={`nav-btn ${state.currentView === 'travelers' ? 'active' : ''}`}
+            onClick={() => setCurrentView('travelers')}
+          >
+            {t('travelers')}
+          </button>
+        </div>
       </div>
       <div className="navbar-right">
         <div className="language-dropdown" ref={dropdownRef}>

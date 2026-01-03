@@ -44,6 +44,13 @@ export interface ShoppingItem {
 }
 
 // Travelers
+export type DocumentType = 'passport' | 'id' | 'driverLicense' | 'other';
+
+export interface TravelerDocument {
+  type: DocumentType;
+  number: string;
+}
+
 export interface Traveler {
   id: number;
   firstName: string;
@@ -52,8 +59,7 @@ export interface Traveler {
   email?: string;
   phonePrefix?: string;
   phone?: string;
-  documentType?: 'passport' | 'id' | 'driverLicense' | 'other';
-  documentNumber?: string;
+  documents: TravelerDocument[];
   paysBudget: boolean;
 }
 
