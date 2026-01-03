@@ -1153,6 +1153,248 @@ body {
   accent-color: var(--color-primary);
 }
 
+/* ========================================
+   TRAVELERS VIEW
+   ======================================== */
+
+.travelers-view {
+  overflow-y: auto;
+}
+
+.travelers-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-xl);
+  border-bottom: 1px solid var(--border-color);
+  flex-wrap: wrap;
+  gap: var(--space-md);
+}
+
+.travelers-header h2 {
+  font-family: var(--font-family-heading);
+  color: var(--color-primary);
+}
+
+.travelers-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.travelers-count {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
+.travelers-paying {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.travelers-list {
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.no-travelers {
+  text-align: center;
+  padding: var(--space-xxl);
+  color: var(--text-muted);
+}
+
+.traveler-card {
+  background: var(--color-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.traveler-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.traveler-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.traveler-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  flex-shrink: 0;
+}
+
+.traveler-basic-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.traveler-name {
+  font-family: var(--font-family-heading);
+  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+}
+
+.traveler-age {
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.traveler-pays-badge {
+  background: var(--color-success-subtle);
+  color: var(--color-success);
+  padding: var(--space-xxs) var(--space-sm);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.traveler-expand-icon {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+  transition: transform var(--transition-base);
+}
+
+.traveler-card.expanded .traveler-expand-icon {
+  transform: rotate(180deg);
+}
+
+.traveler-details {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.traveler-card.expanded .traveler-details {
+  max-height: 300px;
+  opacity: 1;
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--border-color);
+}
+
+.traveler-detail-row {
+  display: flex;
+  gap: var(--space-md);
+  padding: var(--space-sm) 0;
+}
+
+.detail-label {
+  color: var(--text-muted);
+  min-width: 140px;
+  font-size: var(--font-size-sm);
+}
+
+.detail-value {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.traveler-actions {
+  display: flex;
+  gap: var(--space-md);
+  margin-top: var(--space-lg);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--border-color);
+}
+
+.traveler-edit-btn,
+.traveler-delete-btn {
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.traveler-edit-btn {
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  border: none;
+}
+
+.traveler-edit-btn:hover {
+  background: var(--color-primary-dark);
+}
+
+.traveler-delete-btn {
+  background: transparent;
+  color: var(--color-error);
+  border: 1px solid var(--color-error);
+}
+
+.traveler-delete-btn:hover {
+  background: var(--color-error);
+  color: var(--text-inverse);
+}
+
+.add-traveler-btn {
+  width: 100%;
+  padding: var(--space-md);
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border: 2px dashed var(--color-primary);
+  border-radius: var(--radius-lg);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.add-traveler-btn:hover {
+  background: var(--color-primary);
+  color: var(--text-inverse);
+  border-style: solid;
+}
+
+/* Checkbox label in modal */
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-primary);
+}
+
+/* Phone input group */
+.phone-input-group {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.phone-prefix-input {
+  width: 80px;
+  flex-shrink: 0;
+}
+
+.phone-number-input {
+  flex: 1;
+}
+
 /* ==================== ACCOUNT VIEW ==================== */
 
 .account-view {
@@ -1656,6 +1898,56 @@ body {
 
   .activity-checkbox .checkmark {
     font-size: 12px;
+  }
+
+  /* Travelers responsive */
+  .travelers-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: var(--space-md);
+  }
+
+  .travelers-list {
+    padding: var(--space-md);
+  }
+
+  .traveler-card {
+    padding: var(--space-md);
+  }
+
+  .traveler-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: var(--font-size-base);
+  }
+
+  .traveler-name {
+    font-size: var(--font-size-base);
+  }
+
+  .traveler-pays-badge {
+    font-size: 10px;
+    padding: 2px var(--space-xs);
+  }
+
+  .detail-label {
+    min-width: 100px;
+    font-size: var(--font-size-xs);
+  }
+
+  .detail-value {
+    font-size: var(--font-size-sm);
+  }
+
+  .traveler-actions {
+    flex-direction: column;
+    gap: var(--space-sm);
+  }
+
+  .traveler-edit-btn,
+  .traveler-delete-btn {
+    width: 100%;
+    text-align: center;
   }
 
   .budget-wrapper {

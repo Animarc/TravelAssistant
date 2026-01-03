@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { AppState, Activity, Accommodation, ShoppingItem, ViewType, Language } from '../types';
+import { AppState, Activity, Accommodation, ShoppingItem, Traveler, ViewType, Language } from '../types';
 import { initialData, initialAccommodations, initialShoppingItems, tripName as initialTripName } from '../data';
 
 const getInitialState = (): AppState => {
@@ -10,6 +10,7 @@ const getInitialState = (): AppState => {
     days: initialData,
     accommodations: initialAccommodations,
     shoppingItems: initialShoppingItems,
+    travelers: [],
     currentDay: 0,
     currentView: 'planning',
     language: savedLang || 'es'
@@ -180,6 +181,31 @@ export const useAppState = () => {
     }));
   }, []);
 
+  // Traveler management
+  const addTraveler = useCallback((traveler: Omit<Traveler, 'id'>) => {
+    setState(prev => ({
+      ...prev,
+      travelers: [
+        ...prev.travelers,
+        { ...traveler, id: Math.max(0, ...prev.travelers.map(t => t.id)) + 1 }
+      ]
+    }));
+  }, []);
+
+  const updateTraveler = useCallback((id: number, traveler: Omit<Traveler, 'id'>) => {
+    setState(prev => ({
+      ...prev,
+      travelers: prev.travelers.map(t => t.id === id ? { ...traveler, id } : t)
+    }));
+  }, []);
+
+  const deleteTraveler = useCallback((id: number) => {
+    setState(prev => ({
+      ...prev,
+      travelers: prev.travelers.filter(t => t.id !== id)
+    }));
+  }, []);
+
   return {
     state,
     setCurrentDay,
@@ -199,6 +225,9 @@ export const useAppState = () => {
     addShoppingItem,
     updateShoppingItem,
     deleteShoppingItem,
-    toggleShoppingPurchased
+    toggleShoppingPurchased,
+    addTraveler,
+    updateTraveler,
+    deleteTraveler
   };
 };

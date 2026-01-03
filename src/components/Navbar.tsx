@@ -62,6 +62,12 @@ const Navbar = () => {
         >
           {t('objects')}
         </button>
+        <button
+          className={`nav-btn ${state.currentView === 'travelers' ? 'active' : ''}`}
+          onClick={() => setCurrentView('travelers')}
+        >
+          {t('travelers')}
+        </button>
       </div>
       <div className="navbar-right">
         <div className="language-dropdown" ref={dropdownRef}>

@@ -43,8 +43,22 @@ export interface ShoppingItem {
   link?: string;
 }
 
+// Travelers
+export interface Traveler {
+  id: number;
+  firstName: string;
+  lastName: string;
+  age: number;
+  email?: string;
+  phonePrefix?: string;
+  phone?: string;
+  documentType?: 'passport' | 'id' | 'driverLicense' | 'other';
+  documentNumber?: string;
+  paysBudget: boolean;
+}
+
 // Views
-export type ViewType = 'planning' | 'budget' | 'objects' | 'account';
+export type ViewType = 'planning' | 'budget' | 'objects' | 'travelers' | 'account';
 
 // Language
 export type Language = 'es' | 'en' | 'fr' | 'de' | 'zh' | 'ru' | 'ja';
@@ -55,6 +69,7 @@ export interface AppState {
   days: Day[];
   accommodations: Accommodation[];
   shoppingItems: ShoppingItem[];
+  travelers: Traveler[];
   currentDay: number;
   currentView: ViewType;
   language: Language;

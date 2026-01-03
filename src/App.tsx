@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import PlanningView from './components/PlanningView';
 import BudgetView from './components/BudgetView';
 import ObjectsView from './components/ObjectsView';
+import TravelersView from './components/TravelersView';
 import AccountView from './components/AccountView';
 import Footer from './components/Footer';
 import './styles/main.css';
@@ -17,6 +18,8 @@ const AppContent = () => {
         return <BudgetView />;
       case 'objects':
         return <ObjectsView />;
+      case 'travelers':
+        return <TravelersView />;
       case 'account':
         return <AccountView />;
       default:
