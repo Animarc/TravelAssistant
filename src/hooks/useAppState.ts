@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { AppState, Activity, Accommodation, ShoppingItem, Traveler, ViewType, Language } from '../types';
-import { initialData, initialAccommodations, initialShoppingItems, tripName as initialTripName } from '../data';
+import { initialData, initialAccommodations, initialShoppingItems, initialTravelers, tripName as initialTripName } from '../data';
 
 const getInitialState = (): AppState => {
   const savedLang = localStorage.getItem('travelAssistantLang') as Language | null;
@@ -10,7 +10,7 @@ const getInitialState = (): AppState => {
     days: initialData,
     accommodations: initialAccommodations,
     shoppingItems: initialShoppingItems,
-    travelers: [],
+    travelers: initialTravelers,
     currentDay: 0,
     currentView: 'planning',
     language: savedLang || 'es'

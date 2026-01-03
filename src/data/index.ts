@@ -1,6 +1,67 @@
-import { Day, Accommodation, ShoppingItem } from '../types';
+import { Day, Accommodation, ShoppingItem, Traveler } from '../types';
 
 export const tripName = "Japan Countryside Trip";
+
+export const initialTravelers: Traveler[] = [
+  {
+    id: 1,
+    firstName: "Carlos",
+    lastName: "García López",
+    age: 34,
+    email: "carlos.garcia@email.com",
+    phonePrefix: "+34",
+    phone: "612345678",
+    documents: [
+      { type: "passport", number: "AAB123456" },
+      { type: "id", number: "12345678A" }
+    ],
+    paysBudget: true
+  },
+  {
+    id: 2,
+    firstName: "María",
+    lastName: "Fernández Ruiz",
+    age: 32,
+    email: "maria.fernandez@email.com",
+    phonePrefix: "+34",
+    phone: "623456789",
+    documents: [
+      { type: "passport", number: "BBB234567" }
+    ],
+    paysBudget: true
+  },
+  {
+    id: 3,
+    firstName: "Pablo",
+    lastName: "García Fernández",
+    age: 8,
+    documents: [
+      { type: "id", number: "87654321B" }
+    ],
+    paysBudget: false
+  },
+  {
+    id: 4,
+    firstName: "Lucía",
+    lastName: "García Fernández",
+    age: 5,
+    documents: [],
+    paysBudget: false
+  },
+  {
+    id: 5,
+    firstName: "Carmen",
+    lastName: "López Martínez",
+    age: 65,
+    phonePrefix: "+34",
+    phone: "634567890",
+    documents: [
+      { type: "passport", number: "CCC345678" },
+      { type: "driverLicense", number: "98765432" }
+    ],
+    paysBudget: false
+  }
+];
 
 export const initialShoppingItems: ShoppingItem[] = [
   {
