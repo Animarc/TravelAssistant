@@ -10,6 +10,11 @@ const BudgetView = () => {
   const [showShoppingModal, setShowShoppingModal] = useState(false);
   const [editingItemId, setEditingItemId] = useState<number | null>(null);
 
+  // Calculate paying travelers count
+  const payingTravelersCount = useMemo(() => {
+    return state.travelers.filter(t => t.paysBudget).length;
+  }, [state.travelers]);
+
   // Calculate budget totals
   const budget = useMemo(() => {
     // Activities total
@@ -92,11 +97,13 @@ const BudgetView = () => {
                 <div key={acc.id} className="budget-item">
                   <div className="budget-item-info">
                     <span className="budget-item-name">{acc.name}</span>
+                  </div>
+                  <div className="budget-item-actions">
                     <span className="budget-item-nights">
                       {calculateNights(acc.fromDay, acc.toDay)} {calculateNights(acc.fromDay, acc.toDay) === 1 ? t('night') : t('nights')}
                     </span>
+                    <span className="budget-item-price">{formatPrice(acc.price)}</span>
                   </div>
-                  <span className="budget-item-price">{formatPrice(acc.price)}</span>
                 </div>
               ))}
             </div>
@@ -118,11 +125,11 @@ const BudgetView = () => {
                       {getShoppingCategoryIcon(item.category)}
                     </span>
                     <span className="budget-item-name">{item.name}</span>
+                  </div>
+                  <div className="budget-item-actions">
                     <span className={`shopping-status ${item.purchased ? 'purchased' : 'pending'}`}>
                       {item.purchased ? t('purchased') : t('pending')}
                     </span>
-                  </div>
-                  <div className="budget-item-actions">
                     <span className="budget-item-price">
                       {formatPrice(item.price, item.currency)}
                     </span>
@@ -186,6 +193,14 @@ const BudgetView = () => {
                 <span>{t('total')}</span>
                 <span className="grand-total-amount">{formatPrice(budget.total)}</span>
               </div>
+              {payingTravelersCount > 1 && (
+                <div className="per-person-total">
+                  <span>{t('perPerson')} ({payingTravelersCount})</span>
+                  <span className="per-person-amount">
+                    {formatPrice(budget.total / payingTravelersCount)}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
         </aside>

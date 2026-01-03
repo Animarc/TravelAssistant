@@ -1056,6 +1056,22 @@ body {
   border-radius: var(--radius-pill);
 }
 
+.per-person-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-md);
+  padding-top: var(--space-md);
+  border-top: 1px dashed var(--color-gray-300);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+}
+
+.per-person-amount {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+}
+
 /* ==================== OBJECTS VIEW ==================== */
 
 .objects-view {
@@ -1157,6 +1173,25 @@ body {
   width: 18px;
   height: 18px;
   accent-color: var(--color-primary);
+}
+
+.object-item span {
+  flex: 1;
+}
+
+.buy-object-btn {
+  padding: var(--space-xs);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  opacity: 0.5;
+  transition: opacity var(--transition-base), transform var(--transition-base);
+}
+
+.buy-object-btn:hover {
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 /* ========================================

@@ -76,6 +76,8 @@ export const translations: Record<Language, Record<string, string>> = {
     subtotalShopping: 'Subtotal Compras',
     totalBudget: 'Presupuesto Total',
     total: 'TOTAL',
+    perPerson: 'Por persona',
+    buyOnIdealo: 'Comprar en Idealo',
     night: 'noche',
     nights: 'noches',
     purchased: 'comprado',
@@ -269,6 +271,8 @@ export const translations: Record<Language, Record<string, string>> = {
     subtotalShopping: 'Subtotal Shopping',
     totalBudget: 'Total Budget',
     total: 'TOTAL',
+    perPerson: 'Per person',
+    buyOnIdealo: 'Buy on Idealo',
     night: 'night',
     nights: 'nights',
     purchased: 'purchased',
@@ -446,7 +450,9 @@ export const translations: Record<Language, Record<string, string>> = {
     delete: 'Supprimer',
     phone: 'Téléphone',
     prefix: '+33',
-    phoneNumber: 'Numéro'
+    phoneNumber: 'Numéro',
+    perPerson: 'Par personne',
+    buyOnIdealo: 'Acheter sur Idealo'
   },
   de: {
     appTitle: 'Ani Travel Assistant',
@@ -507,7 +513,9 @@ export const translations: Record<Language, Record<string, string>> = {
     delete: 'Löschen',
     phone: 'Telefon',
     prefix: '+49',
-    phoneNumber: 'Nummer'
+    phoneNumber: 'Nummer',
+    perPerson: 'Pro Person',
+    buyOnIdealo: 'Bei Idealo kaufen'
   },
   zh: {
     appTitle: 'Ani旅行助手',
@@ -568,7 +576,9 @@ export const translations: Record<Language, Record<string, string>> = {
     delete: '删除',
     phone: '电话',
     prefix: '+86',
-    phoneNumber: '号码'
+    phoneNumber: '号码',
+    perPerson: '每人',
+    buyOnIdealo: '在Idealo购买'
   },
   ru: {
     appTitle: 'Ani Travel Assistant',
@@ -629,7 +639,9 @@ export const translations: Record<Language, Record<string, string>> = {
     delete: 'Удалить',
     phone: 'Телефон',
     prefix: '+7',
-    phoneNumber: 'Номер'
+    phoneNumber: 'Номер',
+    perPerson: 'На человека',
+    buyOnIdealo: 'Купить на Idealo'
   },
   ja: {
     appTitle: 'Ani旅行アシスタント',
@@ -690,6 +702,8 @@ export const translations: Record<Language, Record<string, string>> = {
     delete: '削除',
     phone: '電話番号',
     prefix: '+81',
-    phoneNumber: '番号'
+    phoneNumber: '番号',
+    perPerson: '一人当たり',
+    buyOnIdealo: 'Idealoで購入'
   }
 };
