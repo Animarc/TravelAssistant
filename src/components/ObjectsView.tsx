@@ -101,7 +101,7 @@ const ObjectsView = () => {
   const openIdealoSearch = (itemKey: string, e: React.MouseEvent) => {
     e.stopPropagation();
     const searchTerm = encodeURIComponent(t(itemKey));
-    window.open(`https://www.idealo.es/?q=${searchTerm}`, '_blank');
+    window.open(`https://www.idealo.es/resultados.html?q=${searchTerm}`, '_blank');
   };
 
   const isDocumentsCategory = (categoryName: string) => {
@@ -147,7 +147,7 @@ const ObjectsView = () => {
                       onClick={(e) => openIdealoSearch(item.key, e)}
                       title={t('buyOnIdealo')}
                     >
-                      🛒
+                      {t('buy')}
                     </button>
                   )}
                 </li>

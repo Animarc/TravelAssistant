@@ -1180,18 +1180,20 @@ body {
 }
 
 .buy-object-btn {
-  padding: var(--space-xs);
-  background: none;
+  padding: var(--space-xs) var(--space-sm);
+  background: var(--color-primary-subtle);
   border: none;
+  border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: var(--font-size-sm);
-  opacity: 0.5;
-  transition: opacity var(--transition-base), transform var(--transition-base);
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-medium);
+  transition: background var(--transition-base), color var(--transition-base);
 }
 
 .buy-object-btn:hover {
-  opacity: 1;
-  transform: scale(1.2);
+  background: var(--color-primary);
+  color: white;
 }
 
 /* ========================================

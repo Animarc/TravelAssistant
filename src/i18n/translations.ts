@@ -78,6 +78,7 @@ export const translations: Record<Language, Record<string, string>> = {
     total: 'TOTAL',
     perPerson: 'Por persona',
     buyOnIdealo: 'Comprar en Idealo',
+    buy: 'Comprar',
     night: 'noche',
     nights: 'noches',
     purchased: 'comprado',
@@ -273,6 +274,7 @@ export const translations: Record<Language, Record<string, string>> = {
     total: 'TOTAL',
     perPerson: 'Per person',
     buyOnIdealo: 'Buy on Idealo',
+    buy: 'Buy',
     night: 'night',
     nights: 'nights',
     purchased: 'purchased',
@@ -452,7 +454,8 @@ export const translations: Record<Language, Record<string, string>> = {
     prefix: '+33',
     phoneNumber: 'Numéro',
     perPerson: 'Par personne',
-    buyOnIdealo: 'Acheter sur Idealo'
+    buyOnIdealo: 'Acheter sur Idealo',
+    buy: 'Acheter'
   },
   de: {
     appTitle: 'Ani Travel Assistant',
@@ -515,7 +518,8 @@ export const translations: Record<Language, Record<string, string>> = {
     prefix: '+49',
     phoneNumber: 'Nummer',
     perPerson: 'Pro Person',
-    buyOnIdealo: 'Bei Idealo kaufen'
+    buyOnIdealo: 'Bei Idealo kaufen',
+    buy: 'Kaufen'
   },
   zh: {
     appTitle: 'Ani旅行助手',
@@ -578,7 +582,8 @@ export const translations: Record<Language, Record<string, string>> = {
     prefix: '+86',
     phoneNumber: '号码',
     perPerson: '每人',
-    buyOnIdealo: '在Idealo购买'
+    buyOnIdealo: '在Idealo购买',
+    buy: '购买'
   },
   ru: {
     appTitle: 'Ani Travel Assistant',
@@ -641,7 +646,8 @@ export const translations: Record<Language, Record<string, string>> = {
     prefix: '+7',
     phoneNumber: 'Номер',
     perPerson: 'На человека',
-    buyOnIdealo: 'Купить на Idealo'
+    buyOnIdealo: 'Купить на Idealo',
+    buy: 'Купить'
   },
   ja: {
     appTitle: 'Ani旅行アシスタント',
@@ -704,6 +710,7 @@ export const translations: Record<Language, Record<string, string>> = {
     prefix: '+81',
     phoneNumber: '番号',
     perPerson: '一人当たり',
-    buyOnIdealo: 'Idealoで購入'
+    buyOnIdealo: 'Idealoで購入',
+    buy: '購入'
   }
 };
