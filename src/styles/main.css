@@ -1322,62 +1322,60 @@ body {
   }
 
   .navbar {
-    flex-direction: column;
+    display: flex;
+    flex-wrap: wrap;
     padding: var(--space-sm) var(--space-md);
     gap: var(--space-xs);
-    position: relative;
+    align-items: center;
   }
 
   .navbar-left {
     display: none;
   }
 
+  /* First row: trip name (75%) + icons (25%) */
   .navbar-center {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: contents;
     padding: 0;
-    gap: var(--space-xs);
     background-color: transparent;
   }
 
   .trip-name {
-    width: 100%;
+    order: 1;
+    flex: 0 0 calc(75% - var(--space-xs));
     text-align: center;
     font-size: var(--font-size-sm);
-    padding-right: 70px;
-    order: 1;
+    padding: var(--space-xs) var(--space-sm);
+    max-width: none;
   }
 
   .navbar-separator {
     display: none;
   }
 
-  .navbar-center .nav-btn {
+  /* Icons in first row, right side */
+  .navbar-right {
     order: 2;
+    flex: 0 0 calc(25% - var(--space-xs));
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-xs);
+    position: static;
   }
 
-  .navbar-center {
-    flex-direction: row;
-    flex-wrap: wrap;
+  .navbar-right .nav-icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: var(--font-size-sm);
   }
 
-  .trip-name {
-    flex-basis: 100%;
-  }
-
+  /* Second row: view buttons spanning full width */
   .nav-btn {
-    flex: 1;
+    order: 3;
+    flex: 1 1 30%;
     text-align: center;
     min-width: 0;
     padding: var(--space-xs) var(--space-sm);
-  }
-
-  .navbar-right {
-    position: absolute;
-    top: var(--space-sm);
-    right: var(--space-md);
   }
 
   .container {
