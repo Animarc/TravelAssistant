@@ -682,6 +682,11 @@ body {
   background-color: var(--color-secondary-dark);
 }
 
+/* Accommodation drawer - Mobile only */
+.accommodation-drawer {
+  display: none;
+}
+
 /* Map markers */
 .activity-marker-inner {
   width: 30px;
@@ -1433,6 +1438,81 @@ body {
   .no-accommodation {
     padding: var(--space-xs);
     font-size: var(--font-size-xs);
+  }
+
+  /* Hide desktop accommodation, show drawer */
+  .accommodation-desktop {
+    display: none;
+  }
+
+  .accommodation-drawer {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--color-white);
+    box-shadow: 0 -4px 20px rgba(26, 54, 93, 0.15);
+    z-index: var(--z-sticky);
+    transition: transform var(--transition-base);
+  }
+
+  .accommodation-drawer-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-sm) var(--space-lg);
+    background: var(--color-primary);
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .drawer-toggle-text {
+    font-family: var(--font-family-heading);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-inverse);
+  }
+
+  .drawer-toggle-arrow {
+    color: var(--text-inverse);
+    font-size: var(--font-size-xs);
+    transition: transform var(--transition-base);
+  }
+
+  .drawer-toggle-arrow.open {
+    transform: rotate(180deg);
+  }
+
+  .accommodation-drawer-content {
+    max-height: 0;
+    overflow: hidden;
+    padding: 0 var(--space-lg);
+    background: var(--color-white);
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+
+  .accommodation-drawer.open .accommodation-drawer-content {
+    max-height: 200px;
+    padding: var(--space-md) var(--space-lg);
+    overflow-y: auto;
+  }
+
+  .accommodation-drawer .accommodation-item {
+    margin-bottom: var(--space-sm);
+  }
+
+  .accommodation-drawer .no-accommodation {
+    text-align: center;
+    padding: var(--space-md) 0;
+  }
+
+  /* Adjust left panel to account for drawer */
+  .left-panel {
+    padding-bottom: 45px;
   }
 
   .budget-wrapper {

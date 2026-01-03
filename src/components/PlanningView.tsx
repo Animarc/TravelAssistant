@@ -24,6 +24,7 @@ const PlanningView = () => {
   const [editingActivity, setEditingActivity] = useState<number | null>(null);
   const [showActivityModal, setShowActivityModal] = useState(false);
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
+  const [accommodationDrawerOpen, setAccommodationDrawerOpen] = useState(false);
 
   const currentDay = state.days[state.currentDay];
   const accommodations = getAccommodationsForDay(state.currentDay);
@@ -283,8 +284,8 @@ const PlanningView = () => {
           )}
         </ul>
 
-        {/* Accommodation section */}
-        <div className="accommodation-container">
+        {/* Accommodation section - Desktop */}
+        <div className="accommodation-container accommodation-desktop">
           <div className="accommodation-section">
             <div className="accommodation-header">
               <h3>{t('whereWeSleep')}</h3>
@@ -320,6 +321,50 @@ const PlanningView = () => {
                 ))
               )}
             </div>
+          </div>
+        </div>
+
+        {/* Accommodation drawer - Mobile */}
+        <div className={`accommodation-drawer ${accommodationDrawerOpen ? 'open' : ''}`}>
+          <button
+            className="accommodation-drawer-toggle"
+            onClick={() => setAccommodationDrawerOpen(!accommodationDrawerOpen)}
+          >
+            <span className="drawer-toggle-text">{t('whereWeSleepShort')}</span>
+            <span className={`drawer-toggle-arrow ${accommodationDrawerOpen ? 'open' : ''}`}>
+              {accommodationDrawerOpen ? '▼' : '▲'}
+            </span>
+          </button>
+          <div className="accommodation-drawer-content">
+            {accommodations.length === 0 ? (
+              <p className="no-accommodation">{t('noAccommodation')}</p>
+            ) : (
+              accommodations.map(acc => (
+                <div key={acc.id} className="accommodation-item">
+                  <div className="accommodation-info">
+                    <strong className="accommodation-name">{acc.name}</strong>
+                    {acc.link && (
+                      <a
+                        href={acc.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="accommodation-link"
+                      >
+                        {t('seeReservation')}
+                      </a>
+                    )}
+                    {isValidCoordinates(acc.coordinates) && (
+                      <button
+                        className="accommodation-gmaps-btn"
+                        onClick={() => handleOpenMaps(acc.coordinates as [number, number])}
+                      >
+                        {t('goWithMaps')}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </aside>
