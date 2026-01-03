@@ -508,6 +508,40 @@ body {
   flex: 1;
 }
 
+/* Activity checkbox */
+.activity-checkbox {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.activity-checkbox:hover {
+  background: var(--color-primary-subtle);
+  transform: scale(1.05);
+}
+
+.activity-checkbox.checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.activity-checkbox .checkmark {
+  color: var(--color-white);
+  font-size: 14px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+}
+
 .activity-time {
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
@@ -1513,6 +1547,117 @@ body {
   /* Adjust left panel to account for drawer */
   .left-panel {
     padding-bottom: 45px;
+  }
+
+  /* Collapsible activities in mobile */
+  .activity-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .activity-item .activity-content {
+    flex-wrap: wrap;
+  }
+
+  .activity-item .activity-details {
+    width: 100%;
+    margin-top: var(--space-sm);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.2s ease, margin 0.3s ease;
+    margin-top: 0;
+  }
+
+  .activity-item .activity-details .activity-name {
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Collapsed state - show only name inline */
+  .activity-item:not(.expanded) .activity-details {
+    display: flex;
+    align-items: center;
+    max-height: 24px;
+    opacity: 1;
+    margin-top: 0;
+    flex: 1;
+  }
+
+  .activity-item:not(.expanded) .activity-details .activity-description,
+  .activity-item:not(.expanded) .activity-details .activity-important,
+  .activity-item:not(.expanded) .activity-details .activity-price {
+    display: none;
+  }
+
+  .activity-item:not(.expanded) .activity-details .activity-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  /* Expanded state */
+  .activity-item.expanded .activity-details {
+    max-height: 300px;
+    opacity: 1;
+    margin-top: var(--space-sm);
+  }
+
+  .activity-item.expanded .activity-content {
+    flex-wrap: wrap;
+  }
+
+  /* Actions only visible when expanded */
+  .activity-item .activity-actions {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
+    padding: 0;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 0;
+  }
+
+  .activity-item.expanded .activity-actions {
+    max-height: 50px;
+    opacity: 1;
+    padding-top: var(--space-sm);
+    margin-top: var(--space-sm);
+    border-top: 1px solid var(--border-color);
+  }
+
+  /* Expand indicator */
+  .activity-item::after {
+    content: '▼';
+    position: absolute;
+    right: var(--space-md);
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: var(--text-muted);
+    transition: transform var(--transition-base);
+  }
+
+  .activity-item {
+    position: relative;
+    padding-right: 30px;
+  }
+
+  .activity-item.expanded::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  /* Smaller checkbox on mobile */
+  .activity-checkbox {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+  }
+
+  .activity-checkbox .checkmark {
+    font-size: 12px;
   }
 
   .budget-wrapper {

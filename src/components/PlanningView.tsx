@@ -25,6 +25,11 @@ const PlanningView = () => {
   const [showActivityModal, setShowActivityModal] = useState(false);
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
   const [accommodationDrawerOpen, setAccommodationDrawerOpen] = useState(false);
+  const [expandedActivity, setExpandedActivity] = useState<number | null>(null);
+
+  const handleActivityClick = (index: number) => {
+    setExpandedActivity(expandedActivity === index ? null : index);
+  };
 
   const currentDay = state.days[state.currentDay];
   const accommodations = getAccommodationsForDay(state.currentDay);
@@ -181,10 +186,20 @@ const PlanningView = () => {
             .map((activity, index) => (
               <li
                 key={index}
-                className={`activity-item ${activity.isDone ? 'done' : ''}`}
-                onClick={() => toggleActivityDone(index)}
+                className={`activity-item ${activity.isDone ? 'done' : ''} ${expandedActivity === index ? 'expanded' : ''}`}
+                onClick={() => handleActivityClick(index)}
               >
                 <div className="activity-content">
+                  <button
+                    className={`activity-checkbox ${activity.isDone ? 'checked' : ''}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleActivityDone(index);
+                    }}
+                    aria-label={activity.isDone ? 'Mark as not done' : 'Mark as done'}
+                  >
+                    {activity.isDone && <span className="checkmark">✓</span>}
+                  </button>
                   <span className="activity-time">{activity.time || t('noTime')}</span>
                   <span className="activity-type-badge">
                     {getActivityTypeIcon(activity.type)}
@@ -251,10 +266,20 @@ const PlanningView = () => {
                   return (
                     <li
                       key={`optional-${index}`}
-                      className={`activity-item optional ${activity.isDone ? 'done' : ''}`}
-                      onClick={() => toggleActivityDone(realIndex)}
+                      className={`activity-item optional ${activity.isDone ? 'done' : ''} ${expandedActivity === realIndex ? 'expanded' : ''}`}
+                      onClick={() => handleActivityClick(realIndex)}
                     >
                       <div className="activity-content">
+                        <button
+                          className={`activity-checkbox ${activity.isDone ? 'checked' : ''}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleActivityDone(realIndex);
+                          }}
+                          aria-label={activity.isDone ? 'Mark as not done' : 'Mark as done'}
+                        >
+                          {activity.isDone && <span className="checkmark">✓</span>}
+                        </button>
                         <span className="activity-time">{activity.time || t('noTime')}</span>
                         <span className="activity-type-badge">
                           {getActivityTypeIcon(activity.type)}
@@ -332,7 +357,7 @@ const PlanningView = () => {
           >
             <span className="drawer-toggle-text">{t('whereWeSleepShort')}</span>
             <span className={`drawer-toggle-arrow ${accommodationDrawerOpen ? 'open' : ''}`}>
-              {accommodationDrawerOpen ? '▼' : '▲'}
+              ▲
             </span>
           </button>
           <div className="accommodation-drawer-content">
