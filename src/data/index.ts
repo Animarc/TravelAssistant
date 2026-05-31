@@ -107,7 +107,7 @@ export const initialShoppingItems: ShoppingItem[] = [
   },
   {
     id: 6,
-    name: "Entradas PokéPark Kanto (Yomiuriland)",
+    name: "Entradas Sanrio Puroland",
     category: "entradas",
     price: 60,
     currency: "EUR",
@@ -862,56 +862,56 @@ export const initialData: Day[] = [
   },
   // Día 14 - 16 Julio
   {
-    title: "16 Julio - Tokyo PokéPark Kanto",
+    title: "16 Julio - Tokyo Sanrio Puroland",
     activities: [
       {
         time: "09:00",
-        name: "Salida a Yomiuriland",
-        description: "Salida desde Shinjuku hacia Yomiuriland (25 min en tren)",
+        name: "Salida a Sanrio Puroland",
+        description: "Salida desde Shinjuku con la línea Keio hasta Keio-Tama-Center (40 min). Desde la estación son 5 min andando al parque",
         type: "transporte",
-        coordinates: [35.6264, 139.5218]
+        coordinates: [35.6285, 139.4159]
       },
       {
         time: "10:00",
-        name: "Apertura PokéPark Kanto",
-        description: "Entrada al parque. Registrar la app oficial PokéPark nada más entrar para tickets de acceso limitado a tiendas y shows",
+        name: "Apertura Sanrio Puroland",
+        description: "Entrada al parque temático cubierto de Sanrio. Coger primero los integration tickets de los shows principales (My Melody & Kuromi, Miracle Gift Parade)",
         type: "visita",
-        importantInfo: "Registrar app oficial PokéPark nada más entrar para acceder a tiendas y shows con cupo limitado",
-        coordinates: [35.6264, 139.5218]
+        importantInfo: "Reservar los integration tickets de los shows nada más entrar; el aforo es limitado y se agotan rápido",
+        coordinates: [35.6285, 139.4159]
       },
       {
         time: "10:30",
-        name: "Pokémon Forest",
-        description: "Explorar la zona Pokémon Forest del parque",
+        name: "Sanrio Character Boat Ride",
+        description: "Paseo en barca por el mundo de los personajes de Sanrio en la planta baja del parque",
         type: "visita",
-        coordinates: [35.6264, 139.5218]
+        coordinates: [35.6285, 139.4159]
       },
       {
         time: "13:00",
         name: "Comer en el parque",
-        description: "Comida temática dentro del PokéPark",
+        description: "Comida temática en el Sanrio Rainbow World Restaurant o en Kawaii Kafé",
         type: "comida",
-        coordinates: [35.6264, 139.5218]
+        coordinates: [35.6285, 139.4159]
       },
       {
         time: "14:30",
-        name: "Sedge Town",
-        description: "Atracciones, shows y merchandising en la zona Sedge Town",
+        name: "Miracle Gift Parade y shows",
+        description: "Asistir a la Miracle Gift Parade y a los shows de My Melody & Kuromi en el Fairyland Theater",
         type: "visita",
-        coordinates: [35.6264, 139.5218]
+        coordinates: [35.6285, 139.4159]
       },
       {
         time: "17:00",
-        name: "Resto de Yomiuriland",
-        description: "Disfrutar del resto del parque de atracciones si queda energía",
+        name: "Compras y My Melody Road",
+        description: "Recorrer las tiendas, My Melody Road, Hello Kitty's House y la zona de fotos con personajes",
         type: "visita",
         isOptional: true,
-        coordinates: [35.6264, 139.5218]
+        coordinates: [35.6285, 139.4159]
       },
       {
         time: "19:00",
         name: "Vuelta al piso",
-        description: "Regreso desde Yomiuriland al apartamento en Tokyo",
+        description: "Regreso desde Sanrio Puroland al apartamento en Tokyo (Keio Line hasta Shinjuku)",
         type: "transporte",
         coordinates: [35.6812, 139.7671]
       }

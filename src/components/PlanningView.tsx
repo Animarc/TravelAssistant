@@ -26,6 +26,7 @@ const PlanningView = () => {
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
   const [accommodationDrawerOpen, setAccommodationDrawerOpen] = useState(false);
   const [expandedActivity, setExpandedActivity] = useState<number | null>(null);
+  const [showDayList, setShowDayList] = useState(false);
 
   const handleActivityClick = (index: number) => {
     setExpandedActivity(expandedActivity === index ? null : index);
@@ -155,6 +156,12 @@ const PlanningView = () => {
               <button className="add-accommodation-btn" onClick={() => setShowAccommodationModal(true)}>
                 {t('addAccommodation')}
               </button>
+              <button
+                className={`list-days-btn ${showDayList ? 'active' : ''}`}
+                onClick={() => setShowDayList(prev => !prev)}
+              >
+                {t('listDays')}
+              </button>
               <button className="add-day-btn" onClick={handleAddDay}>
                 {t('addDayFull')}
               </button>
@@ -180,6 +187,23 @@ const PlanningView = () => {
           </div>
         </header>
 
+        {showDayList ? (
+          <ul className="day-list">
+            {state.days.map((day, index) => (
+              <li
+                key={index}
+                className={`day-list-item ${index === state.currentDay ? 'active' : ''}`}
+                onClick={() => {
+                  setCurrentDay(index);
+                  setShowDayList(false);
+                }}
+              >
+                <span className="day-list-index">{t('day')} {index + 1}</span>
+                <span className="day-list-title">{day.title}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
         <ul className="activity-list">
           {currentDay?.activities
             .filter(a => !a.isOptional)
@@ -308,6 +332,7 @@ const PlanningView = () => {
             </>
           )}
         </ul>
+        )}
 
         {/* Accommodation section - Desktop */}
         <div className="accommodation-container accommodation-desktop">

@@ -371,7 +371,8 @@ body {
 }
 
 .add-activity-btn,
-.add-accommodation-btn {
+.add-accommodation-btn,
+.list-days-btn {
   padding: var(--space-xs) var(--space-md);
   font-size: var(--font-size-xs);
   font-family: var(--font-family);
@@ -386,9 +387,63 @@ body {
 }
 
 .add-activity-btn:hover,
-.add-accommodation-btn:hover {
+.add-accommodation-btn:hover,
+.list-days-btn:hover {
   background: var(--color-gray-100);
   box-shadow: var(--shadow-sm);
+}
+
+.list-days-btn.active {
+  background: var(--color-primary);
+  color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+}
+
+.day-list {
+  list-style: none;
+  padding: var(--space-md) var(--space-xl);
+  margin: 0;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.day-list-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-white);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.day-list-item:hover {
+  background: var(--color-gray-100);
+  box-shadow: var(--shadow-sm);
+  transform: translateX(2px);
+}
+
+.day-list-item.active {
+  border-color: var(--color-primary);
+  background: var(--color-gray-100);
+  font-weight: var(--font-weight-semibold);
+}
+
+.day-list-index {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-primary);
+  min-width: 60px;
+  font-size: var(--font-size-sm);
+}
+
+.day-list-title {
+  flex: 1;
+  font-size: var(--font-size-base);
 }
 
 .day-header h2 {
@@ -1846,7 +1901,8 @@ body {
 
   .add-day-btn,
   .add-activity-btn,
-  .add-accommodation-btn {
+  .add-accommodation-btn,
+  .list-days-btn {
     padding: 2px var(--space-sm);
     font-size: 9px;
   }
@@ -2143,7 +2199,8 @@ body {
   .day-action-btn,
   .add-day-btn,
   .add-activity-btn,
-  .add-accommodation-btn {
+  .add-accommodation-btn,
+  .list-days-btn {
     font-size: 8px;
   }
 

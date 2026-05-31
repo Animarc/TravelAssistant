@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Language } from '../types';
+import { printItinerary } from '../utils';
 
 const Navbar = () => {
   const { state, setCurrentView, setLanguage } = useApp();
@@ -72,6 +73,25 @@ const Navbar = () => {
         </div>
       </div>
       <div className="navbar-right">
+        <button
+          className="nav-icon-btn"
+          title={t('printItinerary')}
+          onClick={() =>
+            printItinerary(state.days, state.accommodations, {
+              title: t('printItinerary'),
+              day: t('day'),
+              activities: t('activities'),
+              optionalActivities: t('optionalActivities'),
+              accommodation: t('whereWeSleep'),
+              noAccommodation: t('noAccommodation'),
+              importantInfo: t('importantInfo'),
+              noTime: t('noTime'),
+              tripName: state.tripName
+            })
+          }
+        >
+          🖨️
+        </button>
         <div className="language-dropdown" ref={dropdownRef}>
           <button
             className="nav-icon-btn"
