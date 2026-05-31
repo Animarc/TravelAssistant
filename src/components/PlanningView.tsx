@@ -141,7 +141,7 @@ const PlanningView = () => {
             <button
               className="day-action-btn"
               onClick={moveDayBack}
-              disabled={state.currentDay === 0}
+              disabled={showDayList || state.currentDay === 0}
               title={t('moveDayBack')}
             >
               {t('moveDayBack')}
@@ -183,7 +183,7 @@ const PlanningView = () => {
             <button
               className="day-action-btn"
               onClick={moveDayForward}
-              disabled={state.currentDay >= state.days.length - 1}
+              disabled={showDayList || state.currentDay >= state.days.length - 1}
               title={t('moveDayForward')}
             >
               {t('moveDayForward')}
