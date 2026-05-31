@@ -150,10 +150,18 @@ const PlanningView = () => {
           <div className="day-title-group">
             <h2>{t('day')} {state.currentDay + 1}: {currentDay?.title}</h2>
             <div className="day-action-buttons">
-              <button className="add-activity-btn" onClick={() => setShowActivityModal(true)}>
+              <button
+                className="add-activity-btn"
+                onClick={() => setShowActivityModal(true)}
+                disabled={showDayList}
+              >
                 {t('addActivity')}
               </button>
-              <button className="add-accommodation-btn" onClick={() => setShowAccommodationModal(true)}>
+              <button
+                className="add-accommodation-btn"
+                onClick={() => setShowAccommodationModal(true)}
+                disabled={showDayList}
+              >
                 {t('addAccommodation')}
               </button>
               <button
@@ -162,7 +170,11 @@ const PlanningView = () => {
               >
                 {t('listDays')}
               </button>
-              <button className="add-day-btn" onClick={handleAddDay}>
+              <button
+                className="add-day-btn"
+                onClick={handleAddDay}
+                disabled={showDayList}
+              >
                 {t('addDayFull')}
               </button>
             </div>
@@ -335,6 +347,7 @@ const PlanningView = () => {
         )}
 
         {/* Accommodation section - Desktop */}
+        {!showDayList && (
         <div className="accommodation-container accommodation-desktop">
           <div className="accommodation-section">
             <div className="accommodation-header">
@@ -373,8 +386,10 @@ const PlanningView = () => {
             </div>
           </div>
         </div>
+        )}
 
         {/* Accommodation drawer - Mobile */}
+        {!showDayList && (
         <div className={`accommodation-drawer ${accommodationDrawerOpen ? 'open' : ''}`}>
           <button
             className="accommodation-drawer-toggle"
@@ -417,6 +432,7 @@ const PlanningView = () => {
             )}
           </div>
         </div>
+        )}
       </aside>
 
       <section className="right-panel">
