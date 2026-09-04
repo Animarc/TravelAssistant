@@ -60,7 +60,7 @@ const BudgetView = () => {
           {/* Activities Section */}
           <section className="budget-section">
             <div className="budget-section-header">
-              <h3>📋 {t('activities')}</h3>
+              <h3>{t('activities')}</h3>
               <span className="budget-section-total">
                 {formatPrice(budget.activities)}
               </span>
@@ -87,7 +87,7 @@ const BudgetView = () => {
           {/* Accommodations Section */}
           <section className="budget-section">
             <div className="budget-section-header">
-              <h3>🏨 {t('accommodations')}</h3>
+              <h3>{t('accommodations')}</h3>
               <span className="budget-section-total">
                 {formatPrice(budget.accommodations)}
               </span>
@@ -112,7 +112,7 @@ const BudgetView = () => {
           {/* Shopping Section */}
           <section className="budget-section">
             <div className="budget-section-header">
-              <h3>🛒 {t('shoppingAndReservations')}</h3>
+              <h3>{t('shoppingAndReservations')}</h3>
               <span className="budget-section-total">
                 {formatPrice(budget.shopping)}
               </span>

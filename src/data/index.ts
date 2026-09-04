@@ -1,4 +1,5 @@
-import { Day, Accommodation, ShoppingItem, Traveler } from '../types';
+import { Day, Accommodation, ShoppingItem, Traveler, Trip } from '../types';
+import { interlakenTrip } from './interlaken';
 
 export const tripName = "Japón 2025 - 2 al 27 de Julio";
 
@@ -1587,4 +1588,17 @@ export const initialData: Day[] = [
       }
     ]
   }
+];
+
+export const initialTrips: Trip[] = [
+  {
+    id: 'japan-2025',
+    tripName,
+    days: initialData,
+    accommodations: initialAccommodations,
+    shoppingItems: initialShoppingItems,
+    travelers: initialTravelers,
+    currentDay: 0
+  },
+  interlakenTrip
 ];

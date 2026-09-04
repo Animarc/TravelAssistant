@@ -63,6 +63,16 @@ export interface Traveler {
   paysBudget: boolean;
 }
 
+export interface Trip {
+  id: string;
+  tripName: string;
+  days: Day[];
+  accommodations: Accommodation[];
+  shoppingItems: ShoppingItem[];
+  travelers: Traveler[];
+  currentDay: number;
+}
+
 // Views
 export type ViewType = 'planning' | 'budget' | 'objects' | 'travelers' | 'account';
 
@@ -71,6 +81,8 @@ export type Language = 'es' | 'en' | 'fr' | 'de' | 'zh' | 'ru' | 'ja';
 
 // App State
 export interface AppState {
+  trips: Trip[];
+  activeTripId: string;
   tripName: string;
   days: Day[];
   accommodations: Accommodation[];
@@ -78,6 +90,7 @@ export interface AppState {
   travelers: Traveler[];
   currentDay: number;
   currentView: ViewType;
+  lastTripView: Exclude<ViewType, 'account'>;
   language: Language;
 }
 

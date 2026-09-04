@@ -7,6 +7,8 @@ import TravelersView from './components/TravelersView';
 import AccountView from './components/AccountView';
 import Footer from './components/Footer';
 import './styles/main.css';
+import './styles/planner-controls.css';
+import './styles/trip-navigation.css';
 
 const AppContent = () => {
   const { state } = useApp();

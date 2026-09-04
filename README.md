@@ -1,6 +1,6 @@
-# Travel Assistant
+# Kakomu
 
-A modern travel planning application built with React, TypeScript, and Vite.
+A shared space where trips take shape together, built with React, TypeScript, and Vite.
 
 ## Features
 

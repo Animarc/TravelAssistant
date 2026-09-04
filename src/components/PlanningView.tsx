@@ -1,19 +1,30 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type DragEvent, type KeyboardEvent, type PointerEvent } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { getActivityTypeIcon, isValidCoordinates, createGoogleMapsUrl } from '../utils';
 import ActivityModal from './modals/ActivityModal';
 import AccommodationModal from './modals/AccommodationModal';
+import DayModal from './modals/DayModal';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+
+const DragHandleIcon = () => (
+  <svg className="drag-handle-icon" viewBox="0 0 16 20" aria-hidden="true">
+    <circle cx="5" cy="4" r="1.4" />
+    <circle cx="11" cy="4" r="1.4" />
+    <circle cx="5" cy="10" r="1.4" />
+    <circle cx="11" cy="10" r="1.4" />
+    <circle cx="5" cy="16" r="1.4" />
+    <circle cx="11" cy="16" r="1.4" />
+  </svg>
+);
 
 const PlanningView = () => {
   const {
     state,
     setCurrentDay,
     addDay,
-    moveDayBack,
-    moveDayForward,
+    moveDay,
     deleteActivity,
     toggleActivityDone,
     getAccommodationsForDay
@@ -24,9 +35,18 @@ const PlanningView = () => {
   const [editingActivity, setEditingActivity] = useState<number | null>(null);
   const [showActivityModal, setShowActivityModal] = useState(false);
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
+  const [showDayModal, setShowDayModal] = useState(false);
+  const [showDayActions, setShowDayActions] = useState(false);
   const [accommodationDrawerOpen, setAccommodationDrawerOpen] = useState(false);
   const [expandedActivity, setExpandedActivity] = useState<number | null>(null);
   const [showDayList, setShowDayList] = useState(false);
+  const [focusNewDayList, setFocusNewDayList] = useState(false);
+  const [draggedDay, setDraggedDay] = useState<number | null>(null);
+  const [dragOverDay, setDragOverDay] = useState<number | null>(null);
+  const [focusReorderedDay, setFocusReorderedDay] = useState<number | null>(null);
+  const activityListRef = useRef<HTMLUListElement>(null);
+  const dayActionsRef = useRef<HTMLDivElement>(null);
+  const pointerDayRef = useRef<number | null>(null);
 
   const handleActivityClick = (index: number) => {
     setExpandedActivity(expandedActivity === index ? null : index);
@@ -35,8 +55,55 @@ const PlanningView = () => {
   const currentDay = state.days[state.currentDay];
   const accommodations = getAccommodationsForDay(state.currentDay);
 
+  useEffect(() => {
+    if (!focusNewDayList) return;
+
+    const focusFrame = requestAnimationFrame(() => {
+      if (activityListRef.current) {
+        activityListRef.current.scrollTop = 0;
+        activityListRef.current.focus({ preventScroll: true });
+      }
+      setFocusNewDayList(false);
+    });
+
+    return () => cancelAnimationFrame(focusFrame);
+  }, [focusNewDayList, state.currentDay, state.days.length]);
+
+  useEffect(() => {
+    if (!showDayActions) return;
+
+    const closeActions = (event: MouseEvent) => {
+      if (dayActionsRef.current && !dayActionsRef.current.contains(event.target as Node)) {
+        setShowDayActions(false);
+      }
+    };
+    const closeActionsWithEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key === 'Escape') setShowDayActions(false);
+    };
+
+    document.addEventListener('mousedown', closeActions);
+    document.addEventListener('keydown', closeActionsWithEscape);
+    return () => {
+      document.removeEventListener('mousedown', closeActions);
+      document.removeEventListener('keydown', closeActionsWithEscape);
+    };
+  }, [showDayActions]);
+
+  useEffect(() => {
+    if (focusReorderedDay === null) return;
+    const focusFrame = requestAnimationFrame(() => {
+      document
+        .querySelector<HTMLButtonElement>(`[data-day-index="${focusReorderedDay}"] .day-drag-handle`)
+        ?.focus();
+      setFocusReorderedDay(null);
+    });
+    return () => cancelAnimationFrame(focusFrame);
+  }, [focusReorderedDay, state.days]);
+
   // Initialize map
   useEffect(() => {
+    const mapContainer = mapRef.current;
+
     if (mapRef.current && !mapInstanceRef.current) {
       mapInstanceRef.current = L.map(mapRef.current).setView([35.6762, 139.6503], 10);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -44,7 +111,30 @@ const PlanningView = () => {
       }).addTo(mapInstanceRef.current);
     }
 
+    let resizeFrame: number | null = null;
+    const refreshMapSize = () => {
+      if (resizeFrame !== null) {
+        cancelAnimationFrame(resizeFrame);
+      }
+      resizeFrame = requestAnimationFrame(() => mapInstanceRef.current?.invalidateSize());
+    };
+
+    const resizeObserver = mapContainer && typeof ResizeObserver !== 'undefined'
+      ? new ResizeObserver(refreshMapSize)
+      : null;
+
+    if (mapContainer) {
+      resizeObserver?.observe(mapContainer);
+      window.addEventListener('resize', refreshMapSize);
+      refreshMapSize();
+    }
+
     return () => {
+      resizeObserver?.disconnect();
+      window.removeEventListener('resize', refreshMapSize);
+      if (resizeFrame !== null) {
+        cancelAnimationFrame(resizeFrame);
+      }
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
@@ -107,11 +197,11 @@ const PlanningView = () => {
     }
   }, [state.currentDay, currentDay, accommodations]);
 
-  const handleAddDay = () => {
-    const title = prompt(t('enterDayTitle'));
-    if (title && title.trim()) {
-      addDay(title.trim());
-    }
+  const handleAddDay = (description: string) => {
+    addDay(description);
+    setShowDayList(false);
+    setShowDayModal(false);
+    setFocusNewDayList(true);
   };
 
   const handleDeleteActivity = (index: number) => {
@@ -125,98 +215,242 @@ const PlanningView = () => {
     window.open(url, '_blank');
   };
 
+  const openDayAction = (action: 'day' | 'activity' | 'accommodation') => {
+    setShowDayActions(false);
+    setShowDayList(false);
+
+    if (action === 'day') setShowDayModal(true);
+    if (action === 'activity') setShowActivityModal(true);
+    if (action === 'accommodation') setShowAccommodationModal(true);
+  };
+
+  const resetDayDrag = () => {
+    setDraggedDay(null);
+    setDragOverDay(null);
+    pointerDayRef.current = null;
+  };
+
+  const handleDayDragStart = (event: DragEvent<HTMLButtonElement>, index: number) => {
+    event.dataTransfer.effectAllowed = 'move';
+    event.dataTransfer.setData('text/plain', String(index));
+    setDraggedDay(index);
+    setDragOverDay(index);
+  };
+
+  const handleDayDrop = (event: DragEvent<HTMLLIElement>, targetIndex: number) => {
+    event.preventDefault();
+    const sourceIndex = Number(event.dataTransfer.getData('text/plain'));
+    if (Number.isInteger(sourceIndex)) moveDay(sourceIndex, targetIndex);
+    resetDayDrag();
+  };
+
+  const handleDayPointerDown = (event: PointerEvent<HTMLButtonElement>, index: number) => {
+    if (event.pointerType === 'mouse') return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    pointerDayRef.current = index;
+    setDraggedDay(index);
+    setDragOverDay(index);
+  };
+
+  const handleDayPointerMove = (event: PointerEvent<HTMLButtonElement>) => {
+    if (pointerDayRef.current === null) return;
+    const target = document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>('[data-day-index]');
+    if (!target) return;
+    const targetIndex = Number(target.dataset.dayIndex);
+    if (!Number.isInteger(targetIndex)) return;
+
+    const sourceIndex = pointerDayRef.current;
+    if (targetIndex === sourceIndex) return;
+
+    moveDay(sourceIndex, targetIndex);
+    pointerDayRef.current = targetIndex;
+    setDraggedDay(targetIndex);
+    setDragOverDay(null);
+  };
+
+  const handleDayPointerUp = (event: PointerEvent<HTMLButtonElement>) => {
+    if (pointerDayRef.current === null) return;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    resetDayDrag();
+  };
+
+  const handleDayHandleKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown') return;
+    event.preventDefault();
+    const targetIndex = event.key === 'ArrowUp' ? index - 1 : index + 1;
+    if (targetIndex >= 0 && targetIndex < state.days.length) {
+      moveDay(index, targetIndex);
+      setFocusReorderedDay(targetIndex);
+    }
+  };
+
   return (
     <>
       <aside className="left-panel">
         <header className="day-header">
-          <div className="day-nav-group">
+          <div className="day-navigation">
             <button
               className="day-nav-btn"
               onClick={() => setCurrentDay(state.currentDay - 1)}
               disabled={state.currentDay === 0}
               title={t('prevDay')}
+              aria-label={t('prevDay')}
             >
               ←
             </button>
-            <button
-              className="day-action-btn"
-              onClick={moveDayBack}
-              disabled={showDayList || state.currentDay === 0}
-              title={t('moveDayBack')}
-            >
-              {t('moveDayBack')}
-            </button>
-          </div>
-          <div className="day-title-group">
-            <h2>{t('day')} {state.currentDay + 1}: {currentDay?.title}</h2>
-            <div className="day-action-buttons">
-              <button
-                className="add-activity-btn"
-                onClick={() => setShowActivityModal(true)}
-                disabled={showDayList}
-              >
-                {t('addActivity')}
-              </button>
-              <button
-                className="add-accommodation-btn"
-                onClick={() => setShowAccommodationModal(true)}
-                disabled={showDayList}
-              >
-                {t('addAccommodation')}
-              </button>
-              <button
-                className={`list-days-btn ${showDayList ? 'active' : ''}`}
-                onClick={() => setShowDayList(prev => !prev)}
-              >
-                {t('listDays')}
-              </button>
-              <button
-                className="add-day-btn"
-                onClick={handleAddDay}
-                disabled={showDayList}
-              >
-                {t('addDayFull')}
-              </button>
+            <div className="day-title-group">
+              <span className="day-kicker">{t('day')} {state.currentDay + 1}</span>
+              <h2>{currentDay?.title}</h2>
             </div>
-          </div>
-          <div className="day-nav-group">
-            <button
-              className="day-action-btn"
-              onClick={moveDayForward}
-              disabled={showDayList || state.currentDay >= state.days.length - 1}
-              title={t('moveDayForward')}
-            >
-              {t('moveDayForward')}
-            </button>
             <button
               className="day-nav-btn"
               onClick={() => setCurrentDay(state.currentDay + 1)}
               disabled={state.currentDay >= state.days.length - 1}
               title={t('nextDay')}
+              aria-label={t('nextDay')}
             >
               →
             </button>
           </div>
+
+          <div className="day-toolbar">
+            <div className="day-action-buttons">
+              <button
+                className={`day-tool-btn list-days-btn ${showDayList ? 'active' : ''}`}
+                onClick={() => {
+                  setShowDayActions(false);
+                  setShowDayList(prev => !prev);
+                }}
+                aria-pressed={showDayList}
+              >
+                <span className="button-symbol list-symbol" aria-hidden="true">≡</span>
+                {t('listDays')}
+              </button>
+              <div className="desktop-day-actions">
+                <button
+                  className="day-tool-btn add-activity-btn"
+                  onClick={() => setShowActivityModal(true)}
+                  disabled={showDayList}
+                >
+                  <span className="button-symbol" aria-hidden="true">+</span>
+                  {t('addActivity')}
+                </button>
+                <button
+                  className="day-tool-btn add-accommodation-btn"
+                  onClick={() => setShowAccommodationModal(true)}
+                  disabled={showDayList}
+                >
+                  <span className="button-symbol" aria-hidden="true">+</span>
+                  {t('addAccommodation')}
+                </button>
+                <button
+                  className="day-tool-btn add-day-btn"
+                  onClick={() => setShowDayModal(true)}
+                >
+                  <span className="button-symbol" aria-hidden="true">+</span>
+                  {t('addDayFull')}
+                </button>
+              </div>
+              <div className="mobile-day-actions" ref={dayActionsRef}>
+                <button
+                  className={`day-tool-btn actions-menu-btn ${showDayActions ? 'active' : ''}`}
+                  onClick={() => setShowDayActions(prev => !prev)}
+                  aria-expanded={showDayActions}
+                  aria-haspopup="menu"
+                  aria-controls="day-actions-menu"
+                >
+                  <span className="button-symbol" aria-hidden="true">+</span>
+                  {t('dayActions')}
+                </button>
+                {showDayActions && (
+                  <div id="day-actions-menu" className="day-actions-menu" role="menu">
+                    <span className="day-actions-menu-title">{t('chooseDayAction')}</span>
+                    <button type="button" role="menuitem" onClick={() => openDayAction('activity')}>
+                      <span aria-hidden="true">＋</span>{t('addActivity')}
+                    </button>
+                    <button type="button" role="menuitem" onClick={() => openDayAction('accommodation')}>
+                      <span aria-hidden="true">⌂</span>{t('addAccommodation')}
+                    </button>
+                    <button type="button" role="menuitem" onClick={() => openDayAction('day')}>
+                      <span aria-hidden="true">□</span>{t('addDayFull')}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </header>
 
         {showDayList ? (
-          <ul className="day-list">
-            {state.days.map((day, index) => (
-              <li
-                key={index}
-                className={`day-list-item ${index === state.currentDay ? 'active' : ''}`}
-                onClick={() => {
-                  setCurrentDay(index);
-                  setShowDayList(false);
-                }}
-              >
-                <span className="day-list-index">{t('day')} {index + 1}</span>
-                <span className="day-list-title">{day.title}</span>
-              </li>
-            ))}
-          </ul>
+          <div className="day-list-panel">
+            <div className="day-list-guide">
+              <strong>{t('yourDays')}</strong>
+              <span><DragHandleIcon />{t('dragDaysHint')}</span>
+            </div>
+            <ul className="day-list">
+              {state.days.map((day, index) => (
+                <li
+                  key={index}
+                  data-day-index={index}
+                  className={`day-list-item ${index === state.currentDay ? 'active' : ''} ${draggedDay === index ? 'dragging' : ''} ${dragOverDay === index && draggedDay !== index ? 'drag-over' : ''}`}
+                  onDragOver={(event) => {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'move';
+                    setDragOverDay(index);
+                  }}
+                  onDrop={(event) => handleDayDrop(event, index)}
+                >
+                  <button
+                    type="button"
+                    className="day-list-select"
+                    onClick={() => {
+                      setCurrentDay(index);
+                      setShowDayList(false);
+                    }}
+                  >
+                    <span className="day-list-index">{t('day')} {index + 1}</span>
+                    <span className="day-list-title">{day.title}</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="day-drag-handle"
+                    draggable
+                    onClick={(event) => event.stopPropagation()}
+                    onDragStart={(event) => handleDayDragStart(event, index)}
+                    onDragEnd={resetDayDrag}
+                    onPointerDown={(event) => handleDayPointerDown(event, index)}
+                    onPointerMove={handleDayPointerMove}
+                    onPointerUp={handleDayPointerUp}
+                    onPointerCancel={resetDayDrag}
+                    onKeyDown={(event) => handleDayHandleKeyDown(event, index)}
+                    aria-label={`${t('reorderDay')}: ${day.title}`}
+                    title={t('reorderDay')}
+                  >
+                    <DragHandleIcon />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         ) : (
-        <ul className="activity-list">
+        <ul
+          className="activity-list"
+          ref={activityListRef}
+          tabIndex={-1}
+          aria-label={`${t('activities')}: ${currentDay?.title || ''}`}
+        >
+          {currentDay?.activities.length === 0 && (
+            <li className="empty-day-state">
+              <span className="empty-day-mark" aria-hidden="true">+</span>
+              <strong>{t('emptyDayTitle')}</strong>
+              <p>{t('emptyDayHint')}</p>
+              <button type="button" onClick={() => setShowActivityModal(true)}>
+                {t('addActivity')}
+              </button>
+            </li>
+          )}
           {currentDay?.activities
             .filter(a => !a.isOptional)
             .map((activity, index) => (
@@ -452,6 +686,13 @@ const PlanningView = () => {
 
       {showAccommodationModal && (
         <AccommodationModal onClose={() => setShowAccommodationModal(false)} />
+      )}
+
+      {showDayModal && (
+        <DayModal
+          onCreate={handleAddDay}
+          onClose={() => setShowDayModal(false)}
+        />
       )}
     </>
   );

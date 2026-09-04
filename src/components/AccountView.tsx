@@ -2,7 +2,7 @@ import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 
 const AccountView = () => {
-  const { state, setCurrentView } = useApp();
+  const { state, switchTrip, setCurrentView } = useApp();
   const { t } = useTranslation(state.language);
 
   const handleExportJson = () => {
@@ -48,20 +48,25 @@ const AccountView = () => {
 
         <section className="account-section">
           <h2>{t('myTrips')}</h2>
-          <div className="trip-card current">
-            <div className="trip-info">
-              <h3>{state.tripName}</h3>
-              <p>
-                {state.days.length} {t('days')} •{' '}
-                {state.days.reduce((sum, d) => sum + d.activities.length, 0)} {t('activitiesCount')}
-              </p>
+          {state.trips.map(trip => (
+            <div key={trip.id} className={`trip-card ${trip.id === state.activeTripId ? 'current' : ''}`}>
+              <div className="trip-info">
+                <h3>{trip.tripName}</h3>
+                <p>
+                  {trip.days.length} {t('days')} •{' '}
+                  {trip.days.reduce((sum, day) => sum + day.activities.length, 0)} {t('activitiesCount')}
+                </p>
+              </div>
+              <div className="trip-actions">
+                <button onClick={() => {
+                  switchTrip(trip.id);
+                  setCurrentView('planning');
+                }}>
+                  {t('open')}
+                </button>
+              </div>
             </div>
-            <div className="trip-actions">
-              <button onClick={() => setCurrentView('planning')}>
-                {t('open')}
-              </button>
-            </div>
-          </div>
+          ))}
         </section>
       </div>
     </div>
