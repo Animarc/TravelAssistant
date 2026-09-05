@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
+  <title id="title">Kakomu</title>
+  <rect width="48" height="48" rx="13" fill="#17324D"/>
+  <path d="M14 8v32" fill="none" stroke="#FCFAF6" stroke-width="4.8" stroke-linecap="round"/>
+  <path d="M37 9C31 16.5 25 21 17 24c8 3 14 7.5 20 15" fill="none" stroke="#FCFAF6" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="17" cy="24" r="3.4" fill="#B9553F"/>
+</svg>
