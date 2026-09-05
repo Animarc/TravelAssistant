@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { Language } from '../types';
 import { printItinerary } from '../utils';
+import ThemePicker from './ThemePicker';
 
 type IconName = 'print' | 'language' | 'settings';
 
@@ -39,7 +40,7 @@ const InterfaceIcon = ({ name }: { name: IconName }) => {
 };
 
 const Navbar = () => {
-  const { state, saveStatus, switchTrip, setCurrentView, setLanguage } = useApp();
+  const { state, saveStatus, retrySave, canRetrySave, switchTrip, setCurrentView, setLanguage, closePublicPreview, importPublicPreview } = useApp();
   const { t } = useTranslation(state.language);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [showTripMenu, setShowTripMenu] = useState(false);
@@ -83,16 +84,17 @@ const Navbar = () => {
     { code: 'ru', name: 'Русский' },
     { code: 'ja', name: '日本語' }
   ];
+  const hasTripContext = state.isAuthenticated || state.publicPreview;
 
   return (
-    <nav className={`navbar ${state.currentView === 'account' ? 'navbar-global-view' : ''}`} aria-label={t('appTitle')}>
+    <nav className={`navbar ${state.currentView === 'account' ? 'navbar-global-view' : ''} ${!state.isAuthenticated ? 'navbar-auth' : ''}`} aria-label={t('appTitle')}>
       <div className="navbar-primary">
         <div className="navbar-left">
           <img src={`${import.meta.env.BASE_URL}kakomu-mark.svg`} alt="" className="navbar-logo" />
           <span className="navbar-title">{t('appTitle')}</span>
         </div>
 
-        <div className="trip-switcher" ref={tripDropdownRef}>
+        {state.isAuthenticated && !state.publicPreview && <div className="trip-switcher" ref={tripDropdownRef}>
           <button
             type="button"
             className={`trip-switcher-trigger ${showTripMenu ? 'open' : ''}`}
@@ -139,9 +141,11 @@ const Navbar = () => {
               ))}
             </div>
           )}
-        </div>
+        </div>}
 
-        <div className="navbar-page-title">
+        {state.publicPreview && <div className="public-preview-title"><span>{t('publicTrip')}</span><strong>{state.tripName}</strong></div>}
+
+        {state.isAuthenticated && !state.publicPreview && state.trips.length > 0 && <div className="navbar-page-title">
           <button
             type="button"
             className="global-back-btn"
@@ -151,16 +155,17 @@ const Navbar = () => {
             ←
           </button>
           <strong>{t('options')}</strong>
-        </div>
+        </div>}
 
         <div className="navbar-right">
-          <span className={`save-status ${saveStatus}`} role="status" aria-live="polite">
+          {state.isAuthenticated && saveStatus !== 'idle' && <button type="button" className={`save-status ${saveStatus}`} role="status" aria-live="polite"
+            disabled={!canRetrySave || saveStatus === 'saving'} onClick={() => void retrySave().catch(() => undefined)}>
             <span className="save-status-symbol" aria-hidden="true">
-              {saveStatus === 'saving' ? '' : saveStatus === 'saved' ? '✓' : '!'}
+              {saveStatus === 'saving' ? '' : '!'}
             </span>
-            <span className="save-status-label">{t(saveStatus)}</span>
-          </span>
-          {state.currentView !== 'account' && (
+            <span className="save-status-label">{saveStatus === 'saveError' && canRetrySave ? t('retrySync') : t(saveStatus)}</span>
+          </button>}
+          {hasTripContext && state.currentView !== 'account' && (
             <button
               className="nav-icon-btn"
               title={t('printItinerary')}
@@ -182,6 +187,26 @@ const Navbar = () => {
               <InterfaceIcon name="print" />
             </button>
           )}
+          {state.publicPreview && <>
+            <button type="button" className="preview-back-btn" onClick={closePublicPreview}>{t('backToExplore')}</button>
+            {state.isAuthenticated
+              ? <button type="button" className="preview-copy-btn" onClick={() => void importPublicPreview().catch(() => undefined)}>{t('importToMyTrips')}</button>
+              : <button type="button" className="preview-copy-btn" onClick={() => { sessionStorage.setItem('kakomu.authMode', 'register'); closePublicPreview(); }}>{t('useThisTrip')}</button>}
+          </>}
+          {state.isAuthenticated && !state.publicPreview && <button
+            className={`nav-icon-btn ${state.currentView === 'account' ? 'active' : ''}`}
+            title={t('options')}
+            aria-label={t('options')}
+            aria-current={state.currentView === 'account' ? 'page' : undefined}
+            onClick={() => {
+              setShowTripMenu(false);
+              setShowLanguageMenu(false);
+              setCurrentView('account');
+            }}
+          >
+            <InterfaceIcon name="settings" />
+          </button>}
+          <ThemePicker />
           <div className="language-dropdown" ref={languageDropdownRef}>
             <button
               className="nav-icon-btn"
@@ -211,22 +236,10 @@ const Navbar = () => {
               </div>
             )}
           </div>
-          <button
-            className={`nav-icon-btn ${state.currentView === 'account' ? 'active' : ''}`}
-            title={t('options')}
-            aria-label={t('options')}
-            aria-current={state.currentView === 'account' ? 'page' : undefined}
-            onClick={() => {
-              setShowTripMenu(false);
-              setCurrentView('account');
-            }}
-          >
-            <InterfaceIcon name="settings" />
-          </button>
         </div>
       </div>
 
-      {state.currentView !== 'account' && <div className="trip-context-nav">
+      {hasTripContext && state.currentView !== 'account' && <div className="trip-context-nav">
         <div className="nav-buttons-scroll" aria-label={t('tripNavigation')}>
           <button
             className={`nav-btn ${state.currentView === 'planning' ? 'active' : ''}`}

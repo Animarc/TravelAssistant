@@ -1,7 +1,10 @@
 // Activity types
 export type ActivityType = 'normal' | 'vuelo' | 'transporte' | 'comida' | 'visita';
+export type EntityId = string | number;
+export type TripRole = 'viewer' | 'editor' | 'owner';
 
 export interface Activity {
+  id?: EntityId;
   time: string;
   name: string;
   description: string;
@@ -15,13 +18,14 @@ export interface Activity {
 }
 
 export interface Day {
+  id?: EntityId;
   title: string;
   activities: Activity[];
 }
 
 // Accommodation
 export interface Accommodation {
-  id: number;
+  id: EntityId;
   name: string;
   price: number;
   link?: string;
@@ -34,7 +38,7 @@ export interface Accommodation {
 export type ShoppingCategory = 'transporte' | 'entradas' | 'electronica' | 'documentos' | 'otros';
 
 export interface ShoppingItem {
-  id: number;
+  id: EntityId;
   name: string;
   category: ShoppingCategory;
   price: number;
@@ -52,7 +56,7 @@ export interface TravelerDocument {
 }
 
 export interface Traveler {
-  id: number;
+  id: EntityId;
   firstName: string;
   lastName: string;
   age: number;
@@ -71,6 +75,43 @@ export interface Trip {
   shoppingItems: ShoppingItem[];
   travelers: Traveler[];
   currentDay: number;
+  description?: string;
+  coverImageUrl?: string;
+  isPublic?: boolean;
+  currency: string;
+  currentUserRole?: TripRole;
+  capabilities?: TripCapabilities;
+}
+
+export interface TripCapabilities {
+  canEdit: boolean;
+  canManageMembers: boolean;
+  canDelete: boolean;
+}
+
+export interface AuthUser {
+  userId: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl?: string;
+}
+
+export interface TripMember {
+  userId: string;
+  role: TripRole;
+  joinedAt: string;
+}
+
+export interface TripInvitation {
+  id: string;
+  tripId: string;
+  invitedUserId?: string;
+  invitedByUserId: string;
+  role: Exclude<TripRole, 'owner'>;
+  status: 'pending' | 'accepted' | 'declined' | 'expired';
+  createdAt: string;
+  expiresAt: string;
 }
 
 // Views
@@ -92,6 +133,10 @@ export interface AppState {
   currentView: ViewType;
   lastTripView: Exclude<ViewType, 'account'>;
   language: Language;
+  isAuthenticated: boolean;
+  authLoading: boolean;
+  user: AuthUser | null;
+  error: string | null;
 }
 
 // Transfer (auto-generated between activities)

@@ -12,6 +12,8 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
   const { state, addActivity, updateActivity } = useApp();
   const { t } = useTranslation(state.language);
   const isEditing = editIndex !== undefined;
+  const tripCurrency = state.trips.find(trip => trip.id === state.activeTripId)?.currency ?? 'EUR';
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState<Partial<Activity>>({
     time: '',
@@ -19,7 +21,7 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
     description: '',
     importantInfo: '',
     price: '',
-    currency: 'EUR',
+    currency: tripCurrency,
     type: 'normal',
     isOptional: false,
     coordinates: undefined
@@ -35,11 +37,11 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
     }
   }, [isEditing, editIndex, state.currentDay, state.days]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name?.trim()) {
-      alert(t('fillRequiredFields'));
+      setValidationError(t('fillRequiredFields'));
       return;
     }
 
@@ -49,19 +51,18 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
       description: formData.description || '',
       importantInfo: formData.importantInfo,
       price: formData.price ? parseFloat(formData.price as string) : undefined,
-      currency: formData.currency || 'EUR',
+      currency: formData.currency || tripCurrency,
       type: formData.type as ActivityType,
       isOptional: formData.isOptional,
       coordinates: formData.coordinates
     };
 
-    if (isEditing) {
-      updateActivity(editIndex, activity);
-    } else {
-      addActivity(activity);
-    }
-
-    onClose();
+    setValidationError(null);
+    try {
+      if (isEditing) await updateActivity(editIndex, activity);
+      else await addActivity(activity);
+      onClose();
+    } catch { /* Global error notification remains visible. */ }
   };
 
   const handleChange = (
@@ -81,6 +82,7 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
       <section className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <h2>{isEditing ? t('editActivity') : t('addNewActivity')}</h2>
+        {validationError && <p className="form-error" role="alert">{validationError}</p>}
         <form onSubmit={handleSubmit}>
           <label>
             <input

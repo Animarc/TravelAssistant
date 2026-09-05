@@ -1,0 +1,46 @@
+name: Publish SPA
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      VITE_SESSION_API_URL: ${{ vars.SESSION_API_URL }}
+      VITE_TRAVELS_API_URL: ${{ vars.TRAVELS_API_URL }}
+      VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
+      VITE_APPLE_CLIENT_ID: ${{ vars.APPLE_CLIENT_ID }}
+      VITE_APPLE_REDIRECT_URI: https://animarc.github.io/TravelAssistant/
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node deployment/check-backends.mjs
+      - run: npm run check
+      - name: Support direct SPA routes on Pages
+        run: cp dist/index.html dist/404.html
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - uses: actions/deploy-pages@v4
+        id: deployment
+

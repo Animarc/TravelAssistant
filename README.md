@@ -9,7 +9,7 @@ A shared space where trips take shape together, built with React, TypeScript, an
 - **Packing List**: Checklist for travel essentials organized by category
 - **Interactive Map**: View locations on an interactive Leaflet map
 - **Multi-language**: Support for ES, EN, FR, DE, ZH, RU, JA
-- **Observability**: Integrated with Grafana Faro for frontend monitoring
+- **Secure sessions**: short-lived access tokens in memory and refresh through an HttpOnly cookie
 
 ## Tech Stack
 
@@ -17,7 +17,8 @@ A shared space where trips take shape together, built with React, TypeScript, an
 - TypeScript
 - Vite
 - Leaflet for maps
-- Grafana Faro for observability
+- React Router for addressable application views
+- Vitest and Testing Library for regression tests
 
 ## Development
 
@@ -28,11 +29,23 @@ npm install
 # Start development server
 npm run dev
 
+# Run lint, tests and the production build
+npm run check
+
 # Build for production
 npm run build
 
 # Preview production build
 npm run preview
+```
+
+The Session API must be available at `http://localhost:5010` and the Travels API at
+`http://localhost:5101`, unless overridden in a local `.env` file.
+
+When an API contract changes, start both APIs and regenerate the checked-in TypeScript contracts:
+
+```bash
+npm run api:generate
 ```
 
 ## Deployment
@@ -51,14 +64,8 @@ npm run deploy
 
 ## Configuration
 
-Update the `base` in `vite.config.ts` to match your repository name:
-
-```ts
-export default defineConfig({
-  base: '/your-repo-name/',
-  // ...
-})
-```
+Copy `.env.example` to `.env.local` to override local API addresses. The GitHub Pages base path
+remains configured in `vite.config.ts` while this repository is deployed there.
 
 ## License
 

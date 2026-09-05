@@ -1,14 +1,15 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
+import type { TranslationKey } from '../i18n/translations';
 
 interface PackingItem {
-  key: string;
+  key: TranslationKey;
   checked: boolean;
 }
 
 interface PackingCategory {
-  name: string;
+  name: TranslationKey;
   icon: string;
   items: PackingItem[];
 }
@@ -19,7 +20,7 @@ const ObjectsView = () => {
 
   const [categories, setCategories] = useState<PackingCategory[]>([
     {
-      name: t('electronics'),
+      name: 'electronics',
       icon: '📱',
       items: [
         { key: 'phoneCharger', checked: false },
@@ -30,7 +31,7 @@ const ObjectsView = () => {
       ]
     },
     {
-      name: t('clothing'),
+      name: 'clothing',
       icon: '👕',
       items: [
         { key: 'underwear', checked: false },
@@ -42,7 +43,7 @@ const ObjectsView = () => {
       ]
     },
     {
-      name: t('hygiene'),
+      name: 'hygiene',
       icon: '🧴',
       items: [
         { key: 'toothbrush', checked: false },
@@ -54,7 +55,7 @@ const ObjectsView = () => {
       ]
     },
     {
-      name: t('documents'),
+      name: 'documents',
       icon: '📄',
       items: [
         { key: 'passportId', checked: false },
@@ -66,7 +67,7 @@ const ObjectsView = () => {
       ]
     },
     {
-      name: t('other'),
+      name: 'other',
       icon: '📦',
       items: [
         { key: 'backpack', checked: false },
@@ -98,15 +99,13 @@ const ObjectsView = () => {
     0
   );
 
-  const openIdealoSearch = (itemKey: string, e: React.MouseEvent) => {
+  const openIdealoSearch = (itemKey: TranslationKey, e: React.MouseEvent) => {
     e.stopPropagation();
     const searchTerm = encodeURIComponent(t(itemKey));
     window.open(`https://www.idealo.es/resultados.html?q=${searchTerm}`, '_blank');
   };
 
-  const isDocumentsCategory = (categoryName: string) => {
-    return categoryName === t('documents');
-  };
+  const isDocumentsCategory = (categoryName: TranslationKey) => categoryName === 'documents';
 
   return (
     <div className="left-panel objects-view">
@@ -123,7 +122,7 @@ const ObjectsView = () => {
           <section key={catIndex} className="objects-category">
             <h3>
               <span className="category-icon">{category.icon}</span>
-              {category.name}
+              {t(category.name)}
               <span className="category-count">
                 {category.items.filter(i => i.checked).length}/{category.items.length}
               </span>
@@ -133,11 +132,13 @@ const ObjectsView = () => {
                 <li
                   key={item.key}
                   className={`object-item ${item.checked ? 'checked' : ''}`}
-                  onClick={() => toggleItem(catIndex, itemIndex)}
+                  onClick={() => { if (!state.publicPreview) toggleItem(catIndex, itemIndex); }}
                 >
                   <input
                     type="checkbox"
                     checked={item.checked}
+                    disabled={state.publicPreview}
+                    onClick={event => event.stopPropagation()}
                     onChange={() => toggleItem(catIndex, itemIndex)}
                   />
                   <span>{t(item.key)}</span>

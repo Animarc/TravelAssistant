@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
-import { Traveler, TravelerDocument, DocumentType } from '../../types';
+import { Traveler, TravelerDocument, DocumentType, EntityId } from '../../types';
 
 interface TravelerModalProps {
-  editId?: number;
+  editId?: EntityId;
   onClose: () => void;
 }
 
@@ -12,6 +12,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
   const { state, addTraveler, updateTraveler } = useApp();
   const { t } = useTranslation(state.language);
   const isEditing = editId !== undefined;
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -45,16 +46,16 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
     }
   }, [isEditing, editId, state.travelers]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.firstName.trim() || !formData.lastName.trim()) {
-      alert(t('enterTravelerName'));
+      setValidationError(t('enterTravelerName'));
       return;
     }
 
     if (!formData.age || parseInt(formData.age) < 0) {
-      alert(t('enterValidAge'));
+      setValidationError(t('enterValidAge'));
       return;
     }
 
@@ -69,13 +70,12 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
       paysBudget: formData.paysBudget
     };
 
-    if (isEditing && editId !== undefined) {
-      updateTraveler(editId, traveler);
-    } else {
-      addTraveler(traveler);
-    }
-
-    onClose();
+    setValidationError(null);
+    try {
+      if (isEditing && editId !== undefined) await updateTraveler(editId, traveler);
+      else await addTraveler(traveler);
+      onClose();
+    } catch { /* Global error notification remains visible. */ }
   };
 
   const handleChange = (
@@ -117,6 +117,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
       <section className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <h2>{isEditing ? t('editTraveler') : t('addNewTraveler')}</h2>
+        {validationError && <p className="form-error" role="alert">{validationError}</p>}
         <form onSubmit={handleSubmit}>
           <label>{t('firstName')}:
             <input

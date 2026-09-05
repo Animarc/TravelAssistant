@@ -3,12 +3,18 @@ import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { formatPrice, getShoppingCategoryIcon, calculateNights } from '../utils';
 import ShoppingModal from './modals/ShoppingModal';
+import type { EntityId } from '../types';
+import ConfirmDialog from './ConfirmDialog';
 
 const BudgetView = () => {
   const { state, toggleShoppingPurchased, deleteShoppingItem } = useApp();
   const { t } = useTranslation(state.language);
   const [showShoppingModal, setShowShoppingModal] = useState(false);
-  const [editingItemId, setEditingItemId] = useState<number | null>(null);
+  const [editingItemId, setEditingItemId] = useState<EntityId | null>(null);
+  const [pendingDeleteItem, setPendingDeleteItem] = useState<EntityId | null>(null);
+  const activeTrip = state.trips.find(trip => trip.id === state.activeTripId);
+  const baseCurrency = activeTrip?.currency ?? 'EUR';
+  const canEdit = !state.publicPreview && activeTrip?.capabilities?.canEdit === true;
 
   // Calculate paying travelers count
   const payingTravelersCount = useMemo(() => {
@@ -21,7 +27,7 @@ const BudgetView = () => {
     let activitiesTotal = 0;
     state.days.forEach(day => {
       day.activities.forEach(activity => {
-        if (activity.price) {
+        if (activity.price && (activity.currency ?? baseCurrency) === baseCurrency) {
           activitiesTotal += parseFloat(String(activity.price)) || 0;
         }
       });
@@ -35,22 +41,30 @@ const BudgetView = () => {
 
     // Shopping total
     const shoppingTotal = state.shoppingItems.reduce(
-      (sum, item) => sum + item.price,
+      (sum, item) => sum + (item.currency === baseCurrency ? item.price : 0),
       0
     );
+
+    const foreignTotals = new Map<string, number>();
+    state.days.flatMap(day => day.activities).forEach(item => {
+      const currency = item.currency ?? baseCurrency;
+      if (item.price && currency !== baseCurrency) foreignTotals.set(currency, (foreignTotals.get(currency) ?? 0) + Number(item.price));
+    });
+    state.shoppingItems.forEach(item => {
+      if (item.currency !== baseCurrency) foreignTotals.set(item.currency, (foreignTotals.get(item.currency) ?? 0) + item.price);
+    });
 
     return {
       activities: activitiesTotal,
       accommodations: accommodationsTotal,
       shopping: shoppingTotal,
-      total: activitiesTotal + accommodationsTotal + shoppingTotal
+      total: activitiesTotal + accommodationsTotal + shoppingTotal,
+      foreign: [...foreignTotals.entries()]
     };
-  }, [state.days, state.accommodations, state.shoppingItems]);
+  }, [baseCurrency, state.days, state.accommodations, state.shoppingItems]);
 
-  const handleDeleteShopping = (id: number) => {
-    if (confirm(t('confirmDeleteShopping'))) {
-      deleteShoppingItem(id);
-    }
+  const handleDeleteShopping = (id: EntityId) => {
+    setPendingDeleteItem(id);
   };
 
   return (
@@ -62,7 +76,7 @@ const BudgetView = () => {
             <div className="budget-section-header">
               <h3>{t('activities')}</h3>
               <span className="budget-section-total">
-                {formatPrice(budget.activities)}
+                {formatPrice(budget.activities, baseCurrency)}
               </span>
             </div>
             <div className="budget-section-content">
@@ -89,7 +103,7 @@ const BudgetView = () => {
             <div className="budget-section-header">
               <h3>{t('accommodations')}</h3>
               <span className="budget-section-total">
-                {formatPrice(budget.accommodations)}
+                {formatPrice(budget.accommodations, baseCurrency)}
               </span>
             </div>
             <div className="budget-section-content">
@@ -102,7 +116,7 @@ const BudgetView = () => {
                     <span className="budget-item-nights">
                       {calculateNights(acc.fromDay, acc.toDay)} {calculateNights(acc.fromDay, acc.toDay) === 1 ? t('night') : t('nights')}
                     </span>
-                    <span className="budget-item-price">{formatPrice(acc.price)}</span>
+                    <span className="budget-item-price">{formatPrice(acc.price, baseCurrency)}</span>
                   </div>
                 </div>
               ))}
@@ -114,7 +128,7 @@ const BudgetView = () => {
             <div className="budget-section-header">
               <h3>{t('shoppingAndReservations')}</h3>
               <span className="budget-section-total">
-                {formatPrice(budget.shopping)}
+                {formatPrice(budget.shopping, baseCurrency)}
               </span>
             </div>
             <div className="budget-section-content">
@@ -135,12 +149,15 @@ const BudgetView = () => {
                     </span>
                     <button
                       className="toggle-purchased-btn"
-                      onClick={() => toggleShoppingPurchased(item.id)}
+                      disabled={!canEdit}
+                      onClick={() => void toggleShoppingPurchased(item.id).catch(() => undefined)}
                     >
                       {item.purchased ? '↩️' : '✅'}
                     </button>
                     <button
                       className="edit-btn"
+                      hidden={!canEdit}
+                      disabled={!canEdit}
                       onClick={() => {
                         setEditingItemId(item.id);
                         setShowShoppingModal(true);
@@ -150,6 +167,8 @@ const BudgetView = () => {
                     </button>
                     <button
                       className="delete-btn"
+                      hidden={!canEdit}
+                      disabled={!canEdit}
                       onClick={() => handleDeleteShopping(item.id)}
                     >
                       🗑️
@@ -159,6 +178,8 @@ const BudgetView = () => {
               ))}
               <button
                 className="add-shopping-btn"
+                hidden={!canEdit}
+                disabled={!canEdit}
                 onClick={() => {
                   setEditingItemId(null);
                   setShowShoppingModal(true);
@@ -178,26 +199,27 @@ const BudgetView = () => {
               <div className="breakdown">
                 <div className="breakdown-row">
                   <span>{t('subtotalActivities')}</span>
-                  <span>{formatPrice(budget.activities)}</span>
+                  <span>{formatPrice(budget.activities, baseCurrency)}</span>
                 </div>
                 <div className="breakdown-row">
                   <span>{t('subtotalAccommodations')}</span>
-                  <span>{formatPrice(budget.accommodations)}</span>
+                  <span>{formatPrice(budget.accommodations, baseCurrency)}</span>
                 </div>
                 <div className="breakdown-row">
                   <span>{t('subtotalShopping')}</span>
-                  <span>{formatPrice(budget.shopping)}</span>
+                  <span>{formatPrice(budget.shopping, baseCurrency)}</span>
                 </div>
               </div>
               <div className="grand-total">
                 <span>{t('total')}</span>
-                <span className="grand-total-amount">{formatPrice(budget.total)}</span>
+                <span className="grand-total-amount">{formatPrice(budget.total, baseCurrency)}</span>
               </div>
+              {budget.foreign.map(([currency, total]) => <div className="breakdown-row" key={currency}><span>{t('unconverted')}</span><span>{formatPrice(total, currency)}</span></div>)}
               {payingTravelersCount > 1 && (
                 <div className="per-person-total">
                   <span>{t('perPerson')} ({payingTravelersCount})</span>
                   <span className="per-person-amount">
-                    {formatPrice(budget.total / payingTravelersCount)}
+                    {formatPrice(budget.total / payingTravelersCount, baseCurrency)}
                   </span>
                 </div>
               )}
@@ -215,6 +237,11 @@ const BudgetView = () => {
           }}
         />
       )}
+      <ConfirmDialog open={pendingDeleteItem !== null} message={t('confirmDeleteShopping')} confirmLabel={t('delete')} cancelLabel={t('cancel')} onCancel={() => setPendingDeleteItem(null)} onConfirm={async () => {
+        if (pendingDeleteItem === null) return;
+        try { await deleteShoppingItem(pendingDeleteItem); setPendingDeleteItem(null); }
+        catch { /* Global error notification remains visible. */ }
+      }} />
     </div>
   );
 };

@@ -1,0 +1,102 @@
+/* Appearance only. Responsive layout lives in the existing layout files. */
+:root {
+  color-scheme: light;
+  --bg-action: #17324d;
+  --bg-action-hover: #294c67;
+  --bg-action-dark: #0f263b;
+  --bg-secondary: #3f746f;
+  --bg-secondary-dark: #315e59;
+  --bg-danger: #b4473d;
+  --bg-danger-hover: #8c342d;
+  --bg-soft: #f8f5ef;
+  --bg-hover: rgba(234, 230, 222, .52);
+  --bg-success: rgba(220, 233, 230, .45);
+  --bg-optional: rgba(243, 221, 215, .38);
+  --bg-error: #fff0ed;
+  --text-error: #702d2a;
+  --bg-translucent: rgba(255, 255, 255, .8);
+  --bg-subtle-hover: rgba(23, 50, 77, .055);
+}
+
+@media screen {
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-body: #111820;
+  --bg-panel: #17212b;
+  --bg-elevated: #202d39;
+  --bg-soft: #1b2732;
+  --bg-translucent: #202d39;
+  --bg-subtle-hover: #263745;
+  --bg-hover: #263745;
+  --bg-success: #1b3734;
+  --bg-optional: #382922;
+  --bg-error: #3a2427;
+  --text-error: #ffb9b0;
+  --text-primary: #f0eee8;
+  --text-secondary: #bdc9d2;
+  --text-muted: #9caab6;
+  --text-inverse: #ffffff;
+  --border-color: #3b4c5b;
+  --color-primary: #aed0eb;
+  --color-primary-dark: #d0e5f5;
+  --color-primary-light: #b9dcf5;
+  --color-primary-lighter: #93b9d6;
+  --color-primary-subtle: #283b4b;
+  --bg-action: #305776;
+  --bg-action-hover: #3b688a;
+  --bg-action-dark: #254660;
+  --gradient-primary: var(--bg-action);
+  --color-secondary: #8fc8be;
+  --color-secondary-dark: #a5d9ce;
+  --color-secondary-light: #233e3a;
+  --color-accent-dark: #efa08a;
+  --color-accent-subtle: #442f29;
+  --color-success: #91ccbf;
+  --color-success-subtle: #233e3a;
+  --color-danger: #ffb0a5;
+  --color-error: #ffb0a5;
+  --color-error-dark: #ffc8bf;
+  --color-warning: #f1bb84;
+  --color-gray-50: #192530;
+  --color-gray-100: #1e2b36;
+  --color-gray-200: #2a3946;
+  --color-gray-300: #405260;
+  --color-gray-400: #758594;
+  --color-gray-500: #9aa9b5;
+  --color-gray-600: #b5c1ca;
+  --color-gray-700: #d4dce2;
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / .2);
+  --shadow-md: 0 8px 20px rgb(0 0 0 / .25);
+  --shadow-lg: 0 20px 50px rgb(0 0 0 / .35);
+  --shadow-card: 0 12px 36px rgb(0 0 0 / .28);
+}
+}
+
+.theme-picker { position: relative; flex-shrink: 0; }
+.theme-picker select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+.theme-picker:focus-within { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+input, select, textarea { color: var(--text-primary); }
+input::placeholder, textarea::placeholder { color: var(--text-muted); opacity: 1; }
+
+@media screen {
+[data-theme="dark"] :is(.navbar-logo, .auth-restoring-mark img) { filter: brightness(0) invert(.9); }
+[data-theme="dark"] :is(.welcome-form input, .public-explorer-heading input, .public-trip-card, .user-search > input) {
+  background: var(--bg-elevated); color: var(--text-primary);
+}
+[data-theme="dark"] :is(.app-notice, .form-error, .welcome-error, .account-error) {
+  background: var(--bg-error); color: var(--text-error); border-color: #80514e;
+}
+[data-theme="dark"] :is(.leaflet-container, .leaflet-popup-content-wrapper, .leaflet-popup-tip, .leaflet-bar a, .leaflet-control-attribution) {
+  background: var(--bg-panel); color: var(--text-primary);
+}
+[data-theme="dark"] .leaflet-bar a:hover { background: var(--bg-hover); }
+[data-theme="dark"] .leaflet-container a { color: var(--color-primary); }
+/* Only raster tiles are toned down; markers, photos and controls retain their colours. */
+[data-theme="dark"] .leaflet-tile-pane { filter: invert(1) hue-rotate(180deg) brightness(.78) saturate(.65); }
+[data-theme="dark"] :focus-visible { outline-color: #efa08a; }
+}
+
+@media print {
+  :root[data-theme] { color-scheme: light !important; background-color: white !important; }
+  .theme-picker { display: none; }
+}

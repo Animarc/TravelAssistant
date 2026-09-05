@@ -5,8 +5,8 @@ import { getActivityTypeIcon, isValidCoordinates, createGoogleMapsUrl } from '..
 import ActivityModal from './modals/ActivityModal';
 import AccommodationModal from './modals/AccommodationModal';
 import DayModal from './modals/DayModal';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+import ConfirmDialog from './ConfirmDialog';
+import { usePlanningMap } from '../hooks/usePlanningMap';
 
 const DragHandleIcon = () => (
   <svg className="drag-handle-icon" viewBox="0 0 16 20" aria-hidden="true">
@@ -30,8 +30,6 @@ const PlanningView = () => {
     getAccommodationsForDay
   } = useApp();
   const { t } = useTranslation(state.language);
-  const mapRef = useRef<HTMLDivElement>(null);
-  const mapInstanceRef = useRef<L.Map | null>(null);
   const [editingActivity, setEditingActivity] = useState<number | null>(null);
   const [showActivityModal, setShowActivityModal] = useState(false);
   const [showAccommodationModal, setShowAccommodationModal] = useState(false);
@@ -44,6 +42,7 @@ const PlanningView = () => {
   const [draggedDay, setDraggedDay] = useState<number | null>(null);
   const [dragOverDay, setDragOverDay] = useState<number | null>(null);
   const [focusReorderedDay, setFocusReorderedDay] = useState<number | null>(null);
+  const [pendingDeleteActivity, setPendingDeleteActivity] = useState<number | null>(null);
   const activityListRef = useRef<HTMLUListElement>(null);
   const dayActionsRef = useRef<HTMLDivElement>(null);
   const pointerDayRef = useRef<number | null>(null);
@@ -53,7 +52,10 @@ const PlanningView = () => {
   };
 
   const currentDay = state.days[state.currentDay];
+  const activeTrip = state.trips.find(trip => trip.id === state.activeTripId);
+  const canEdit = !state.publicPreview && activeTrip?.capabilities?.canEdit === true;
   const accommodations = getAccommodationsForDay(state.currentDay);
+  const mapRef = usePlanningMap(currentDay, accommodations);
 
   useEffect(() => {
     if (!focusNewDayList) return;
@@ -100,114 +102,17 @@ const PlanningView = () => {
     return () => cancelAnimationFrame(focusFrame);
   }, [focusReorderedDay, state.days]);
 
-  // Initialize map
-  useEffect(() => {
-    const mapContainer = mapRef.current;
-
-    if (mapRef.current && !mapInstanceRef.current) {
-      mapInstanceRef.current = L.map(mapRef.current).setView([35.6762, 139.6503], 10);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors'
-      }).addTo(mapInstanceRef.current);
-    }
-
-    let resizeFrame: number | null = null;
-    const refreshMapSize = () => {
-      if (resizeFrame !== null) {
-        cancelAnimationFrame(resizeFrame);
-      }
-      resizeFrame = requestAnimationFrame(() => mapInstanceRef.current?.invalidateSize());
-    };
-
-    const resizeObserver = mapContainer && typeof ResizeObserver !== 'undefined'
-      ? new ResizeObserver(refreshMapSize)
-      : null;
-
-    if (mapContainer) {
-      resizeObserver?.observe(mapContainer);
-      window.addEventListener('resize', refreshMapSize);
-      refreshMapSize();
-    }
-
-    return () => {
-      resizeObserver?.disconnect();
-      window.removeEventListener('resize', refreshMapSize);
-      if (resizeFrame !== null) {
-        cancelAnimationFrame(resizeFrame);
-      }
-      if (mapInstanceRef.current) {
-        mapInstanceRef.current.remove();
-        mapInstanceRef.current = null;
-      }
-    };
-  }, []);
-
-  // Update markers when day changes
-  useEffect(() => {
-    if (!mapInstanceRef.current) return;
-
-    // Clear existing markers
-    mapInstanceRef.current.eachLayer(layer => {
-      if (layer instanceof L.Marker || layer instanceof L.Polyline) {
-        mapInstanceRef.current?.removeLayer(layer);
-      }
-    });
-
-    const bounds: L.LatLngTuple[] = [];
-
-    // Add activity markers
-    currentDay?.activities.forEach((activity, index) => {
-      if (isValidCoordinates(activity.coordinates)) {
-        const coords = activity.coordinates as [number, number];
-        bounds.push(coords);
-
-        const icon = L.divIcon({
-          className: 'activity-marker',
-          html: `<div class="activity-marker-inner">${index + 1}</div>`,
-          iconSize: [30, 30]
-        });
-
-        L.marker(coords, { icon })
-          .addTo(mapInstanceRef.current!)
-          .bindPopup(`<b>${activity.name}</b><br>${activity.description || ''}`);
-      }
-    });
-
-    // Add accommodation marker
-    accommodations.forEach(acc => {
-      if (isValidCoordinates(acc.coordinates)) {
-        const coords = acc.coordinates as [number, number];
-        bounds.push(coords);
-
-        const icon = L.divIcon({
-          className: 'accommodation-marker',
-          html: '<div class="accommodation-marker-inner"></div>',
-          iconSize: [36, 36]
-        });
-
-        L.marker(coords, { icon })
-          .addTo(mapInstanceRef.current!)
-          .bindPopup(`<b>🏠 ${acc.name}</b>`);
-      }
-    });
-
-    // Fit bounds if we have markers
-    if (bounds.length > 0) {
-      mapInstanceRef.current.fitBounds(bounds, { padding: [50, 50] });
-    }
-  }, [state.currentDay, currentDay, accommodations]);
-
-  const handleAddDay = (description: string) => {
-    addDay(description);
-    setShowDayList(false);
-    setShowDayModal(false);
-    setFocusNewDayList(true);
+  const handleAddDay = async (description: string) => {
+    try {
+      await addDay(description);
+      setShowDayList(false);
+      setShowDayModal(false);
+      setFocusNewDayList(true);
+    } catch { /* Global error notification remains visible. */ }
   };
 
   const handleDeleteActivity = (index: number) => {
-    if (confirm(t('confirmDeleteActivity'))) {
-      deleteActivity(index);
-    }
+    setPendingDeleteActivity(index);
   };
 
   const handleOpenMaps = (coords: [number, number]) => {
@@ -240,7 +145,7 @@ const PlanningView = () => {
   const handleDayDrop = (event: DragEvent<HTMLLIElement>, targetIndex: number) => {
     event.preventDefault();
     const sourceIndex = Number(event.dataTransfer.getData('text/plain'));
-    if (Number.isInteger(sourceIndex)) moveDay(sourceIndex, targetIndex);
+    if (Number.isInteger(sourceIndex)) void moveDay(sourceIndex, targetIndex).catch(() => undefined);
     resetDayDrag();
   };
 
@@ -259,21 +164,18 @@ const PlanningView = () => {
     const targetIndex = Number(target.dataset.dayIndex);
     if (!Number.isInteger(targetIndex)) return;
 
-    const sourceIndex = pointerDayRef.current;
-    if (targetIndex === sourceIndex) return;
-
-    moveDay(sourceIndex, targetIndex);
-    pointerDayRef.current = targetIndex;
-    setDraggedDay(targetIndex);
-    setDragOverDay(null);
+    if (targetIndex !== pointerDayRef.current) setDragOverDay(targetIndex);
   };
 
   const handleDayPointerUp = (event: PointerEvent<HTMLButtonElement>) => {
     if (pointerDayRef.current === null) return;
+    const sourceIndex = pointerDayRef.current;
+    const targetIndex = dragOverDay;
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
     resetDayDrag();
+    if (targetIndex !== null && targetIndex !== sourceIndex) void moveDay(sourceIndex, targetIndex).catch(() => undefined);
   };
 
   const handleDayHandleKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
@@ -281,7 +183,7 @@ const PlanningView = () => {
     event.preventDefault();
     const targetIndex = event.key === 'ArrowUp' ? index - 1 : index + 1;
     if (targetIndex >= 0 && targetIndex < state.days.length) {
-      moveDay(index, targetIndex);
+      void moveDay(index, targetIndex).catch(() => undefined);
       setFocusReorderedDay(targetIndex);
     }
   };
@@ -332,7 +234,8 @@ const PlanningView = () => {
                 <button
                   className="day-tool-btn add-activity-btn"
                   onClick={() => setShowActivityModal(true)}
-                  disabled={showDayList}
+                  disabled={!canEdit || showDayList}
+                  hidden={!canEdit}
                 >
                   <span className="button-symbol" aria-hidden="true">+</span>
                   {t('addActivity')}
@@ -340,7 +243,8 @@ const PlanningView = () => {
                 <button
                   className="day-tool-btn add-accommodation-btn"
                   onClick={() => setShowAccommodationModal(true)}
-                  disabled={showDayList}
+                  disabled={!canEdit || showDayList}
+                  hidden={!canEdit}
                 >
                   <span className="button-symbol" aria-hidden="true">+</span>
                   {t('addAccommodation')}
@@ -348,12 +252,14 @@ const PlanningView = () => {
                 <button
                   className="day-tool-btn add-day-btn"
                   onClick={() => setShowDayModal(true)}
+                  disabled={!canEdit}
+                  hidden={!canEdit}
                 >
                   <span className="button-symbol" aria-hidden="true">+</span>
                   {t('addDayFull')}
                 </button>
               </div>
-              <div className="mobile-day-actions" ref={dayActionsRef}>
+              {canEdit && <div className="mobile-day-actions" ref={dayActionsRef}>
                 <button
                   className={`day-tool-btn actions-menu-btn ${showDayActions ? 'active' : ''}`}
                   onClick={() => setShowDayActions(prev => !prev)}
@@ -378,7 +284,7 @@ const PlanningView = () => {
                     </button>
                   </div>
                 )}
-              </div>
+              </div>}
             </div>
           </div>
         </header>
@@ -416,6 +322,8 @@ const PlanningView = () => {
                   <button
                     type="button"
                     className="day-drag-handle"
+                    hidden={!canEdit}
+                    disabled={!canEdit}
                     draggable
                     onClick={(event) => event.stopPropagation()}
                     onDragStart={(event) => handleDayDragStart(event, index)}
@@ -446,9 +354,9 @@ const PlanningView = () => {
               <span className="empty-day-mark" aria-hidden="true">+</span>
               <strong>{t('emptyDayTitle')}</strong>
               <p>{t('emptyDayHint')}</p>
-              <button type="button" onClick={() => setShowActivityModal(true)}>
+              {canEdit && <button type="button" onClick={() => setShowActivityModal(true)}>
                 {t('addActivity')}
-              </button>
+              </button>}
             </li>
           )}
           {currentDay?.activities
@@ -462,9 +370,10 @@ const PlanningView = () => {
                 <div className="activity-content">
                   <button
                     className={`activity-checkbox ${activity.isDone ? 'checked' : ''}`}
+                    disabled={!canEdit}
                     onClick={(e) => {
                       e.stopPropagation();
-                      toggleActivityDone(index);
+                      void toggleActivityDone(index).catch(() => undefined);
                     }}
                     aria-label={activity.isDone ? 'Mark as not done' : 'Mark as done'}
                   >
@@ -482,7 +391,7 @@ const PlanningView = () => {
                     )}
                     {activity.price && (
                       <span className="activity-price">
-                        {activity.price} {activity.currency || 'EUR'}
+                        {activity.price} {activity.currency || activeTrip?.currency || 'EUR'}
                       </span>
                     )}
                   </div>
@@ -499,7 +408,7 @@ const PlanningView = () => {
                       🗺️
                     </button>
                   )}
-                  <button
+                  {canEdit && <button
                     className="activity-edit-btn"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -507,8 +416,8 @@ const PlanningView = () => {
                     }}
                   >
                     ✏️
-                  </button>
-                  <button
+                  </button>}
+                  {canEdit && <button
                     className="activity-delete-btn"
                     onClick={(e) => {
                       e.stopPropagation();
@@ -516,7 +425,7 @@ const PlanningView = () => {
                     }}
                   >
                     🗑️
-                  </button>
+                  </button>}
                 </div>
               </li>
             ))}
@@ -542,9 +451,10 @@ const PlanningView = () => {
                       <div className="activity-content">
                         <button
                           className={`activity-checkbox ${activity.isDone ? 'checked' : ''}`}
+                          disabled={!canEdit}
                           onClick={(e) => {
                             e.stopPropagation();
-                            toggleActivityDone(realIndex);
+                            void toggleActivityDone(realIndex).catch(() => undefined);
                           }}
                           aria-label={activity.isDone ? 'Mark as not done' : 'Mark as done'}
                         >
@@ -562,7 +472,7 @@ const PlanningView = () => {
                         </div>
                       </div>
                       <div className="activity-actions">
-                        <button
+                        {canEdit && <button
                           className="activity-delete-btn"
                           onClick={(e) => {
                             e.stopPropagation();
@@ -570,7 +480,7 @@ const PlanningView = () => {
                           }}
                         >
                           🗑️
-                        </button>
+                        </button>}
                       </div>
                     </li>
                   );
@@ -694,6 +604,18 @@ const PlanningView = () => {
           onClose={() => setShowDayModal(false)}
         />
       )}
+      <ConfirmDialog
+        open={pendingDeleteActivity !== null}
+        message={t('confirmDeleteActivity')}
+        confirmLabel={t('delete')}
+        cancelLabel={t('cancel')}
+        onCancel={() => setPendingDeleteActivity(null)}
+        onConfirm={async () => {
+          if (pendingDeleteActivity === null) return;
+          try { await deleteActivity(pendingDeleteActivity); setPendingDeleteActivity(null); }
+          catch { /* Global error notification remains visible. */ }
+        }}
+      />
     </>
   );
 };

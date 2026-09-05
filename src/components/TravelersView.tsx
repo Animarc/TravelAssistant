@@ -1,23 +1,25 @@
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
-import { DocumentType } from '../types';
+import { DocumentType, EntityId } from '../types';
 import TravelerModal from './modals/TravelerModal';
+import ConfirmDialog from './ConfirmDialog';
 
 const TravelersView = () => {
   const { state, deleteTraveler } = useApp();
   const { t } = useTranslation(state.language);
   const [showModal, setShowModal] = useState(false);
-  const [editingId, setEditingId] = useState<number | undefined>(undefined);
-  const [expandedTraveler, setExpandedTraveler] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<EntityId | undefined>(undefined);
+  const [expandedTraveler, setExpandedTraveler] = useState<EntityId | null>(null);
+  const [pendingDeleteTraveler, setPendingDeleteTraveler] = useState<EntityId | null>(null);
+  const activeTrip = state.trips.find(trip => trip.id === state.activeTripId);
+  const canEdit = !state.publicPreview && activeTrip?.capabilities?.canEdit === true;
 
-  const handleDelete = (id: number) => {
-    if (confirm(t('confirmDeleteTraveler'))) {
-      deleteTraveler(id);
-    }
+  const handleDelete = (id: EntityId) => {
+    setPendingDeleteTraveler(id);
   };
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: EntityId) => {
     setEditingId(id);
     setShowModal(true);
   };
@@ -120,6 +122,8 @@ const TravelersView = () => {
                 <div className="traveler-actions">
                   <button
                     className="traveler-edit-btn"
+                    hidden={!canEdit}
+                    disabled={!canEdit}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleEdit(traveler.id);
@@ -129,6 +133,8 @@ const TravelersView = () => {
                   </button>
                   <button
                     className="traveler-delete-btn"
+                    hidden={!canEdit}
+                    disabled={!canEdit}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(traveler.id);
@@ -142,7 +148,7 @@ const TravelersView = () => {
           ))
         )}
 
-        <button className="add-traveler-btn" onClick={handleAdd}>
+        <button className="add-traveler-btn" onClick={handleAdd} hidden={!canEdit} disabled={!canEdit}>
           + {t('addTraveler')}
         </button>
       </div>
@@ -153,6 +159,11 @@ const TravelersView = () => {
           onClose={handleCloseModal}
         />
       )}
+      <ConfirmDialog open={pendingDeleteTraveler !== null} message={t('confirmDeleteTraveler')} confirmLabel={t('delete')} cancelLabel={t('cancel')} onCancel={() => setPendingDeleteTraveler(null)} onConfirm={async () => {
+        if (pendingDeleteTraveler === null) return;
+        try { await deleteTraveler(pendingDeleteTraveler); setPendingDeleteTraveler(null); }
+        catch { /* Global error notification remains visible. */ }
+      }} />
     </div>
   );
 };

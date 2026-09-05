@@ -3,7 +3,7 @@ import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
 
 interface DayModalProps {
-  onCreate: (description: string) => void;
+  onCreate: (description: string) => Promise<void>;
   onClose: () => void;
 }
 
@@ -12,12 +12,12 @@ const DayModal = ({ onCreate, onClose }: DayModalProps) => {
   const { t } = useTranslation(state.language);
   const [description, setDescription] = useState('');
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const trimmedDescription = description.trim();
 
     if (trimmedDescription) {
-      onCreate(trimmedDescription);
+      await onCreate(trimmedDescription);
     }
   };
 

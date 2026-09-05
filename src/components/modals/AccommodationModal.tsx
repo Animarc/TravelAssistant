@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
-import { Accommodation } from '../../types';
+import { Accommodation, EntityId } from '../../types';
 
 interface AccommodationModalProps {
-  editId?: number;
+  editId?: EntityId;
   onClose: () => void;
 }
 
@@ -12,6 +12,7 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
   const { state, addAccommodation, updateAccommodation } = useApp();
   const { t } = useTranslation(state.language);
   const isEditing = editId !== undefined;
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -40,16 +41,16 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
     }
   }, [isEditing, editId, state.accommodations]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      alert(t('enterAccommodationName'));
+      setValidationError(t('enterAccommodationName'));
       return;
     }
 
     if (formData.toDay < formData.fromDay) {
-      alert(t('checkoutAfterCheckin'));
+      setValidationError(t('checkoutAfterCheckin'));
       return;
     }
 
@@ -64,13 +65,12 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
         : undefined
     };
 
-    if (isEditing && editId !== undefined) {
-      updateAccommodation(editId, accommodation);
-    } else {
-      addAccommodation(accommodation);
-    }
-
-    onClose();
+    setValidationError(null);
+    try {
+      if (isEditing && editId !== undefined) await updateAccommodation(editId, accommodation);
+      else await addAccommodation(accommodation);
+      onClose();
+    } catch { /* Global error notification remains visible. */ }
   };
 
   const handleChange = (
@@ -88,6 +88,7 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
       <section className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <h2>{isEditing ? t('editAccommodation') : t('addNewAccommodation')}</h2>
+        {validationError && <p className="form-error" role="alert">{validationError}</p>}
         <form onSubmit={handleSubmit}>
           <label>{t('placeName')}:
             <input
