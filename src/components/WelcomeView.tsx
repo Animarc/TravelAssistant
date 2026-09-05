@@ -62,7 +62,8 @@ const WelcomeView = () => {
           <button type="button" onClick={() => { setSocialError(null); void requestAppleCredential().then(value => loginWithApple(value.idToken, value.firstName, value.lastName)).catch(() => setSocialError(t('socialLoginError'))); }}><AppleIcon />{t('continueApple')}</button>
         </div>
         {socialError && <div className="welcome-error" role="alert">{socialError}</div>}
-        {state.error && <div className="welcome-error" role="alert">{state.error}</div>}
+        {state.browserSessionSupport === 'unsupported' && <div className="welcome-error" role="alert">{t('browserSessionUnsupported')}</div>}
+        {state.error && <div className="welcome-error" role="alert">{t(state.error)}</div>}
       </section>
 
       <section className="welcome-preview" aria-label={t('productPreview')}><PublicTripsExplorer onOpen={openPublicPreview} onRegister={() => setMode('register')} /></section>

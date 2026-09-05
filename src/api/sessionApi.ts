@@ -2,6 +2,10 @@ import { apiRequest, saveSession, SESSION_API_URL } from './client';
 import type { AuthResponse, UserProfileResponse, UserSearchResult } from './contracts';
 
 export const sessionApi = {
+  checkBrowserSessionSupport: async () => {
+    await apiRequest<void>(SESSION_API_URL, '/api/auth/browser/cookie-probe/start', { method: 'POST' }, false);
+    return (await apiRequest<{ supported: boolean }>(SESSION_API_URL, '/api/auth/browser/cookie-probe/complete', { method: 'POST' }, false)).supported;
+  },
   login: async (email: string, password: string) => {
     const session = await apiRequest<AuthResponse>(SESSION_API_URL, '/api/auth/browser/login', {
       method: 'POST', body: JSON.stringify({ email, password })

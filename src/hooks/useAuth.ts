@@ -3,7 +3,8 @@ import { ApiError, saveSession } from '../api/client';
 import { sessionApi } from '../api/sessionApi';
 import type { AuthResponse, UserProfileResponse } from '../api/contracts';
 import type { AuthUser } from '../types';
-import { getErrorMessage } from './useAsyncOperation';
+import { getErrorKey } from './useAsyncOperation';
+import type { TranslationKey } from '../i18n/translations';
 
 const userFromSession = (session: AuthResponse): AuthUser => ({
   userId: session.userId, email: session.email, firstName: session.firstName,
@@ -15,12 +16,18 @@ const userFromProfile = (profile: UserProfileResponse): AuthUser => ({
   lastName: profile.lastName, avatarUrl: profile.avatarUrl ?? undefined
 });
 
-export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, setError: (message: string | null) => void) => {
+export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, setError: (message: TranslationKey | null) => void) => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [browserSessionSupport, setBrowserSessionSupport] = useState<'checking' | 'supported' | 'unsupported' | 'unknown'>('checking');
 
   useEffect(() => {
     void (async () => {
+      try {
+        setBrowserSessionSupport(await sessionApi.checkBrowserSessionSupport() ? 'supported' : 'unsupported');
+      } catch {
+        setBrowserSessionSupport('unknown');
+      }
       try {
         await sessionApi.restore();
         setUser(userFromProfile(await sessionApi.profile()));
@@ -28,7 +35,7 @@ export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, 
       } catch (reason) {
         saveSession(null);
         setUser(null);
-        if (!(reason instanceof ApiError && reason.status === 401)) setError(getErrorMessage(reason));
+        if (!(reason instanceof ApiError && reason.status === 401)) setError(getErrorKey(reason));
       } finally {
         setAuthLoading(false);
       }
@@ -43,7 +50,7 @@ export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, 
       setUser(userFromSession(session));
       await loadTrips();
     } catch (reason) {
-      setError(getErrorMessage(reason));
+      setError(getErrorKey(reason));
       throw reason;
     } finally {
       setAuthLoading(false);
@@ -65,5 +72,5 @@ export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, 
     resetTrips();
   }, [resetTrips, setError]);
 
-  return { user, authLoading, isAuthenticated: user !== null, login, register, loginWithGoogle, loginWithApple, logout };
+  return { user, authLoading, isAuthenticated: user !== null, browserSessionSupport, login, register, loginWithGoogle, loginWithApple, logout };
 };

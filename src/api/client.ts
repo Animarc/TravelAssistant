@@ -8,8 +8,9 @@ export const TRAVELS_API_URL = import.meta.env.VITE_TRAVELS_API_URL ?? `http://$
 try { localStorage.removeItem('kakomu.session:v1'); } catch { /* Storage may be unavailable. */ }
 
 export class ApiError extends Error {
-  constructor(public status: number, public code: string, message: string, public problem?: ProblemDetails) {
-    super(message);
+  constructor(public status: number, public code: string, public problem?: ProblemDetails) {
+    super(code);
+    this.name = 'ApiError';
   }
 }
 
@@ -30,11 +31,9 @@ const refreshSession = async (): Promise<AuthResponse> => {
     credentials: 'include'
   }).then(async response => {
     if (!response.ok) {
-      if (response.status !== 401) {
-        throw new ApiError(response.status, 'request.failed', 'Unable to reconnect. Please try again.');
-      }
+      if (response.status !== 401) throw new ApiError(response.status, 'request.failed');
       saveSession(null);
-      throw new ApiError(401, 'auth.session_expired', 'Your session has expired.');
+      throw new ApiError(401, 'auth.session_expired');
     }
     const refreshed = await response.json() as AuthResponse;
     saveSession(refreshed);
@@ -52,11 +51,16 @@ export const apiRequest = async <T>(baseUrl: string, path: string, init: Request
     if (token) headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(`${baseUrl}${path}`, {
-    ...init,
-    headers,
-    credentials: baseUrl === SESSION_API_URL ? 'include' : init.credentials
-  });
+  let response: Response;
+  try {
+    response = await fetch(`${baseUrl}${path}`, {
+      ...init,
+      headers,
+      credentials: baseUrl === SESSION_API_URL ? 'include' : init.credentials
+    });
+  } catch {
+    throw new ApiError(0, 'network.unavailable');
+  }
   if (response.status === 401 && authenticated && retry) {
     await refreshSession();
     return apiRequest<T>(baseUrl, path, init, authenticated, false);
@@ -64,7 +68,9 @@ export const apiRequest = async <T>(baseUrl: string, path: string, init: Request
   if (!response.ok) {
     let problem: ProblemDetails | undefined;
     try { problem = await response.json() as ProblemDetails; } catch { /* empty response */ }
-    throw new ApiError(response.status, problem?.code ?? 'request.failed', problem?.detail ?? problem?.title ?? 'Request failed.', problem);
+    // Server prose is intentionally retained only as diagnostic metadata. The UI
+    // renders a local translation selected from the stable code/status instead.
+    throw new ApiError(response.status, problem?.code ?? 'request.failed', problem);
   }
   if (response.status === 204) return undefined as T;
   return response.json() as Promise<T>;

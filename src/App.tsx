@@ -3,6 +3,7 @@ import { AppProvider, useApp } from './context/AppContext';
 import Navbar from './components/Navbar';
 import WelcomeView from './components/WelcomeView';
 import Footer from './components/Footer';
+import { useTranslation } from './hooks/useTranslation';
 import './styles/main.css';
 import './styles/planner-controls.css';
 import './styles/trip-navigation.css';
@@ -16,6 +17,7 @@ const AccountView = lazy(() => import('./components/AccountView'));
 
 const AppContent = () => {
   const { state, clearError } = useApp();
+  const { t } = useTranslation(state.language);
   if (state.authLoading && !state.isAuthenticated) {
     return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark"><img src={`${import.meta.env.BASE_URL}kakomu-mark.svg`} alt="" /><span>Kakomu…</span></div></div>;
   }
@@ -48,7 +50,7 @@ const AppContent = () => {
         </Suspense>
       </main>
       <Footer />
-      {state.error && <div className="app-notice" role="alert"><span>{state.error}</span><button type="button" onClick={clearError} aria-label="Cerrar">×</button></div>}
+      {state.error && <div className="app-notice" role="alert"><span>{t(state.error)}</span><button type="button" onClick={clearError} aria-label={t('close')}>×</button></div>}
     </div>
   );
 };

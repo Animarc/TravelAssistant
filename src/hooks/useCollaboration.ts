@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
 import { travelsApi } from '../api/travelsApi';
 import type { TripInvitation, TripMember, TripRole } from '../types';
-import { getErrorMessage } from './useAsyncOperation';
+import { getErrorKey } from './useAsyncOperation';
+import type { TranslationKey } from '../i18n/translations';
 
 type RemoteRunner = (operation: () => Promise<void>) => Promise<void>;
 
@@ -10,7 +11,7 @@ export const useCollaboration = (
   tripId: string,
   run: RemoteRunner,
   loadTrips: () => Promise<void>,
-  setError: (message: string | null) => void
+  setError: (message: TranslationKey | null) => void
 ) => {
   const [members, setMembers] = useState<TripMember[]>([]);
   const [invitations, setInvitations] = useState<TripInvitation[]>([]);
@@ -26,7 +27,7 @@ export const useCollaboration = (
       setInvitations(pending);
       setMembers(currentMembers);
     } catch (reason) {
-      setError(getErrorMessage(reason));
+      setError(getErrorKey(reason));
     }
   }, [isAuthenticated, setError, tripId]);
 

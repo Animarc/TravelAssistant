@@ -53,6 +53,7 @@ export const useAppState = () => {
     language,
     isAuthenticated: auth.isAuthenticated,
     authLoading: auth.authLoading,
+    browserSessionSupport: auth.browserSessionSupport,
     user: auth.user,
     error: operation.error
   };
