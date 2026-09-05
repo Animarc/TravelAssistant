@@ -4,12 +4,16 @@ import WelcomeView from './WelcomeView';
 
 const login = vi.fn();
 const register = vi.fn();
+const resendVerification = vi.fn();
+const dismissVerification = vi.fn();
 
 vi.mock('../context/AppContext', () => ({
   useApp: () => ({
-    state: { language: 'es', authLoading: false, error: null },
+    state: { language: 'es', authLoading: false, error: null, verificationState: 'idle', pendingVerificationEmail: null },
     login,
-    register
+    register,
+    resendVerification,
+    dismissVerification
   })
 }));
 
@@ -32,6 +36,6 @@ describe('WelcomeView', () => {
     fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'marc@example.com' } });
     fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'Password!123' } });
     fireEvent.click(screen.getByRole('button', { name: /crear cuenta/i }));
-    expect(register).toHaveBeenCalledWith('marc@example.com', 'Password!123', 'Marc', 'Viajero');
+    expect(register).toHaveBeenCalledWith('marc@example.com', 'Password!123', 'Marc', 'Viajero', 'es');
   });
 });

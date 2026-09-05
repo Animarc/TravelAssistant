@@ -13,13 +13,16 @@ export const sessionApi = {
     saveSession(session);
     return session;
   },
-  register: async (email: string, password: string, firstName: string, lastName: string) => {
-    const session = await apiRequest<AuthResponse>(SESSION_API_URL, '/api/auth/browser/register', {
-      method: 'POST', body: JSON.stringify({ email, password, firstName, lastName, preferredLanguage: 'es' })
-    }, false);
-    saveSession(session);
-    return session;
-  },
+  register: (email: string, password: string, firstName: string, lastName: string, preferredLanguage: string) =>
+    apiRequest<{ verificationRequired: boolean }>(SESSION_API_URL, '/api/auth/browser/register', {
+      method: 'POST', body: JSON.stringify({ email, password, firstName, lastName, preferredLanguage })
+    }, false),
+  verifyEmail: (token: string) => apiRequest<void>(SESSION_API_URL, '/api/auth/browser/verify-email', {
+    method: 'POST', body: JSON.stringify({ token })
+  }, false),
+  resendVerification: (email: string) => apiRequest<void>(SESSION_API_URL, '/api/auth/browser/resend-verification', {
+    method: 'POST', body: JSON.stringify({ email })
+  }, false),
   google: async (idToken: string) => {
     const session = await apiRequest<AuthResponse>(SESSION_API_URL, '/api/auth/browser/google', { method: 'POST', body: JSON.stringify({ idToken }) }, false);
     saveSession(session); return session;

@@ -54,6 +54,8 @@ export const useAppState = () => {
     isAuthenticated: auth.isAuthenticated,
     authLoading: auth.authLoading,
     browserSessionSupport: auth.browserSessionSupport,
+    verificationState: auth.verificationState,
+    pendingVerificationEmail: auth.pendingVerificationEmail,
     user: auth.user,
     error: operation.error
   };
@@ -67,6 +69,8 @@ export const useAppState = () => {
     invitations: collaboration.invitations,
     login: auth.login,
     register: auth.register,
+    resendVerification: auth.resendVerification,
+    dismissVerification: auth.dismissVerification,
     loginWithGoogle: auth.loginWithGoogle,
     loginWithApple: auth.loginWithApple,
     logout: auth.logout,

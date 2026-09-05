@@ -11,6 +11,9 @@ describe('user-safe API errors', () => {
     [new ApiError(429, 'rate_limit.exceeded'), 'errorRateLimited'],
     [new ApiError(503, 'database.internal'), 'errorServer'],
     [new ApiError(0, 'network.unavailable'), 'errorNetwork']
+    , [new ApiError(403, 'auth.email_unverified'), 'errorEmailUnverified']
+    , [new ApiError(400, 'email.verification_invalid'), 'errorVerificationInvalid']
+    , [new ApiError(503, 'email.delivery_failed'), 'errorVerificationDelivery']
   ])('maps %o to %s', (error, expected) => {
     expect(getErrorKey(error)).toBe(expected);
   });

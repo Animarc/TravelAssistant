@@ -14,7 +14,10 @@ export const getErrorKey = (error: unknown): TranslationKey => {
     'auth.invalid_refresh_token': 'errorSessionExpired',
     'auth.google_failed': 'socialLoginError',
     'auth.apple_failed': 'socialLoginError',
-    'auth.oauth_challenge_invalid': 'socialLoginError'
+    'auth.oauth_challenge_invalid': 'socialLoginError',
+    'auth.email_unverified': 'errorEmailUnverified',
+    'email.verification_invalid': 'errorVerificationInvalid',
+    'email.delivery_failed': 'errorVerificationDelivery'
   };
   if (exact[error.code]) return exact[error.code]!;
   if (error.code.startsWith('validation.') || error.status === 400 || error.status === 422) return 'errorValidation';

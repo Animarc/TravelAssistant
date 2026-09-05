@@ -118,3 +118,16 @@
   .preview-window { width: 620px; transform: rotate(.6deg) scale(.72); transform-origin: top left; }
   .welcome-preview > p { margin-top: -105px; padding-inline: 1rem; font-size: var(--font-size-sm); }
 }
+.verification-panel {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  background: var(--surface-soft);
+}
+
+.verification-panel p { margin: .5rem 0 0; }
+.verification-panel.success { border-color: var(--success-color, #3f8f68); }
+.verification-panel.error { border-color: var(--danger-color, #b94a48); }
+.verification-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1rem; }
+.verification-actions button { min-height: 2.75rem; }

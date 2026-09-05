@@ -17,7 +17,7 @@ const AppleIcon = () => <svg className="social-provider-icon apple-icon" viewBox
 </svg>;
 
 const WelcomeView = () => {
-  const { state, login, register, loginWithGoogle, loginWithApple, openPublicPreview } = useApp();
+  const { state, login, register, resendVerification, dismissVerification, loginWithGoogle, loginWithApple, openPublicPreview } = useApp();
   const { t } = useTranslation(state.language);
   const [mode, setMode] = useState<'login' | 'register'>(() => {
     const requested = sessionStorage.getItem('kakomu.authMode');
@@ -26,12 +26,13 @@ const WelcomeView = () => {
   });
   const [socialError, setSocialError] = useState<string | null>(null);
   const [form, setForm] = useState({ email: '', password: '', firstName: '', lastName: '' });
+  const awaitingEmail = state.verificationState === 'pending' || state.verificationState === 'resent';
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     try {
       if (mode === 'login') await login(form.email, form.password);
-      else await register(form.email, form.password, form.firstName, form.lastName);
+      else await register(form.email, form.password, form.firstName, form.lastName, state.language);
     } catch { /* The application state displays the API error. */ }
   };
 
@@ -42,7 +43,19 @@ const WelcomeView = () => {
         <h1 id="welcome-title">{t('welcomeTitle')}</h1>
         <p className="welcome-intro">{t('welcomeIntro')}</p>
 
-        <div className="auth-switch" role="tablist" aria-label={t('accountAccess')}>
+        {state.verificationState === 'verifying' && <div className="verification-panel" role="status"><strong>{t('verifyingEmail')}</strong></div>}
+        {state.verificationState === 'verified' && <div className="verification-panel success" role="status"><strong>{t('emailVerified')}</strong><p>{t('emailVerifiedHint')}</p></div>}
+        {state.verificationState === 'invalid' && <div className="verification-panel error" role="alert"><strong>{t('errorVerificationInvalid')}</strong><p>{t('verificationInvalidHint')}</p></div>}
+        {awaitingEmail && <div className="verification-panel" role="status">
+          <strong>{state.verificationState === 'resent' ? t('verificationSent') : t('registrationCheckEmail')}</strong>
+          <p>{t('registrationCheckEmailHint')} {state.pendingVerificationEmail && <b>{state.pendingVerificationEmail}</b>}</p>
+          <div className="verification-actions">
+            <button type="button" disabled={state.authLoading || !state.pendingVerificationEmail} onClick={() => void resendVerification().catch(() => undefined)}>{t('resendVerification')}</button>
+            <button type="button" onClick={() => { dismissVerification(); setMode('login'); }}>{t('backToLogin')}</button>
+          </div>
+        </div>}
+
+        {!awaitingEmail && <><div className="auth-switch" role="tablist" aria-label={t('accountAccess')}>
           <button type="button" role="tab" aria-selected={mode === 'login'} className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')}>{t('login')}</button>
           <button type="button" role="tab" aria-selected={mode === 'register'} className={mode === 'register' ? 'active' : ''} onClick={() => setMode('register')}>{t('createAccount')}</button>
         </div>
@@ -61,6 +74,7 @@ const WelcomeView = () => {
           <button type="button" onClick={() => { setSocialError(null); void requestGoogleCredential().then(loginWithGoogle).catch(() => setSocialError(t('socialLoginError'))); }}><GoogleIcon />{t('continueGoogle')}</button>
           <button type="button" onClick={() => { setSocialError(null); void requestAppleCredential().then(value => loginWithApple(value.idToken, value.firstName, value.lastName)).catch(() => setSocialError(t('socialLoginError'))); }}><AppleIcon />{t('continueApple')}</button>
         </div>
+        </>}
         {socialError && <div className="welcome-error" role="alert">{socialError}</div>}
         {state.browserSessionSupport === 'unsupported' && <div className="welcome-error" role="alert">{t('browserSessionUnsupported')}</div>}
         {state.error && <div className="welcome-error" role="alert">{t(state.error)}</div>}
