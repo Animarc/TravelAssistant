@@ -16,12 +16,16 @@ const PublicTripsExplorer = ({ authenticated = false, onCopy, onRegister, onOpen
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    let active = true;
     const timer = window.setTimeout(() => {
       setLoading(true); setError(false);
-      void travelsApi.listPublicTrips(query).then(setTrips).catch(() => setError(true)).finally(() => setLoading(false));
+      void travelsApi.listPublicTrips(query, state.language)
+        .then(result => { if (active) setTrips(result); })
+        .catch(() => { if (active) setError(true); })
+        .finally(() => { if (active) setLoading(false); });
     }, query ? 250 : 0);
-    return () => window.clearTimeout(timer);
-  }, [query]);
+    return () => { active = false; window.clearTimeout(timer); };
+  }, [query, state.language]);
 
   const open = async (id: string) => {
     if (onOpen) { await onOpen(id); return; }
@@ -37,7 +41,7 @@ const PublicTripsExplorer = ({ authenticated = false, onCopy, onRegister, onOpen
     {!loading && !error && trips.length === 0 && <p className="catalog-status">{t('noPublicTrips')}</p>}
     <div className="public-trip-grid">{trips.map(trip => <button type="button" className="public-trip-card" key={trip.id} onClick={() => void open(trip.id)}>
       <span className="public-trip-cover" style={trip.coverImageUrl ? { backgroundImage: `url(${trip.coverImageUrl})` } : undefined}><b>{trip.dayCount}</b><small>{t('days')}</small></span>
-      <span className="public-trip-copy"><strong>{trip.name}</strong><small>{trip.activityCount} {t('activities')} · {trip.currency}</small><span>{trip.description}</span></span>
+      <span className="public-trip-copy"><strong>{trip.name}</strong>{trip.authorName && <small>{trip.authorName}</small>}<small>{trip.activityCount} {t('activities')} · {trip.currency}</small><span>{trip.description}</span></span>
     </button>)}</div>
     {selected && <div className="public-trip-dialog" role="dialog" aria-modal="true" aria-labelledby="public-trip-title">
       <div className="public-trip-dialog-card"><button className="dialog-close" onClick={() => setSelected(null)} aria-label="Cerrar">×</button>

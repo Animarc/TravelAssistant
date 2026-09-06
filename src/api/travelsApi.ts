@@ -20,7 +20,7 @@ export const travelsApi = {
   updateTrip: (tripId: string, name: string, description?: string, coverImageUrl?: string, isPublic = false, currency = 'EUR') =>
     apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/${tripId}`, put({ name, description, coverImageUrl, isPublic, currency })),
   deleteTrip: (tripId: string) => apiRequest<void>(TRAVELS_API_URL, `/api/trips/${tripId}`, { method: 'DELETE' }),
-  listPublicTrips: (query = '') => apiRequest<PublicTripDto[]>(TRAVELS_API_URL, `/api/trips/public?query=${encodeURIComponent(query)}`, {}, false),
+  listPublicTrips: (query = '', language = '') => apiRequest<PublicTripDto[]>(TRAVELS_API_URL, `/api/trips/public?query=${encodeURIComponent(query)}${language ? `&language=${encodeURIComponent(language)}` : ''}`, {}, false),
   getPublicTrip: (tripId: string) => apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}`, {}, false),
   copyPublicTrip: (tripId: string) => apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/copy`, { method: 'POST' }),
 
