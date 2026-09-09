@@ -1,6 +1,6 @@
 /* global URL, process, fetch, AbortSignal, setTimeout, console */
 // Only public health/preflight requests; never sends credentials or changes data.
-const origin = 'https://animarc.github.io';
+const origin = 'https://tabijilog.com';
 for (const [key, service] of [
   ['VITE_SESSION_API_URL', 'TabijiLog.Session.Api'],
   ['VITE_TRAVELS_API_URL', 'TabijiLog.Travels.Api']

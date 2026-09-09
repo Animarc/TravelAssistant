@@ -15,7 +15,7 @@ jobs:
       VITE_TRAVELS_API_URL: ${{ vars.TRAVELS_API_URL }}
       VITE_GOOGLE_CLIENT_ID: ${{ vars.GOOGLE_CLIENT_ID }}
       VITE_APPLE_CLIENT_ID: ${{ vars.APPLE_CLIENT_ID }}
-      VITE_APPLE_REDIRECT_URI: https://animarc.github.io/TravelAssistant/
+      VITE_APPLE_REDIRECT_URI: https://tabijilog.com/
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
