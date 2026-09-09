@@ -54,7 +54,7 @@ The app is configured for automatic deployment to GitHub Pages via GitHub Action
 
 1. Push to the `main` branch
 2. GitHub Actions will build and deploy automatically
-3. Access at: `https://animarc.github.io/TravelAssistant/`
+3. Access at: `https://tabijilog.com/`
 
 ### Manual deployment
 
