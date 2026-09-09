@@ -20,18 +20,17 @@ describe('WelcomeView', () => {
     render(<WelcomeView />);
     expect(screen.getByRole('heading', { name: /conocimiento de viajar/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument();
-    expect(screen.queryByLabelText(/^nombre$/i)).not.toBeInTheDocument();
+    expect(screen.queryByLabelText(/nombre de usuario/i)).not.toBeInTheDocument();
   });
 
-  it('switches to registration and submits the complete identity', async () => {
+  it('switches to registration and submits the public username', async () => {
     register.mockResolvedValue(undefined);
     render(<WelcomeView />);
     fireEvent.click(screen.getByRole('tab', { name: /crear cuenta/i }));
-    fireEvent.change(screen.getByLabelText(/^nombre$/i), { target: { value: 'Marc' } });
-    fireEvent.change(screen.getByLabelText(/apellidos/i), { target: { value: 'Viajero' } });
+    fireEvent.change(screen.getByLabelText(/nombre de usuario/i), { target: { value: 'marctabi' } });
     fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'marc@example.com' } });
     fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'Password!123' } });
     fireEvent.click(screen.getByRole('button', { name: /crear cuenta/i }));
-    expect(register).toHaveBeenCalledWith('marc@example.com', 'Password!123', 'Marc', 'Viajero');
+    expect(register).toHaveBeenCalledWith('marc@example.com', 'Password!123', 'marctabi');
   });
 });

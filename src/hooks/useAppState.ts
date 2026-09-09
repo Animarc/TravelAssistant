@@ -70,6 +70,7 @@ export const useAppState = () => {
     loginWithGoogle: auth.loginWithGoogle,
     loginWithApple: auth.loginWithApple,
     logout: auth.logout,
+    updateProfile: auth.updateProfile,
     createTrip: trips.createTrip,
     openPublicPreview: trips.openPublicPreview,
     closePublicPreview: trips.closePublicPreview,

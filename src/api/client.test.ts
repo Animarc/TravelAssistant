@@ -3,7 +3,7 @@ import { ApiError, apiRequest, getStoredSession, saveSession, SESSION_API_URL } 
 import type { AuthResponse } from './contracts';
 
 const session: AuthResponse = {
-  userId: 'user-1', email: 'marc@example.com', firstName: 'Marc', lastName: 'Viajero',
+  userId: 'user-1', email: 'marc@example.com', username: 'marctabi', firstName: 'Marc', lastName: 'Viajero',
   avatarUrl: null, accessToken: 'access-token', expiresAt: '2026-01-01T00:00:00Z'
 };
 

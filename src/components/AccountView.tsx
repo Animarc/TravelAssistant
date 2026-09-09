@@ -9,7 +9,7 @@ import UserSearch from './UserSearch';
 
 const AccountView = () => {
   const {
-    state, members, invitations, logout, createTrip, openPublicPreview, deleteTrip,
+    state, members, invitations, logout, updateProfile, createTrip, openPublicPreview, deleteTrip,
     switchTrip, setCurrentView, loadCollaboration, inviteMember, updateMemberRole,
     removeMember, acceptInvitation, declineInvitation
   } = useApp();
@@ -17,11 +17,17 @@ const AccountView = () => {
   const [tripForm, setTripForm] = useState({ name: '', description: '', currency: 'EUR' });
   const [inviteForm, setInviteForm] = useState({ email: '', role: 'editor' as Exclude<TripRole, 'owner'> });
   const [pendingDeleteTrip, setPendingDeleteTrip] = useState<string | null>(null);
+  const [profileForm, setProfileForm] = useState({ firstName: state.user?.firstName ?? '', lastName: state.user?.lastName ?? '' });
+  const [profileSaving, setProfileSaving] = useState(false);
   const activeTrip = state.trips.find(trip => trip.id === state.activeTripId);
 
   useEffect(() => {
     if (state.isAuthenticated) void loadCollaboration();
   }, [loadCollaboration, state.isAuthenticated, state.activeTripId]);
+
+  useEffect(() => {
+    setProfileForm({ firstName: state.user?.firstName ?? '', lastName: state.user?.lastName ?? '' });
+  }, [state.user?.firstName, state.user?.lastName]);
 
   const handleCreateTrip = async (event: FormEvent) => {
     event.preventDefault();
@@ -36,15 +42,30 @@ const AccountView = () => {
     catch { /* displayed from state.error */ }
   };
 
+  const handleProfile = async (event: FormEvent) => {
+    event.preventDefault();
+    if (profileSaving) return;
+    setProfileSaving(true);
+    try { await updateProfile(profileForm.firstName, profileForm.lastName); }
+    catch { /* displayed from state.error */ }
+    finally { setProfileSaving(false); }
+  };
+
   return (
     <div className="left-panel account-view">
       <div className="account-content">
         <section className="account-section auth-section">
           <div className="signed-user">
-            <div className="user-avatar">{state.user?.firstName?.[0]}{state.user?.lastName?.[0]}</div>
-            <div><span className="section-kicker">{t('connectedAccount')}</span><h2>{state.user?.firstName} {state.user?.lastName}</h2><p>{state.user?.email}</p></div>
+            <div className="user-avatar">{state.user?.username[0]?.toUpperCase()}</div>
+            <div><span className="section-kicker">{t('connectedAccount')}</span><h2>{state.user?.username}</h2><p>{state.user?.email}</p></div>
             <button className="secondary-button" onClick={() => void logout()}>{t('logout')}</button>
           </div>
+          <form className="account-form" onSubmit={handleProfile}>
+            <p className="account-helper">{t('optionalProfileHint')}</p>
+            <label>{t('firstName')}<input maxLength={100} autoComplete="given-name" value={profileForm.firstName} onChange={event => setProfileForm({ ...profileForm, firstName: event.target.value })} /></label>
+            <label>{t('lastName')}<input maxLength={100} autoComplete="family-name" value={profileForm.lastName} onChange={event => setProfileForm({ ...profileForm, lastName: event.target.value })} /></label>
+            <button disabled={profileSaving}>{profileSaving ? t('saving') : t('saveProfile')}</button>
+          </form>
         </section>
 
         {state.isAuthenticated && (

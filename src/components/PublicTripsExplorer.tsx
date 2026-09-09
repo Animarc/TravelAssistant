@@ -41,7 +41,7 @@ const PublicTripsExplorer = ({ authenticated = false, onCopy, onRegister, onOpen
     {!loading && !error && trips.length === 0 && <p className="catalog-status">{t('noPublicTrips')}</p>}
     <div className="public-trip-grid">{trips.map(trip => <button type="button" className="public-trip-card" key={trip.id} onClick={() => void open(trip.id)}>
       <span className="public-trip-cover" style={trip.coverImageUrl ? { backgroundImage: `url(${trip.coverImageUrl})` } : undefined}><b>{trip.dayCount}</b><small>{t('days')}</small></span>
-      <span className="public-trip-copy"><strong>{trip.name}</strong>{trip.authorName && <small>{trip.authorName}</small>}<small>{trip.activityCount} {t('activities')} · {trip.currency}</small><span>{trip.description}</span></span>
+      <span className="public-trip-copy"><strong>{trip.name}</strong>{trip.authorUsername && <small>{trip.authorUsername}</small>}<small>{trip.activityCount} {t('activities')} · {trip.currency}</small><span>{trip.description}</span></span>
     </button>)}</div>
     {selected && <div className="public-trip-dialog" role="dialog" aria-modal="true" aria-labelledby="public-trip-title">
       <div className="public-trip-dialog-card"><button className="dialog-close" onClick={() => setSelected(null)} aria-label="Cerrar">×</button>

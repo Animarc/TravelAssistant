@@ -514,8 +514,9 @@ export interface components {
             /** Format: uuid */
             userId: string;
             email: string;
-            firstName: string;
-            lastName: string;
+            username: string;
+            firstName: null | string;
+            lastName: null | string;
             avatarUrl: null | string;
             accessToken: string;
             refreshToken: string;
@@ -526,8 +527,9 @@ export interface components {
             /** Format: uuid */
             userId: string;
             email: string;
-            firstName: string;
-            lastName: string;
+            username: string;
+            firstName: null | string;
+            lastName: null | string;
             avatarUrl: null | string;
             accessToken: string;
             /** Format: date-time */
@@ -557,8 +559,7 @@ export interface components {
         RegisterRequest: {
             email: string;
             password: string;
-            firstName: string;
-            lastName: string;
+            username: string;
             /** @default es */
             preferredLanguage: null | string;
         };
@@ -571,8 +572,9 @@ export interface components {
             /** Format: uuid */
             id: string;
             email: string;
-            firstName: string;
-            lastName: string;
+            username: string;
+            firstName: null | string;
+            lastName: null | string;
             avatarUrl: null | string;
             preferredLanguage: string;
             /** Format: date-time */

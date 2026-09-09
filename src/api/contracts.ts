@@ -8,8 +8,8 @@ export type AuthResponse = SessionSchema['BrowserAuthResponse'];
 export type UserProfileResponse = SessionSchema['UserProfileResponse'];
 export type TripListDto = TravelsSchema['TripListDto'] & { currency: string };
 export type TripDetailDto = TravelsSchema['TripDetailDto'] & { currency: string };
-export interface PublicTripDto { id: string; name: string; description?: string | null; coverImageUrl?: string | null; currency: string; dayCount: number; activityCount: number; updatedAt: string; language?: string | null; authorName?: string | null; }
-export interface UserSearchResult { id: string; firstName: string; lastName: string; avatarUrl?: string | null; }
+export interface PublicTripDto { id: string; name: string; description?: string | null; coverImageUrl?: string | null; currency: string; dayCount: number; activityCount: number; updatedAt: string; language?: string | null; authorUsername?: string | null; }
+export interface UserSearchResult { id: string; username: string; avatarUrl?: string | null; }
 export type DayDto = TravelsSchema['DayDto'];
 export type ActivityDto = TravelsSchema['ActivityDto'];
 export type AccommodationDto = TravelsSchema['AccommodationDto'];

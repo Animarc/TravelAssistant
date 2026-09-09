@@ -26,13 +26,13 @@ const WelcomeView = () => {
     return requested === 'register' ? 'register' : 'login';
   });
   const [socialError, setSocialError] = useState<string | null>(null);
-  const [form, setForm] = useState({ email: '', password: '', firstName: '', lastName: '' });
+  const [form, setForm] = useState({ email: '', password: '', username: '' });
 
   const submit = async (event: FormEvent) => {
     event.preventDefault();
     try {
       if (mode === 'login') await login(form.email, form.password);
-      else await register(form.email, form.password, form.firstName, form.lastName);
+      else await register(form.email, form.password, form.username);
     } catch { /* The application state displays the API error. */ }
   };
 
@@ -49,10 +49,7 @@ const WelcomeView = () => {
         </div>
 
         <form className="welcome-form" onSubmit={submit}>
-          {mode === 'register' && <div className="welcome-name-row">
-            <label>{t('firstName')}<input required autoComplete="given-name" value={form.firstName} onChange={event => setForm({ ...form, firstName: event.target.value })} /></label>
-            <label>{t('lastName')}<input required autoComplete="family-name" value={form.lastName} onChange={event => setForm({ ...form, lastName: event.target.value })} /></label>
-          </div>}
+          {mode === 'register' && <label>{t('username')}<input required minLength={3} maxLength={30} pattern="[A-Za-z0-9_]+" autoComplete="username" value={form.username} onChange={event => setForm({ ...form, username: event.target.value })} /><small>{t('usernameHint')}</small></label>}
           <label>{t('email')}<input type="email" required autoComplete="email" value={form.email} onChange={event => setForm({ ...form, email: event.target.value })} /></label>
           <label>{t('password')}<input type="password" required minLength={mode === 'register' ? 8 : 1} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} value={form.password} onChange={event => setForm({ ...form, password: event.target.value })} /></label>
           <button className="welcome-submit" disabled={state.authLoading}>{state.authLoading ? t('connecting') : mode === 'login' ? t('login') : t('createAccount')}</button>

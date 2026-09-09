@@ -16,7 +16,7 @@ const UserSearch = () => {
   }, [query]);
   return <div className="user-search"><h2>{t('searchPeople')}</h2><p className="account-helper">{t('searchPeopleHint')}</p>
     <input type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder={t('searchUsersPlaceholder')} aria-label={t('searchPeople')} />
-    <div className="user-results">{users.map(user => <div key={user.id} className="user-result"><span className="user-avatar">{user.firstName[0]}{user.lastName[0]}</span><strong>{user.firstName} {user.lastName}</strong></div>)}</div>
+    <div className="user-results">{users.map(user => <div key={user.id} className="user-result"><span className="user-avatar">{user.username[0]?.toUpperCase()}</span><strong>{user.username}</strong></div>)}</div>
   </div>;
 };
 export default UserSearch;

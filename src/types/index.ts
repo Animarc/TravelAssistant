@@ -92,8 +92,9 @@ export interface TripCapabilities {
 export interface AuthUser {
   userId: string;
   email: string;
-  firstName: string;
-  lastName: string;
+  username: string;
+  firstName?: string;
+  lastName?: string;
   avatarUrl?: string;
 }
 

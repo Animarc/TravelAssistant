@@ -10,6 +10,7 @@ export const getErrorKey = (error: unknown): TranslationKey => {
     'network.unavailable': 'errorNetwork',
     'auth.invalid_credentials': 'errorInvalidCredentials',
     'user.email_conflict': 'errorEmailConflict',
+    'user.username_conflict': 'errorUsernameConflict',
     'auth.session_expired': 'errorSessionExpired',
     'auth.invalid_refresh_token': 'errorSessionExpired',
     'auth.google_failed': 'socialLoginError',

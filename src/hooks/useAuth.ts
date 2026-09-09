@@ -7,13 +7,15 @@ import { getErrorKey } from './useAsyncOperation';
 import type { TranslationKey } from '../i18n/translations';
 
 const userFromSession = (session: AuthResponse): AuthUser => ({
-  userId: session.userId, email: session.email, firstName: session.firstName,
-  lastName: session.lastName, avatarUrl: session.avatarUrl ?? undefined
+  userId: session.userId, email: session.email, username: session.username,
+  firstName: session.firstName ?? undefined, lastName: session.lastName ?? undefined,
+  avatarUrl: session.avatarUrl ?? undefined
 });
 
 const userFromProfile = (profile: UserProfileResponse): AuthUser => ({
-  userId: profile.id, email: profile.email, firstName: profile.firstName,
-  lastName: profile.lastName, avatarUrl: profile.avatarUrl ?? undefined
+  userId: profile.id, email: profile.email, username: profile.username,
+  firstName: profile.firstName ?? undefined, lastName: profile.lastName ?? undefined,
+  avatarUrl: profile.avatarUrl ?? undefined
 });
 
 export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, setError: (message: TranslationKey | null) => void) => {
@@ -60,8 +62,8 @@ export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, 
   const login = useCallback((email: string, password: string) =>
     authenticate(() => sessionApi.login(email, password)), [authenticate]);
 
-  const register = useCallback((email: string, password: string, firstName: string, lastName: string) =>
-    authenticate(() => sessionApi.register(email, password, firstName, lastName)), [authenticate]);
+  const register = useCallback((email: string, password: string, username: string) =>
+    authenticate(() => sessionApi.register(email, password, username)), [authenticate]);
   const loginWithGoogle = useCallback((idToken: string) => authenticate(() => sessionApi.google(idToken)), [authenticate]);
   const loginWithApple = useCallback((idToken: string, firstName?: string, lastName?: string) => authenticate(() => sessionApi.apple(idToken, firstName, lastName)), [authenticate]);
 
@@ -72,5 +74,16 @@ export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, 
     resetTrips();
   }, [resetTrips, setError]);
 
-  return { user, authLoading, isAuthenticated: user !== null, browserSessionSupport, login, register, loginWithGoogle, loginWithApple, logout };
+  const updateProfile = useCallback(async (firstName: string, lastName: string) => {
+    setError(null);
+    try {
+      const profile = await sessionApi.updateProfile(firstName, lastName);
+      setUser(userFromProfile(profile));
+    } catch (reason) {
+      setError(getErrorKey(reason));
+      throw reason;
+    }
+  }, [setError]);
+
+  return { user, authLoading, isAuthenticated: user !== null, browserSessionSupport, login, register, loginWithGoogle, loginWithApple, logout, updateProfile };
 };

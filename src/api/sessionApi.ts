@@ -13,9 +13,9 @@ export const sessionApi = {
     saveSession(session);
     return session;
   },
-  register: async (email: string, password: string, firstName: string, lastName: string) => {
+  register: async (email: string, password: string, username: string) => {
     const session = await apiRequest<AuthResponse>(SESSION_API_URL, '/api/auth/browser/register', {
-      method: 'POST', body: JSON.stringify({ email, password, firstName, lastName, preferredLanguage: 'es' })
+      method: 'POST', body: JSON.stringify({ email, password, username, preferredLanguage: 'es' })
     }, false);
     saveSession(session);
     return session;
@@ -34,6 +34,10 @@ export const sessionApi = {
     return session;
   },
   profile: () => apiRequest<UserProfileResponse>(SESSION_API_URL, '/api/users/me'),
+  updateProfile: (firstName: string, lastName: string) =>
+    apiRequest<UserProfileResponse>(SESSION_API_URL, '/api/users/me', {
+      method: 'PUT', body: JSON.stringify({ firstName, lastName, preferredLanguage: null })
+    }),
   searchUsers: (query: string) => apiRequest<UserSearchResult[]>(SESSION_API_URL, `/api/users/search?query=${encodeURIComponent(query)}`),
   logout: async () => {
     await apiRequest<void>(SESSION_API_URL, '/api/auth/browser/logout', { method: 'POST' });
