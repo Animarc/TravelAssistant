@@ -52,6 +52,7 @@ const PlanningView = () => {
   };
 
   const currentDay = state.days[state.currentDay];
+  const hasDays = state.days.length > 0;
   const activeTrip = state.trips.find(trip => trip.id === state.activeTripId);
   const canEdit = !state.publicPreview && activeTrip?.capabilities?.canEdit === true;
   const accommodations = getAccommodationsForDay(state.currentDay);
@@ -192,7 +193,7 @@ const PlanningView = () => {
     <>
       <aside className="left-panel">
         <header className="day-header">
-          <div className="day-navigation">
+          {hasDays && <div className="day-navigation">
             <button
               className="day-nav-btn"
               onClick={() => setCurrentDay(state.currentDay - 1)}
@@ -215,10 +216,19 @@ const PlanningView = () => {
             >
               →
             </button>
-          </div>
+          </div>}
 
           <div className="day-toolbar">
             <div className="day-action-buttons">
+              {!hasDays ? (
+                canEdit && <button
+                  className="day-tool-btn add-day-btn"
+                  onClick={() => setShowDayModal(true)}
+                >
+                  <span className="button-symbol" aria-hidden="true">+</span>
+                  {t('addDayFull')}
+                </button>
+              ) : <>
               <button
                 className={`day-tool-btn list-days-btn ${showDayList ? 'active' : ''}`}
                 onClick={() => {
@@ -285,6 +295,7 @@ const PlanningView = () => {
                   </div>
                 )}
               </div>}
+              </>}
             </div>
           </div>
         </header>
@@ -491,7 +502,7 @@ const PlanningView = () => {
         )}
 
         {/* Accommodation section - Desktop */}
-        {!showDayList && (
+        {hasDays && !showDayList && (
         <div className="accommodation-container accommodation-desktop">
           <div className="accommodation-section">
             <div className="accommodation-header">
@@ -533,7 +544,7 @@ const PlanningView = () => {
         )}
 
         {/* Accommodation drawer - Mobile */}
-        {!showDayList && (
+        {hasDays && !showDayList && (
         <div className={`accommodation-drawer ${accommodationDrawerOpen ? 'open' : ''}`}>
           <button
             className="accommodation-drawer-toggle"
