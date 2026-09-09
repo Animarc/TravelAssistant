@@ -1,6 +1,6 @@
-# Kakomu
+# Tabiji Log
 
-A shared space where trips take shape together, built with React, TypeScript, and Vite.
+A shared travel log where people discover proven routes, organise their trips, and pass practical knowledge on to future travellers. Built with React, TypeScript, and Vite.
 
 ## Features
 

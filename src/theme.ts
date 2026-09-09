@@ -1,7 +1,7 @@
 import { useSyncExternalStore } from 'react';
 
 export type ThemePreference = 'system' | 'light' | 'dark';
-const key = 'kakomu.theme';
+const key = 'tabiji-log.theme';
 const listeners = new Set<() => void>();
 let preference: ThemePreference = 'system';
 const media = typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-color-scheme: dark)') : null;
@@ -11,7 +11,7 @@ export const parseTheme = (value: string | null): ThemePreference =>
 export const resolveTheme = (value: ThemePreference, systemDark: boolean) =>
   value === 'system' ? (systemDark ? 'dark' : 'light') : value;
 
-try { preference = parseTheme(localStorage.getItem(key)); } catch { /* Private browsing may deny storage. */ }
+try { preference = parseTheme(localStorage.getItem(key) ?? localStorage.getItem('kakomu.theme')); } catch { /* Private browsing may deny storage. */ }
 
 const applyTheme = () => {
   const theme = resolveTheme(preference, media?.matches ?? false);

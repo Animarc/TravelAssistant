@@ -19,7 +19,7 @@ const AppContent = () => {
   const { state, clearError } = useApp();
   const { t } = useTranslation(state.language);
   if (state.authLoading && !state.isAuthenticated) {
-    return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark"><img src={`${import.meta.env.BASE_URL}kakomu-mark.svg`} alt="" /><span>Kakomu…</span></div></div>;
+    return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" /><span>Tabiji Log…</span></div></div>;
   }
   if (!state.isAuthenticated && !state.publicPreview) {
     return <div className="app welcome-app"><Navbar /><WelcomeView /></div>;
@@ -45,7 +45,7 @@ const AppContent = () => {
     <div className={`app ${state.currentView === 'account' ? 'account-view-active' : ''}`}>
       <Navbar />
       <main className={`container ${state.currentView !== 'planning' ? 'centered-view' : ''}`}>
-        <Suspense fallback={<div className="view-loading" role="status">Kakomu…</div>}>
+        <Suspense fallback={<div className="view-loading" role="status">Tabiji Log…</div>}>
           {renderView()}
         </Suspense>
       </main>

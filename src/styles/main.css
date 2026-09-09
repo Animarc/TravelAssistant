@@ -1,5 +1,5 @@
 /**
- * Kakomu - Indigo & Washi design system
+ * Tabiji Log - Indigo & Washi design system
  * React + Vite + TypeScript
  */
 
@@ -2280,7 +2280,7 @@ textarea:focus-visible {
   }
 }
 
-/* ==================== KAKOMU RESPONSIVE REFINEMENTS ==================== */
+/* ==================== TABIJI LOG RESPONSIVE REFINEMENTS ==================== */
 
 @media (max-width: 1000px) {
   .navbar-title {

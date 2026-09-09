@@ -18,7 +18,7 @@ describe('WelcomeView', () => {
 
   it('starts with the conventional login form', () => {
     render(<WelcomeView />);
-    expect(screen.getByRole('heading', { name: /planifica el viaje/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /conocimiento de viajar/i })).toBeInTheDocument();
     expect(screen.getByLabelText(/correo electrónico/i)).toBeInTheDocument();
     expect(screen.queryByLabelText(/^nombre$/i)).not.toBeInTheDocument();
   });

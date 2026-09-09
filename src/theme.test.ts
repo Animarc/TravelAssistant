@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { parseTheme, resolveTheme, setTheme } from './theme';
 
-afterEach(() => { setTheme('system'); localStorage.removeItem('kakomu.theme'); });
+afterEach(() => { setTheme('system'); localStorage.removeItem('tabiji-log.theme'); });
 
 describe('appearance', () => {
   it('uses the device theme unless explicitly overridden', () => {
@@ -19,12 +19,12 @@ describe('appearance', () => {
     setTheme('dark');
     expect(document.documentElement.dataset.theme).toBe('dark');
     expect(document.documentElement.style.colorScheme).toBe('dark');
-    expect(localStorage.getItem('kakomu.theme')).toBe('dark');
+    expect(localStorage.getItem('tabiji-log.theme')).toBe('dark');
     setTheme('light');
     expect(document.documentElement.dataset.theme).toBe('light');
   });
   it('syncs a preference changed in another tab', () => {
-    window.dispatchEvent(new StorageEvent('storage', { key: 'kakomu.theme', newValue: 'dark' }));
+    window.dispatchEvent(new StorageEvent('storage', { key: 'tabiji-log.theme', newValue: 'dark' }));
     expect(document.documentElement.dataset.theme).toBe('dark');
   });
 });

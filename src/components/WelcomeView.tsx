@@ -20,7 +20,8 @@ const WelcomeView = () => {
   const { state, login, register, loginWithGoogle, loginWithApple, openPublicPreview } = useApp();
   const { t } = useTranslation(state.language);
   const [mode, setMode] = useState<'login' | 'register'>(() => {
-    const requested = sessionStorage.getItem('kakomu.authMode');
+    const requested = sessionStorage.getItem('tabiji-log.authMode') ?? sessionStorage.getItem('kakomu.authMode');
+    sessionStorage.removeItem('tabiji-log.authMode');
     sessionStorage.removeItem('kakomu.authMode');
     return requested === 'register' ? 'register' : 'login';
   });
@@ -38,7 +39,7 @@ const WelcomeView = () => {
   return (
     <main className="welcome-view">
       <section className="welcome-access" aria-labelledby="welcome-title">
-        <span className="welcome-kicker">Kakomu</span>
+        <span className="welcome-kicker">Tabiji Log</span>
         <h1 id="welcome-title">{t('welcomeTitle')}</h1>
         <p className="welcome-intro">{t('welcomeIntro')}</p>
 

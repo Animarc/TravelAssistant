@@ -5,7 +5,7 @@ export const SESSION_API_URL = import.meta.env.VITE_SESSION_API_URL ?? `http://$
 export const TRAVELS_API_URL = import.meta.env.VITE_TRAVELS_API_URL ?? `http://${localApiHost}:5101`;
 
 // Remove credentials written by builds predating the HttpOnly cookie flow.
-try { localStorage.removeItem('kakomu.session:v1'); } catch { /* Storage may be unavailable. */ }
+try { localStorage.removeItem('tabiji-log.session:v1'); localStorage.removeItem('kakomu.session:v1'); } catch { /* Storage may be unavailable. */ }
 
 export class ApiError extends Error {
   constructor(public status: number, public code: string, public problem?: ProblemDetails) {

@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title">
   <title id="title">Tabiji Log</title>
-  <rect width="48" height="48" rx="13" fill="#17324D"/>
-  <path d="M9 11h20M19 11v26h20" fill="none" stroke="#FCFAF6" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M9 11h20M19 11v26h20" fill="none" stroke="#17324D" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/>
   <circle cx="39" cy="37" r="3.4" fill="#B9553F"/>
 </svg>

@@ -2,8 +2,8 @@
 // Only public health/preflight requests; never sends credentials or changes data.
 const origin = 'https://animarc.github.io';
 for (const [key, service] of [
-  ['VITE_SESSION_API_URL', 'Kakomu.Session.Api'],
-  ['VITE_TRAVELS_API_URL', 'Kakomu.Travels.Api']
+  ['VITE_SESSION_API_URL', 'TabijiLog.Session.Api'],
+  ['VITE_TRAVELS_API_URL', 'TabijiLog.Travels.Api']
 ]) {
   const url = new URL(process.env[key] || '');
   if (url.protocol !== 'https:' || url.username || url.password ||

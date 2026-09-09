@@ -90,7 +90,7 @@ const Navbar = () => {
     <nav className={`navbar ${state.currentView === 'account' ? 'navbar-global-view' : ''} ${!state.isAuthenticated ? 'navbar-auth' : ''}`} aria-label={t('appTitle')}>
       <div className="navbar-primary">
         <div className="navbar-left">
-          <img src={`${import.meta.env.BASE_URL}kakomu-mark.svg`} alt="" className="navbar-logo" />
+          <img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" className="navbar-logo" />
           <span className="navbar-title">{t('appTitle')}</span>
         </div>
 
@@ -191,7 +191,7 @@ const Navbar = () => {
             <button type="button" className="preview-back-btn" onClick={closePublicPreview}>{t('backToExplore')}</button>
             {state.isAuthenticated
               ? <button type="button" className="preview-copy-btn" onClick={() => void importPublicPreview().catch(() => undefined)}>{t('importToMyTrips')}</button>
-              : <button type="button" className="preview-copy-btn" onClick={() => { sessionStorage.setItem('kakomu.authMode', 'register'); closePublicPreview(); }}>{t('useThisTrip')}</button>}
+              : <button type="button" className="preview-copy-btn" onClick={() => { sessionStorage.setItem('tabiji-log.authMode', 'register'); closePublicPreview(); }}>{t('useThisTrip')}</button>}
           </>}
           {state.isAuthenticated && !state.publicPreview && <button
             className={`nav-icon-btn ${state.currentView === 'account' ? 'active' : ''}`}
