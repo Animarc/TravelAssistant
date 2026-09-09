@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useSubmitLock } from '../../hooks/useSubmitLock';
 import { Traveler, TravelerDocument, DocumentType, EntityId } from '../../types';
 
 interface TravelerModalProps {
@@ -13,6 +14,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
   const { t } = useTranslation(state.language);
   const isEditing = editId !== undefined;
   const [validationError, setValidationError] = useState<string | null>(null);
+  const { isSubmitting, submitOnce } = useSubmitLock();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -72,9 +74,11 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
 
     setValidationError(null);
     try {
-      if (isEditing && editId !== undefined) await updateTraveler(editId, traveler);
-      else await addTraveler(traveler);
-      onClose();
+      const submitted = await submitOnce(async () => {
+        if (isEditing && editId !== undefined) await updateTraveler(editId, traveler);
+        else await addTraveler(traveler);
+      });
+      if (submitted) onClose();
     } catch { /* Global error notification remains visible. */ }
   };
 
@@ -244,8 +248,8 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
             {t('paysBudget')}
           </label><br />
 
-          <button type="submit">
-            {isEditing ? t('updateTravelerBtn') : t('addTravelerBtn')}
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? t('saving') : isEditing ? t('updateTravelerBtn') : t('addTravelerBtn')}
           </button>
         </form>
       </section>

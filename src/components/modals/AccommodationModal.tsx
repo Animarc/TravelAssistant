@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useSubmitLock } from '../../hooks/useSubmitLock';
 import { Accommodation, EntityId } from '../../types';
 
 interface AccommodationModalProps {
@@ -13,6 +14,7 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
   const { t } = useTranslation(state.language);
   const isEditing = editId !== undefined;
   const [validationError, setValidationError] = useState<string | null>(null);
+  const { isSubmitting, submitOnce } = useSubmitLock();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -67,9 +69,11 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
 
     setValidationError(null);
     try {
-      if (isEditing && editId !== undefined) await updateAccommodation(editId, accommodation);
-      else await addAccommodation(accommodation);
-      onClose();
+      const submitted = await submitOnce(async () => {
+        if (isEditing && editId !== undefined) await updateAccommodation(editId, accommodation);
+        else await addAccommodation(accommodation);
+      });
+      if (submitted) onClose();
     } catch { /* Global error notification remains visible. */ }
   };
 
@@ -164,8 +168,8 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
             />
           </label><br />
 
-          <button type="submit">
-            {isEditing ? t('updateAccommodationBtn') : t('addAccommodationBtn')}
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? t('saving') : isEditing ? t('updateAccommodationBtn') : t('addAccommodationBtn')}
           </button>
         </form>
       </section>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useSubmitLock } from '../../hooks/useSubmitLock';
 import { EntityId, ShoppingCategory } from '../../types';
 
 interface ShoppingModalProps {
@@ -14,6 +15,7 @@ const ShoppingModal = ({ editId, onClose }: ShoppingModalProps) => {
   const isEditing = editId !== undefined;
   const tripCurrency = state.trips.find(trip => trip.id === state.activeTripId)?.currency ?? 'EUR';
   const [validationError, setValidationError] = useState<string | null>(null);
+  const { isSubmitting, submitOnce } = useSubmitLock();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -59,9 +61,11 @@ const ShoppingModal = ({ editId, onClose }: ShoppingModalProps) => {
 
     setValidationError(null);
     try {
-      if (isEditing && editId !== undefined) await updateShoppingItem(editId, item);
-      else await addShoppingItem(item);
-      onClose();
+      const submitted = await submitOnce(async () => {
+        if (isEditing && editId !== undefined) await updateShoppingItem(editId, item);
+        else await addShoppingItem(item);
+      });
+      if (submitted) onClose();
     } catch { /* Global error notification remains visible. */ }
   };
 
@@ -129,8 +133,8 @@ const ShoppingModal = ({ editId, onClose }: ShoppingModalProps) => {
             />
           </label><br />
 
-          <button type="submit">
-            {isEditing ? t('updateBtn') : t('addBtn')}
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? t('saving') : isEditing ? t('updateBtn') : t('addBtn')}
           </button>
         </form>
       </section>

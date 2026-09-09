@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useSubmitLock } from '../../hooks/useSubmitLock';
 
 interface DayModalProps {
   onCreate: (description: string) => Promise<void>;
@@ -11,14 +12,17 @@ const DayModal = ({ onCreate, onClose }: DayModalProps) => {
   const { state } = useApp();
   const { t } = useTranslation(state.language);
   const [description, setDescription] = useState('');
+  const { isSubmitting, submitOnce } = useSubmitLock();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     const trimmedDescription = description.trim();
 
-    if (trimmedDescription) {
-      await onCreate(trimmedDescription);
-    }
+    if (!trimmedDescription) return;
+
+    try {
+      await submitOnce(() => onCreate(trimmedDescription));
+    } catch { /* Global error notification remains visible. */ }
   };
 
   return (
@@ -50,8 +54,8 @@ const DayModal = ({ onCreate, onClose }: DayModalProps) => {
             <button type="button" className="secondary-modal-btn" onClick={onClose}>
               {t('cancel')}
             </button>
-            <button type="submit" disabled={!description.trim()}>
-              {t('createDay')}
+            <button type="submit" disabled={isSubmitting || !description.trim()}>
+              {isSubmitting ? t('saving') : t('createDay')}
             </button>
           </div>
         </form>

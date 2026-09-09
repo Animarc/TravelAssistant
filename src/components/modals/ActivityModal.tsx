@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
+import { useSubmitLock } from '../../hooks/useSubmitLock';
 import { Activity, ActivityType } from '../../types';
 
 interface ActivityModalProps {
@@ -14,6 +15,7 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
   const isEditing = editIndex !== undefined;
   const tripCurrency = state.trips.find(trip => trip.id === state.activeTripId)?.currency ?? 'EUR';
   const [validationError, setValidationError] = useState<string | null>(null);
+  const { isSubmitting, submitOnce } = useSubmitLock();
 
   const [formData, setFormData] = useState<Partial<Activity>>({
     time: '',
@@ -59,9 +61,11 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
 
     setValidationError(null);
     try {
-      if (isEditing) await updateActivity(editIndex, activity);
-      else await addActivity(activity);
-      onClose();
+      const submitted = await submitOnce(async () => {
+        if (isEditing) await updateActivity(editIndex, activity);
+        else await addActivity(activity);
+      });
+      if (submitted) onClose();
     } catch { /* Global error notification remains visible. */ }
   };
 
@@ -160,8 +164,8 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
             </select>
           </label><br />
 
-          <button type="submit">
-            {isEditing ? t('updateActivityBtn') : t('addActivityBtn')}
+          <button type="submit" disabled={isSubmitting}>
+            {isSubmitting ? t('saving') : isEditing ? t('updateActivityBtn') : t('addActivityBtn')}
           </button>
         </form>
       </section>
