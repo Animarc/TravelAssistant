@@ -8,6 +8,7 @@ import './styles/main.css';
 import './styles/planner-controls.css';
 import './styles/trip-navigation.css';
 import './styles/theme.css';
+import './styles/experience.css';
 
 const PlanningView = lazy(() => import('./components/PlanningView'));
 const BudgetView = lazy(() => import('./components/BudgetView'));
@@ -19,7 +20,7 @@ const AppContent = () => {
   const { state, clearError } = useApp();
   const { t } = useTranslation(state.language);
   if (state.authLoading && !state.isAuthenticated) {
-    return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" /><span>Tabiji Log…</span></div></div>;
+    return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark" role="status"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" /><span>{t('loading')}</span></div></div>;
   }
   if (!state.isAuthenticated && !state.publicPreview) {
     return <div className="app welcome-app"><Navbar /><WelcomeView /></div>;
@@ -45,7 +46,7 @@ const AppContent = () => {
     <div className={`app ${state.currentView === 'account' ? 'account-view-active' : ''}`}>
       <Navbar />
       <main className={`container ${state.currentView !== 'planning' ? 'centered-view' : ''}`}>
-        <Suspense fallback={<div className="view-loading" role="status">Tabiji Log…</div>}>
+        <Suspense fallback={<div className="view-loading" role="status"><span className="loading-spinner" aria-hidden="true" />{t('loading')}</div>}>
           {renderView()}
         </Suspense>
       </main>

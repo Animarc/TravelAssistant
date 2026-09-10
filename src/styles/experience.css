@@ -1,0 +1,30 @@
+/* Shared feedback and small-screen safeguards. */
+.loading-spinner { display: inline-block; width: 1em; height: 1em; margin-inline-end: .6em; border: 2px solid currentColor; border-inline-end-color: transparent; border-radius: 50%; animation: feedback-spin .8s linear infinite; vertical-align: middle; }
+@keyframes feedback-spin { to { transform: rotate(360deg); } }
+button:disabled { cursor: wait; opacity: .65; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--text-primary); outline-offset: 3px; }
+.empty-state, .catalog-status { padding: 1.25rem; text-align: center; overflow-wrap: anywhere; }
+.empty-state { border: 1px dashed var(--text-muted); border-radius: var(--radius-lg); }
+.confirm-dialog { max-width: none; max-height: none; margin: 0; height: 100dvh; }
+.confirm-dialog::backdrop { background: rgba(15, 38, 59, .58); }
+.confirm-dialog .modal-content { color: var(--text-primary); }
+.confirm-actions { display: flex; justify-content: flex-end; gap: .75rem; flex-wrap: wrap; }
+.confirm-actions button { min-height: 44px; }
+.public-trip-copy, .trip-info, .user-result strong, .signed-user > div { min-width: 0; overflow-wrap: anywhere; }
+.app-notice { bottom: max(1rem, env(safe-area-inset-bottom)); }
+.modal-content, .public-trip-dialog-card { overscroll-behavior: contain; }
+@media (max-width: 600px) {
+  .public-explorer-heading, .signed-user, .trip-card, .collaboration-row { flex-wrap: wrap; gap: 1rem; }
+  .public-explorer-heading input, .user-search > input { width: 100%; min-width: 0; box-sizing: border-box; }
+  .public-trip-grid { grid-template-columns: minmax(0, 1fr); }
+  .account-view, .account-content, .account-section, .left-panel, .right-panel { min-width: 0; max-width: 100%; box-sizing: border-box; }
+  .invite-form { display: flex; flex-direction: column; align-items: stretch; }
+  .invite-form input, .invite-form select { min-width: 0; width: 100%; box-sizing: border-box; }
+  .trip-actions, .collaboration-row > div:last-child { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .collaboration-row code { overflow-wrap: anywhere; min-width: 0; }
+  .modal-content, .public-trip-dialog-card { width: calc(100% - 1.5rem); max-height: calc(100dvh - 2rem); padding: 1.25rem; box-sizing: border-box; overflow-y: auto; }
+  .modal-content input, .modal-content select, .modal-content textarea, .account-form input, .account-form textarea, .invite-form input { font-size: 16px; }
+  .trip-actions button, .collaboration-row button, .dialog-close, .traveler-actions button, .catalog-status button { min-height: 44px; min-width: 44px; }
+  .app-notice { left: .75rem; right: .75rem; max-width: none; }
+}
+@media (prefers-reduced-motion: reduce) { .loading-spinner { animation: none; } }

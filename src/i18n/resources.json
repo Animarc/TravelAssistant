@@ -1,5 +1,10 @@
 {
   "es": {
+    "loading": "Cargando…",
+    "retry": "Reintentar",
+    "clearSearch": "Limpiar búsqueda",
+    "noPeopleResults": "No hay personas que coincidan con tu búsqueda.",
+    "confirmRemoveMember": "¿Quitar a esta persona del viaje? Perderá el acceso.",
     "appearance": "Apariencia",
     "themeSystem": "Según el dispositivo",
     "themeLight": "Claro",
@@ -296,6 +301,11 @@
     "unconverted": "Sin convertir"
   },
   "en": {
+    "loading": "Loading…",
+    "retry": "Try again",
+    "clearSearch": "Clear search",
+    "noPeopleResults": "No people match your search.",
+    "confirmRemoveMember": "Remove this person from the trip? They will lose access.",
     "appearance": "Appearance",
     "themeSystem": "Use device setting",
     "themeLight": "Light",
@@ -592,6 +602,11 @@
     "unconverted": "Not converted"
   },
   "fr": {
+    "loading": "Chargement…",
+    "retry": "Réessayer",
+    "clearSearch": "Effacer la recherche",
+    "noPeopleResults": "Aucune personne ne correspond à votre recherche.",
+    "confirmRemoveMember": "Retirer cette personne du voyage ? Elle perdra son accès.",
     "appearance": "Apparence",
     "themeSystem": "Selon l’appareil",
     "themeLight": "Clair",
@@ -724,6 +739,11 @@
     "unconverted": "Non converti"
   },
   "de": {
+    "loading": "Wird geladen…",
+    "retry": "Erneut versuchen",
+    "clearSearch": "Suche löschen",
+    "noPeopleResults": "Keine Personen entsprechen deiner Suche.",
+    "confirmRemoveMember": "Diese Person aus der Reise entfernen? Sie verliert den Zugriff.",
     "appearance": "Darstellung",
     "themeSystem": "Geräteeinstellung",
     "themeLight": "Hell",
@@ -856,6 +876,11 @@
     "unconverted": "Nicht umgerechnet"
   },
   "zh": {
+    "loading": "正在加载…",
+    "retry": "重试",
+    "clearSearch": "清除搜索",
+    "noPeopleResults": "没有符合搜索条件的用户。",
+    "confirmRemoveMember": "将此用户移出旅行？该用户将失去访问权限。",
     "appearance": "外观",
     "themeSystem": "跟随设备",
     "themeLight": "浅色",
@@ -988,6 +1013,11 @@
     "unconverted": "未换算"
   },
   "ru": {
+    "loading": "Загрузка…",
+    "retry": "Повторить",
+    "clearSearch": "Очистить поиск",
+    "noPeopleResults": "По вашему запросу никто не найден.",
+    "confirmRemoveMember": "Удалить участника из поездки? Он потеряет доступ.",
     "appearance": "Оформление",
     "themeSystem": "Как на устройстве",
     "themeLight": "Светлое",
@@ -1120,6 +1150,11 @@
     "unconverted": "Без конвертации"
   },
   "ja": {
+    "loading": "読み込み中…",
+    "retry": "再試行",
+    "clearSearch": "検索をクリア",
+    "noPeopleResults": "検索に一致するユーザーはいません。",
+    "confirmRemoveMember": "この参加者を旅行から削除しますか？アクセスできなくなります。",
     "appearance": "外観",
     "themeSystem": "デバイスの設定に従う",
     "themeLight": "ライト",
