@@ -6,6 +6,7 @@ import ConfirmDialog from './ConfirmDialog';
 import '../styles/account.css';
 import PublicTripsExplorer from './PublicTripsExplorer';
 import UserSearch from './UserSearch';
+import UserRating from './UserRating';
 
 const AccountView = () => {
   const {
@@ -20,6 +21,7 @@ const AccountView = () => {
   const [pendingRemoveMember, setPendingRemoveMember] = useState<string | null>(null);
   const [profileForm, setProfileForm] = useState({ firstName: state.user?.firstName ?? '', lastName: state.user?.lastName ?? '' });
   const [profileSaving, setProfileSaving] = useState(false);
+  const [ratingMember, setRatingMember] = useState<string | null>(null);
   const activeTrip = state.trips.find(trip => trip.id === state.activeTripId);
 
   useEffect(() => {
@@ -104,10 +106,10 @@ const AccountView = () => {
           ))}</section>
         )}
 
-        {state.isAuthenticated && activeTrip?.capabilities?.canManageMembers && (
+        {state.isAuthenticated && activeTrip && !state.publicPreview && (
           <section className="account-section"><h2>{t('tripMembers')}</h2>
-            <form className="invite-form" onSubmit={handleInvite}><input type="email" required placeholder={t('inviteEmailPlaceholder')} value={inviteForm.email} onChange={e => setInviteForm({ ...inviteForm, email: e.target.value })} /><select value={inviteForm.role} onChange={e => setInviteForm({ ...inviteForm, role: e.target.value as Exclude<TripRole, 'owner'> })}><option value="editor">Editor</option><option value="viewer">Viewer</option></select><button disabled={saveStatus === 'saving'}>{saveStatus === 'saving' ? t('saving') : t('invite')}</button></form>
-            <div className="members-list">{members.map(member => <div className="collaboration-row" key={member.userId}><code>{member.userId === state.user?.userId ? t('you') : member.userId}</code><div>{member.role !== 'owner' ? <><select value={member.role} onChange={e => void updateMemberRole(member.userId, e.target.value as Exclude<TripRole, 'owner'>).catch(() => undefined)}><option value="editor">Editor</option><option value="viewer">Viewer</option></select><button className="danger-button" onClick={() => setPendingRemoveMember(member.userId)}>{t('remove')}</button></> : <span className="role-badge">Owner</span>}</div></div>)}</div>
+            {activeTrip.capabilities?.canManageMembers && <form className="invite-form" onSubmit={handleInvite}><input type="email" required placeholder={t('inviteEmailPlaceholder')} value={inviteForm.email} onChange={e => setInviteForm({ ...inviteForm, email: e.target.value })} /><select value={inviteForm.role} onChange={e => setInviteForm({ ...inviteForm, role: e.target.value as Exclude<TripRole, 'owner'> })}><option value="editor">Editor</option><option value="viewer">Viewer</option></select><button disabled={saveStatus === 'saving'}>{saveStatus === 'saving' ? t('saving') : t('invite')}</button></form>}
+            <div className="members-list">{members.map(member => <div className="member-rating-card" key={member.userId}><div className="collaboration-row"><div className="member-identity"><strong>@{member.username || t('traveler')}</strong><span className="member-score">★ {member.ratingCount ? member.averageRating.toFixed(1) : '—'} · {member.ratingCount}</span></div><div>{member.userId !== state.user?.userId && <button className="secondary-button" onClick={() => setRatingMember(ratingMember === member.userId ? null : member.userId)}>{t('rateTraveler')}</button>}{activeTrip.capabilities?.canManageMembers && member.role !== 'owner' ? <><select value={member.role} onChange={e => void updateMemberRole(member.userId, e.target.value as Exclude<TripRole, 'owner'>).catch(() => undefined)}><option value="editor">Editor</option><option value="viewer">Viewer</option></select><button className="danger-button" onClick={() => setPendingRemoveMember(member.userId)}>{t('remove')}</button></> : <span className="role-badge">{member.userId === state.user?.userId ? t('you') : member.role}</span>}</div></div>{ratingMember === member.userId && <UserRating tripId={activeTrip.id} userId={member.userId} language={state.language} initialAverage={member.averageRating} initialCount={member.ratingCount} />}</div>)}</div>
           </section>
         )}
 

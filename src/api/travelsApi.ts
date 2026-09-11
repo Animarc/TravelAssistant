@@ -1,6 +1,6 @@
 import type { Accommodation, Activity, ShoppingItem, Traveler, TripInvitation, TripMember, TripRole } from '../types';
 import { apiRequest, TRAVELS_API_URL } from './client';
-import type { AccommodationDto, ActivityDto, DayDto, PublicTripDto, ShoppingItemDto, TravelerDto, TripDetailDto, TripListDto, TripRatingDto } from './contracts';
+import type { AccommodationDto, ActivityDto, DayDto, PublicTripDto, ShoppingItemDto, TravelerDto, TripDetailDto, TripListDto, TripRatingDto, UserRatingDto } from './contracts';
 
 const json = (body: unknown): RequestInit => ({ method: 'POST', body: JSON.stringify(body) });
 const put = (body: unknown): RequestInit => ({ method: 'PUT', body: JSON.stringify(body) });
@@ -56,6 +56,8 @@ export const travelsApi = {
   deleteTraveler: (tripId: string, id: string) => apiRequest<void>(TRAVELS_API_URL, `/api/trips/${tripId}/travelers/${id}`, { method: 'DELETE' }),
 
   getMembers: (tripId: string) => apiRequest<TripMember[]>(TRAVELS_API_URL, `/api/trips/${tripId}/members`),
+  getUserRating: (tripId: string, userId: string) => apiRequest<UserRatingDto>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}/rating`),
+  rateUser: (tripId: string, userId: string, score: number, review?: string) => apiRequest<UserRatingDto>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}/rating`, put({ score, review: review?.trim() || null })),
   invite: (tripId: string, email: string, role: Exclude<TripRole, 'owner'>) => apiRequest<TripInvitation>(TRAVELS_API_URL, `/api/trips/${tripId}/members/invitations`, json({ email, role })),
   updateMember: (tripId: string, userId: string, role: Exclude<TripRole, 'owner'>) => apiRequest<void>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}`, put({ role })),
   removeMember: (tripId: string, userId: string) => apiRequest<void>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}`, { method: 'DELETE' }),

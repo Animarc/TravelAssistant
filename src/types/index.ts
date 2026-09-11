@@ -100,8 +100,11 @@ export interface AuthUser {
 
 export interface TripMember {
   userId: string;
+  username: string;
   role: TripRole;
   joinedAt: string;
+  averageRating: number;
+  ratingCount: number;
 }
 
 export interface TripInvitation {

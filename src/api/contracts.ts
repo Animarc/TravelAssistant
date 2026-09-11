@@ -11,6 +11,8 @@ export type TripDetailDto = TravelsSchema['TripDetailDto'] & { currency: string 
 export interface PublicTripDto { id: string; name: string; description?: string | null; coverImageUrl?: string | null; currency: string; dayCount: number; activityCount: number; updatedAt: string; language?: string | null; authorUsername?: string | null; averageRating: number; ratingCount: number; }
 export interface TripReviewDto { username: string; score: number; review: string; updatedAt: string; }
 export interface TripRatingDto { averageRating: number; ratingCount: number; userRating?: number | null; userReview?: string | null; canRate: boolean; reviews: TripReviewDto[]; }
+export interface UserReviewDto { username: string; score: number; review: string; updatedAt: string; }
+export interface UserRatingDto { userId: string; averageRating: number; ratingCount: number; userRating?: number | null; userReview?: string | null; canRate: boolean; reviews: UserReviewDto[]; }
 export interface UserSearchResult { id: string; username: string; avatarUrl?: string | null; }
 export type DayDto = TravelsSchema['DayDto'];
 export type ActivityDto = TravelsSchema['ActivityDto'];

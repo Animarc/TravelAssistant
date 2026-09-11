@@ -133,6 +133,18 @@
 .collaboration-row { padding: var(--space-md); background: var(--color-gray-50); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
 .collaboration-row > div { display: flex; align-items: center; gap: var(--space-sm); }
 .collaboration-row code { overflow-wrap: anywhere; }
+.member-rating-card { overflow: hidden; background: var(--color-gray-50); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+.member-rating-card .collaboration-row { border: 0; border-radius: 0; }
+.member-identity { display: grid !important; gap: .2rem !important; }
+.member-score, .user-rating-summary span, .user-reviews span { color: #d99b19; font-weight: 800; }
+.user-rating-panel { display: grid; gap: var(--space-md); padding: var(--space-lg); border-top: 1px solid var(--border-color); background: var(--bg-elevated); }
+.user-rating-summary { display: flex; align-items: baseline; gap: .4rem; }
+.user-rating-panel textarea { width: 100%; padding: .75rem; color: var(--text-primary); background: var(--bg-body); border: 1px solid var(--border-color); border-radius: var(--radius-md); font: inherit; resize: vertical; }
+.user-rating-panel > button { justify-self: start; padding: .7rem 1rem; border: 0; border-radius: var(--radius-md); color: white; background: var(--bg-action); font-weight: 700; }
+.user-reviews { display: grid; gap: .75rem; padding-top: .5rem; }
+.user-reviews article { padding: .75rem; border-radius: var(--radius-md); background: var(--color-gray-50); }
+.user-reviews article header { display: flex; justify-content: space-between; gap: 1rem; }
+.user-reviews article p { margin-top: .4rem; white-space: pre-wrap; }
 
 .not-logged-in {
   color: var(--text-muted);
