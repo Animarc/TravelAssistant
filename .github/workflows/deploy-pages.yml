@@ -26,7 +26,10 @@ jobs:
       - run: node deployment/check-backends.mjs
       - run: npm run check
       - name: Support direct SPA routes on Pages
-        run: cp dist/index.html dist/404.html
+        run: |
+          cp dist/index.html dist/404.html
+          mkdir -p dist/verify-email
+          cp dist/index.html dist/verify-email/index.html
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
@@ -43,4 +46,3 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/deploy-pages@v4
         id: deployment
-
