@@ -4,8 +4,9 @@ import type { components as TravelsComponents } from './generated/travels';
 type SessionSchema = SessionComponents['schemas'];
 type TravelsSchema = TravelsComponents['schemas'];
 
-export type AuthResponse = SessionSchema['BrowserAuthResponse'];
-export type UserProfileResponse = SessionSchema['UserProfileResponse'];
+export type AuthResponse = SessionSchema['BrowserAuthResponse'] & { emailVerified: boolean };
+export type UserProfileResponse = SessionSchema['UserProfileResponse'] & { emailVerified: boolean };
+export interface EmailVerificationResponse { verified: boolean; status: 'sent' | 'wait' | 'already_verified' | 'verified' | 'invalid_or_expired' | 'unavailable' | 'not_found'; }
 export type TripListDto = TravelsSchema['TripListDto'] & { currency: string };
 export type TripDetailDto = TravelsSchema['TripDetailDto'] & { currency: string };
 export interface PublicTripDto { id: string; name: string; description?: string | null; coverImageUrl?: string | null; currency: string; dayCount: number; activityCount: number; updatedAt: string; language?: string | null; authorUsername?: string | null; averageRating: number; ratingCount: number; }

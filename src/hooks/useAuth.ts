@@ -10,12 +10,14 @@ const userFromSession = (session: AuthResponse): AuthUser => ({
   userId: session.userId, email: session.email, username: session.username,
   firstName: session.firstName ?? undefined, lastName: session.lastName ?? undefined,
   avatarUrl: session.avatarUrl ?? undefined
+  , emailVerified: session.emailVerified
 });
 
 const userFromProfile = (profile: UserProfileResponse): AuthUser => ({
   userId: profile.id, email: profile.email, username: profile.username,
   firstName: profile.firstName ?? undefined, lastName: profile.lastName ?? undefined,
   avatarUrl: profile.avatarUrl ?? undefined
+  , emailVerified: profile.emailVerified
 });
 
 export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, setError: (message: TranslationKey | null) => void) => {
@@ -85,5 +87,7 @@ export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, 
     }
   }, [setError]);
 
-  return { user, authLoading, isAuthenticated: user !== null, browserSessionSupport, login, register, loginWithGoogle, loginWithApple, logout, updateProfile };
+  const sendEmailVerification = useCallback(async () => sessionApi.sendEmailVerification(), []);
+
+  return { user, authLoading, isAuthenticated: user !== null, browserSessionSupport, login, register, loginWithGoogle, loginWithApple, logout, updateProfile, sendEmailVerification };
 };

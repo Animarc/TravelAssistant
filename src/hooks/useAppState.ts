@@ -71,6 +71,7 @@ export const useAppState = () => {
     loginWithApple: auth.loginWithApple,
     logout: auth.logout,
     updateProfile: auth.updateProfile,
+    sendEmailVerification: auth.sendEmailVerification,
     createTrip: trips.createTrip,
     openPublicPreview: trips.openPublicPreview,
     closePublicPreview: trips.closePublicPreview,

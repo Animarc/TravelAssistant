@@ -9,6 +9,8 @@ import './styles/planner-controls.css';
 import './styles/trip-navigation.css';
 import './styles/theme.css';
 import './styles/experience.css';
+import EmailVerificationBanner from './components/EmailVerificationBanner';
+import VerifyEmailView from './components/VerifyEmailView';
 
 const PlanningView = lazy(() => import('./components/PlanningView'));
 const BudgetView = lazy(() => import('./components/BudgetView'));
@@ -20,6 +22,7 @@ const AccountView = lazy(() => import('./components/AccountView'));
 const AppContent = () => {
   const { state, clearError } = useApp();
   const { t } = useTranslation(state.language);
+  if (window.location.pathname.replace(/\/$/, '').endsWith('/verify-email')) return <div className="app welcome-app"><VerifyEmailView /></div>;
   if (state.authLoading && !state.isAuthenticated) {
     return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark" role="status"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" /><span>{t('loading')}</span></div></div>;
   }
@@ -48,6 +51,7 @@ const AppContent = () => {
   return (
     <div className={`app ${state.currentView === 'account' ? 'account-view-active' : ''}`}>
       <Navbar />
+      <EmailVerificationBanner />
       <main className={`container ${state.currentView !== 'planning' ? 'centered-view' : ''}`}>
         <Suspense fallback={<div className="view-loading" role="status"><span className="loading-spinner" aria-hidden="true" />{t('loading')}</div>}>
           {renderView()}

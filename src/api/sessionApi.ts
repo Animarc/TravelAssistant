@@ -1,5 +1,5 @@
 import { apiRequest, saveSession, SESSION_API_URL } from './client';
-import type { AuthResponse, UserProfileResponse, UserSearchResult } from './contracts';
+import type { AuthResponse, EmailVerificationResponse, UserProfileResponse, UserSearchResult } from './contracts';
 
 export const sessionApi = {
   checkBrowserSessionSupport: async () => {
@@ -39,6 +39,8 @@ export const sessionApi = {
       method: 'PUT', body: JSON.stringify({ firstName, lastName, preferredLanguage: null })
     }),
   searchUsers: (query: string) => apiRequest<UserSearchResult[]>(SESSION_API_URL, `/api/users/search?query=${encodeURIComponent(query)}`),
+  sendEmailVerification: () => apiRequest<EmailVerificationResponse>(SESSION_API_URL, '/api/email-verification/send', { method: 'POST' }),
+  confirmEmail: (token: string) => apiRequest<EmailVerificationResponse>(SESSION_API_URL, '/api/email-verification/confirm', { method: 'POST', body: JSON.stringify({ token }) }, false),
   logout: async () => {
     await apiRequest<void>(SESSION_API_URL, '/api/auth/browser/logout', { method: 'POST' });
     saveSession(null);

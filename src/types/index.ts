@@ -96,6 +96,7 @@ export interface AuthUser {
   firstName?: string;
   lastName?: string;
   avatarUrl?: string;
+  emailVerified: boolean;
 }
 
 export interface TripMember {
