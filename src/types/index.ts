@@ -116,7 +116,7 @@ export interface TripInvitation {
 }
 
 // Views
-export type ViewType = 'planning' | 'budget' | 'objects' | 'travelers' | 'account';
+export type ViewType = 'planning' | 'budget' | 'objects' | 'travelers' | 'ratings' | 'account';
 
 // Language
 export type Language = 'es' | 'en' | 'fr' | 'de' | 'zh' | 'ru' | 'ja';

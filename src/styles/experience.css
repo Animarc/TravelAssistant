@@ -17,7 +17,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .trip-rating { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; padding: .75rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-lg); background: var(--bg-translucent); }
 .trip-rating-summary { display: flex; align-items: baseline; gap: .35rem; }.trip-rating-summary > span { color: #d99b19; font-size: 1.35rem; }.trip-rating-summary small { color: var(--text-secondary); }
 .rating-stars { display: flex; align-items: center; gap: .15rem; margin: 0; padding: 0; border: 0; }.rating-stars legend { float: left; margin-inline-end: .5rem; font-size: .85rem; font-weight: 700; }.rating-stars button { padding: .15rem; border: 0; background: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }.rating-stars button.selected, .rating-stars button:hover { color: #d99b19; }
+.mobile-trip-rating { display: none; }
+.ratings-view { width: min(900px, 100%); margin: 0 auto; padding: clamp(1rem, 3vw, 2.5rem); }.ratings-view > header { margin-bottom: 1.5rem; }.ratings-view h1 { margin: .3rem 0; color: var(--color-primary); font-family: var(--font-family-heading); }
+.trip-rating-expanded { align-items: stretch; justify-content: flex-start; padding: clamp(1rem, 3vw, 2rem); }.trip-rating-expanded .trip-rating-summary { width: 100%; }.trip-rating-expanded .rating-stars { width: 100%; }
+.review-editor { width: 100%; }.review-editor label { display: grid; gap: .5rem; font-weight: 700; }.review-editor textarea { width: 100%; resize: vertical; box-sizing: border-box; padding: .8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); background: var(--bg-elevated); color: var(--text-primary); font: inherit; }.review-editor > div { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: .6rem; }.review-editor button { min-height: 44px; }
+.reviews-list { width: 100%; }.reviews-list h2 { margin: 1rem 0; }.reviews-list article { padding: 1rem 0; border-top: 1px solid var(--border-color); }.reviews-list article header { display: flex; justify-content: space-between; gap: 1rem; }.reviews-list article header span { color: #d99b19; letter-spacing: .08em; }.reviews-list article p { margin: .6rem 0 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 @media (max-width: 600px) {
+  .desktop-ratings-nav { display: none; }
+  .mobile-trip-rating { display: block; grid-column: 1 / -1; width: 100%; }
   .public-explorer-heading, .signed-user, .trip-card, .collaboration-row { flex-wrap: wrap; gap: 1rem; }
   .public-explorer-heading input, .user-search > input { width: 100%; min-width: 0; box-sizing: border-box; }
   .public-trip-grid { grid-template-columns: minmax(0, 1fr); }

@@ -8,12 +8,12 @@ vi.mock('../api/travelsApi', () => ({ travelsApi: { getTripRating: vi.fn(), rate
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
 
 it('loads the current vote and updates the aggregate after rating', async () => {
-  vi.mocked(travelsApi.getTripRating).mockResolvedValue({ averageRating: 4, ratingCount: 2, userRating: null, canRate: true });
-  vi.mocked(travelsApi.rateTrip).mockResolvedValue({ averageRating: 4.3, ratingCount: 3, userRating: 5, canRate: true });
+  vi.mocked(travelsApi.getTripRating).mockResolvedValue({ averageRating: 4, ratingCount: 2, userRating: null, userReview: null, canRate: true, reviews: [] });
+  vi.mocked(travelsApi.rateTrip).mockResolvedValue({ averageRating: 4.3, ratingCount: 3, userRating: 5, userReview: null, canRate: true, reviews: [] });
   render(<TripRating tripId="trip-1" authenticated language="es" />);
   const fiveStars = await screen.findByRole('button', { name: '5 estrellas' });
   await userEvent.click(fiveStars);
-  expect(travelsApi.rateTrip).toHaveBeenCalledWith('trip-1', 5);
+  expect(travelsApi.rateTrip).toHaveBeenCalledWith('trip-1', 5, undefined);
   expect(await screen.findByText('4.3')).toBeInTheDocument();
   expect(fiveStars).toHaveAttribute('aria-pressed', 'true');
 });

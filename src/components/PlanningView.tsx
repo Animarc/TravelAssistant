@@ -192,7 +192,7 @@ const PlanningView = () => {
 
   return (
     <>
-      {state.publicPreview && activeTrip && <TripRating tripId={activeTrip.id} authenticated={state.isAuthenticated} language={state.language} />}
+      {state.publicPreview && activeTrip && <div className="mobile-trip-rating"><TripRating tripId={activeTrip.id} authenticated={state.isAuthenticated} language={state.language} /></div>}
       <aside className="left-panel">
         <header className="day-header">
           {hasDays && <div className="day-navigation">

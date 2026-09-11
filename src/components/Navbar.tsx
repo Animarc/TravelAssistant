@@ -269,6 +269,13 @@ const Navbar = () => {
           >
             {t('travelers')}
           </button>
+          {state.publicPreview && <button
+            className={`nav-btn desktop-ratings-nav ${state.currentView === 'ratings' ? 'active' : ''}`}
+            onClick={() => setCurrentView('ratings')}
+            aria-current={state.currentView === 'ratings' ? 'page' : undefined}
+          >
+            {t('opinions')}
+          </button>}
         </div>
       </div>}
     </nav>

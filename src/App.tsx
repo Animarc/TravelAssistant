@@ -14,6 +14,7 @@ const PlanningView = lazy(() => import('./components/PlanningView'));
 const BudgetView = lazy(() => import('./components/BudgetView'));
 const ObjectsView = lazy(() => import('./components/ObjectsView'));
 const TravelersView = lazy(() => import('./components/TravelersView'));
+const RatingsView = lazy(() => import('./components/RatingsView'));
 const AccountView = lazy(() => import('./components/AccountView'));
 
 const AppContent = () => {
@@ -35,6 +36,8 @@ const AppContent = () => {
         return <ObjectsView />;
       case 'travelers':
         return <TravelersView />;
+      case 'ratings':
+        return <RatingsView />;
       case 'account':
         return <AccountView />;
       default:

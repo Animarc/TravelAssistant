@@ -9,7 +9,8 @@ export type UserProfileResponse = SessionSchema['UserProfileResponse'];
 export type TripListDto = TravelsSchema['TripListDto'] & { currency: string };
 export type TripDetailDto = TravelsSchema['TripDetailDto'] & { currency: string };
 export interface PublicTripDto { id: string; name: string; description?: string | null; coverImageUrl?: string | null; currency: string; dayCount: number; activityCount: number; updatedAt: string; language?: string | null; authorUsername?: string | null; averageRating: number; ratingCount: number; }
-export interface TripRatingDto { averageRating: number; ratingCount: number; userRating?: number | null; canRate: boolean; }
+export interface TripReviewDto { username: string; score: number; review: string; updatedAt: string; }
+export interface TripRatingDto { averageRating: number; ratingCount: number; userRating?: number | null; userReview?: string | null; canRate: boolean; reviews: TripReviewDto[]; }
 export interface UserSearchResult { id: string; username: string; avatarUrl?: string | null; }
 export type DayDto = TravelsSchema['DayDto'];
 export type ActivityDto = TravelsSchema['ActivityDto'];

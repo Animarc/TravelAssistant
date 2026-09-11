@@ -16,7 +16,7 @@ interface TripUiState {
 }
 
 const emptyTrip: Trip = { id: '', tripName: '', currency: 'EUR', days: [], accommodations: [], shoppingItems: [], travelers: [], currentDay: 0 };
-const viewRoutes: Record<ViewType, string> = { planning: '/planning', budget: '/budget', objects: '/objects', travelers: '/travelers', account: '/account' };
+const viewRoutes: Record<ViewType, string> = { planning: '/planning', budget: '/budget', objects: '/objects', travelers: '/travelers', ratings: '/ratings', account: '/account' };
 const routeViews = new Map(Object.entries(viewRoutes).map(([view, route]) => [route, view as ViewType]));
 const remoteId = (id: EntityId | undefined): string | null => typeof id === 'string' ? id : null;
 

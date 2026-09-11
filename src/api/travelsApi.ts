@@ -24,7 +24,7 @@ export const travelsApi = {
   getPublicTrip: (tripId: string) => apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}`, {}, false),
   copyPublicTrip: (tripId: string) => apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/copy`, { method: 'POST' }),
   getTripRating: (tripId: string, authenticated = false) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, {}, authenticated),
-  rateTrip: (tripId: string, score: number) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, { method: 'PUT', body: JSON.stringify({ score }) }),
+  rateTrip: (tripId: string, score: number, review?: string) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, { method: 'PUT', body: JSON.stringify({ score, review: review?.trim() || null }) }),
 
   createDay: (tripId: string, title: string) => apiRequest<DayDto>(TRAVELS_API_URL, `/api/trips/${tripId}/days`, json({ title })),
   updateDay: (tripId: string, dayId: string, title: string) => apiRequest<DayDto>(TRAVELS_API_URL, `/api/trips/${tripId}/days/${dayId}`, put({ title })),
