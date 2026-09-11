@@ -5,6 +5,7 @@ import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 import { getErrorKey } from '../hooks/useAsyncOperation';
 import type { TranslationKey } from '../i18n/translations';
+import TripRating from './TripRating';
 
 interface Props { authenticated?: boolean; onCopy?: (id: string) => Promise<void>; onRegister?: () => void; onOpen?: (id: string) => Promise<void>; }
 
@@ -49,11 +50,12 @@ const PublicTripsExplorer = ({ authenticated = false, onCopy, onRegister, onOpen
     {!loading && !error && trips.length === 0 && <div className="catalog-status empty-state" role="status"><p>{t('noPublicTrips')}</p>{query && <button type="button" onClick={() => { setQuery(''); setLoading(true); }}>{t('clearSearch')}</button>}</div>}
     <div className="public-trip-grid" aria-busy={loading || opening !== null}>{!loading && trips.map(trip => <button type="button" className="public-trip-card" key={trip.id} disabled={opening !== null} onClick={() => void open(trip.id)}>
       <span className="public-trip-cover" style={trip.coverImageUrl ? { backgroundImage: `url(${trip.coverImageUrl})` } : undefined}><b>{trip.dayCount}</b><small>{t('days')}</small></span>
-      <span className="public-trip-copy"><strong>{trip.name}</strong>{opening === trip.id && <span role="status">{t('loading')}</span>}{trip.authorUsername && <small>{trip.authorUsername}</small>}<small>{trip.activityCount} {t('activities')} · {trip.currency}</small><span>{trip.description}</span></span>
+      <span className="public-trip-copy"><strong>{trip.name}</strong>{opening === trip.id && <span role="status">{t('loading')}</span>}{trip.authorUsername && <small>{trip.authorUsername}</small>}<small>{trip.activityCount} {t('activities')} · {trip.currency}</small><span className="rating-inline">★ {trip.ratingCount ? trip.averageRating.toFixed(1) : '—'} · {trip.ratingCount} {t('ratings')}</span><span>{trip.description}</span></span>
     </button>)}</div>
     {selected && <div className="public-trip-dialog" role="dialog" aria-modal="true" aria-labelledby="public-trip-title">
       <div className="public-trip-dialog-card"><button className="dialog-close" disabled={copying} onClick={() => setSelected(null)} aria-label={t('close')}>×</button>
         <span className="welcome-kicker">{t('publicTrip')}</span><h2 id="public-trip-title">{selected.name}</h2><p>{selected.description}</p>
+        <TripRating tripId={selected.id} authenticated={authenticated} language={state.language} />
         <ol>{selected.days.slice(0, 7).map((day, index) => <li key={day.id}><b>{t('day')} {index + 1}</b><span>{day.title}</span></li>)}</ol>
         {error && <p role="alert">{t(error)}</p>}
         <button className="welcome-submit" disabled={copying} onClick={async () => {

@@ -13,6 +13,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .public-trip-copy, .trip-info, .user-result strong, .signed-user > div { min-width: 0; overflow-wrap: anywhere; }
 .app-notice { bottom: max(1rem, env(safe-area-inset-bottom)); }
 .modal-content, .public-trip-dialog-card { overscroll-behavior: contain; }
+.rating-inline { color: var(--color-accent-dark) !important; font-weight: 800; }
+.trip-rating { grid-column: 1 / -1; display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; padding: .75rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-lg); background: var(--bg-translucent); }
+.trip-rating-summary { display: flex; align-items: baseline; gap: .35rem; }.trip-rating-summary > span { color: #d99b19; font-size: 1.35rem; }.trip-rating-summary small { color: var(--text-secondary); }
+.rating-stars { display: flex; align-items: center; gap: .15rem; margin: 0; padding: 0; border: 0; }.rating-stars legend { float: left; margin-inline-end: .5rem; font-size: .85rem; font-weight: 700; }.rating-stars button { padding: .15rem; border: 0; background: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }.rating-stars button.selected, .rating-stars button:hover { color: #d99b19; }
 @media (max-width: 600px) {
   .public-explorer-heading, .signed-user, .trip-card, .collaboration-row { flex-wrap: wrap; gap: 1rem; }
   .public-explorer-heading input, .user-search > input { width: 100%; min-width: 0; box-sizing: border-box; }

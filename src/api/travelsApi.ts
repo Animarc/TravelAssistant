@@ -1,6 +1,6 @@
 import type { Accommodation, Activity, ShoppingItem, Traveler, TripInvitation, TripMember, TripRole } from '../types';
 import { apiRequest, TRAVELS_API_URL } from './client';
-import type { AccommodationDto, ActivityDto, DayDto, PublicTripDto, ShoppingItemDto, TravelerDto, TripDetailDto, TripListDto } from './contracts';
+import type { AccommodationDto, ActivityDto, DayDto, PublicTripDto, ShoppingItemDto, TravelerDto, TripDetailDto, TripListDto, TripRatingDto } from './contracts';
 
 const json = (body: unknown): RequestInit => ({ method: 'POST', body: JSON.stringify(body) });
 const put = (body: unknown): RequestInit => ({ method: 'PUT', body: JSON.stringify(body) });
@@ -23,6 +23,8 @@ export const travelsApi = {
   listPublicTrips: (query = '', language = '') => apiRequest<PublicTripDto[]>(TRAVELS_API_URL, `/api/trips/public?query=${encodeURIComponent(query)}${language ? `&language=${encodeURIComponent(language)}` : ''}`, {}, false),
   getPublicTrip: (tripId: string) => apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}`, {}, false),
   copyPublicTrip: (tripId: string) => apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/copy`, { method: 'POST' }),
+  getTripRating: (tripId: string, authenticated = false) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, {}, authenticated),
+  rateTrip: (tripId: string, score: number) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, { method: 'PUT', body: JSON.stringify({ score }) }),
 
   createDay: (tripId: string, title: string) => apiRequest<DayDto>(TRAVELS_API_URL, `/api/trips/${tripId}/days`, json({ title })),
   updateDay: (tripId: string, dayId: string, title: string) => apiRequest<DayDto>(TRAVELS_API_URL, `/api/trips/${tripId}/days/${dayId}`, put({ title })),

@@ -7,6 +7,7 @@ import AccommodationModal from './modals/AccommodationModal';
 import DayModal from './modals/DayModal';
 import ConfirmDialog from './ConfirmDialog';
 import { usePlanningMap } from '../hooks/usePlanningMap';
+import TripRating from './TripRating';
 
 const DragHandleIcon = () => (
   <svg className="drag-handle-icon" viewBox="0 0 16 20" aria-hidden="true">
@@ -191,6 +192,7 @@ const PlanningView = () => {
 
   return (
     <>
+      {state.publicPreview && activeTrip && <TripRating tripId={activeTrip.id} authenticated={state.isAuthenticated} language={state.language} />}
       <aside className="left-panel">
         <header className="day-header">
           {hasDays && <div className="day-navigation">
