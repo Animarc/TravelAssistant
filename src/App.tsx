@@ -22,7 +22,7 @@ const AccountView = lazy(() => import('./components/AccountView'));
 const AppContent = () => {
   const { state, clearError } = useApp();
   const { t } = useTranslation(state.language);
-  if (window.location.pathname.replace(/\/$/, '').endsWith('/verify-email')) return <div className="app welcome-app"><VerifyEmailView /></div>;
+  if (new URLSearchParams(window.location.search).has('verify-email') || window.location.pathname.replace(/\/$/, '').endsWith('/verify-email')) return <div className="app welcome-app"><VerifyEmailView /></div>;
   if (state.authLoading && !state.isAuthenticated) {
     return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark" role="status"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" /><span>{t('loading')}</span></div></div>;
   }

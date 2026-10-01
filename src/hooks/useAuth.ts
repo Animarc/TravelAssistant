@@ -87,7 +87,7 @@ export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, 
     }
   }, [setError]);
 
-  const sendEmailVerification = useCallback(async () => sessionApi.sendEmailVerification(), []);
+  const sendEmailVerification = useCallback(async () => { const result = await sessionApi.sendEmailVerification(); if (result.verified) { await sessionApi.restore(); setUser(userFromProfile(await sessionApi.profile())); } return result; }, []);
 
   return { user, authLoading, isAuthenticated: user !== null, browserSessionSupport, login, register, loginWithGoogle, loginWithApple, logout, updateProfile, sendEmailVerification };
 };
