@@ -11,6 +11,7 @@ import './styles/theme.css';
 import './styles/experience.css';
 import EmailVerificationBanner from './components/EmailVerificationBanner';
 import VerifyEmailView from './components/VerifyEmailView';
+import PasswordResetView from './components/PasswordResetView';
 import RegistrationConfirmation from './components/RegistrationConfirmation';
 
 const PlanningView = lazy(() => import('./components/PlanningView'));
@@ -24,6 +25,8 @@ const AppContent = () => {
   const { state, clearError } = useApp();
   const { t } = useTranslation(state.language);
   if (new URLSearchParams(window.location.search).has('verify-email') || window.location.pathname.replace(/\/$/, '').endsWith('/verify-email')) return <div className="app welcome-app"><VerifyEmailView /></div>;
+  if (new URLSearchParams(window.location.search).has('reset-password')) return <div className="app welcome-app"><PasswordResetView confirm /></div>;
+  if (new URLSearchParams(window.location.search).has('forgot-password')) return <div className="app welcome-app"><PasswordResetView /></div>;
   if (state.authLoading && !state.isAuthenticated) {
     return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark" role="status"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" /><span>{t('loading')}</span></div></div>;
   }

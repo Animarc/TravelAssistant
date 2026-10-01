@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
 import '../styles/welcome.css';
 import PublicTripsExplorer from './PublicTripsExplorer';
+import PasswordResetView from './PasswordResetView';
 import { requestAppleCredential, requestGoogleCredential } from '../api/socialAuth';
 
 const GoogleIcon = () => <svg className="social-provider-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -25,6 +26,7 @@ const WelcomeView = () => {
     sessionStorage.removeItem('kakomu.authMode');
     return requested === 'register' ? 'register' : 'login';
   });
+  const [recovering, setRecovering] = useState(false);
   const [socialError, setSocialError] = useState<string | null>(null);
   const [form, setForm] = useState({ email: '', password: '', username: '' });
 
@@ -36,6 +38,7 @@ const WelcomeView = () => {
     } catch { /* The application state displays the API error. */ }
   };
 
+  if (recovering) return <PasswordResetView onBack={() => setRecovering(false)} />;
   return (
     <main className="welcome-view">
       <section className="welcome-access" aria-labelledby="welcome-title">
@@ -54,6 +57,7 @@ const WelcomeView = () => {
           <label>{t('password')}<input type="password" required minLength={mode === 'register' ? 8 : 1} autoComplete={mode === 'login' ? 'current-password' : 'new-password'} value={form.password} onChange={event => setForm({ ...form, password: event.target.value })} /></label>
           <button className="welcome-submit" disabled={state.authLoading}>{state.authLoading ? t('connecting') : mode === 'login' ? t('login') : t('createAccount')}</button>
         </form>
+        {mode === 'login' && <button type="button" className="text-button" onClick={() => setRecovering(true)}>{t('forgotPassword')}</button>}
         <div className="social-divider"><span>{t('or')}</span></div>
         <div className="social-access">
           <button type="button" onClick={() => { setSocialError(null); void requestGoogleCredential().then(loginWithGoogle).catch(() => setSocialError(t('socialLoginError'))); }}><GoogleIcon />{t('continueGoogle')}</button>

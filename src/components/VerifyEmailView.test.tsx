@@ -1,11 +1,12 @@
 import { StrictMode } from 'react';
 import { cleanup, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, expect, it, vi } from 'vitest';
+import { beforeEach, afterEach, expect, it, vi } from 'vitest';
 import { ApiError } from '../api/client';
 import { sessionApi } from '../api/sessionApi';
 import VerifyEmailView from './VerifyEmailView';
-vi.mock('../api/sessionApi', () => ({ sessionApi: { confirmEmail: vi.fn() } }));
+vi.mock('../api/sessionApi', () => ({ sessionApi: { confirmEmail: vi.fn(), restore: vi.fn() } }));
+beforeEach(() => { localStorage.setItem('travelAssistantLang', 'es'); vi.mocked(sessionApi.restore).mockResolvedValue({} as never); });
 afterEach(() => { cleanup(); vi.resetAllMocks(); window.history.replaceState({}, '', '/'); });
 it('confirms only once in StrictMode and removes the token from the URL', async () => {
   window.history.replaceState({}, '', '/?verify-email=1&token=secret');
@@ -28,4 +29,18 @@ it('rejects an expired link', async () => {
   vi.mocked(sessionApi.confirmEmail).mockRejectedValue(new ApiError(400, 'request.failed'));
   render(<VerifyEmailView />);
   expect(await screen.findByText('Enlace no válido')).toBeInTheDocument();
+});
+it('restores an existing session after verification', async () => {
+  window.history.replaceState({}, '', '/?verify-email=1&token=secret');
+  vi.mocked(sessionApi.confirmEmail).mockResolvedValue({ verified: true, status: 'verified' });
+  render(<VerifyEmailView />);
+  expect(await screen.findByText('Correo confirmado')).toBeInTheDocument();
+  expect(sessionApi.restore).toHaveBeenCalledOnce();
+});
+it('uses the selected language for the confirmation screen', async () => {
+  localStorage.setItem('travelAssistantLang', 'en');
+  window.history.replaceState({}, '', '/?verify-email=1&token=secret');
+  vi.mocked(sessionApi.confirmEmail).mockResolvedValue({ verified: true, status: 'verified' });
+  render(<VerifyEmailView />);
+  expect(await screen.findByText('Email confirmed')).toBeInTheDocument();
 });

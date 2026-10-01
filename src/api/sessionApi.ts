@@ -1,4 +1,4 @@
-import { apiRequest, saveSession, SESSION_API_URL } from './client';
+import { apiRequest, refreshSession, saveSession, SESSION_API_URL } from './client';
 import type { AuthResponse, EmailVerificationResponse, UserProfileResponse, UserSearchResult } from './contracts';
 
 export const sessionApi = {
@@ -28,11 +28,7 @@ export const sessionApi = {
     const session = await apiRequest<AuthResponse>(SESSION_API_URL, '/api/auth/browser/apple', { method: 'POST', body: JSON.stringify({ idToken, firstName, lastName }) }, false);
     saveSession(session); return session;
   },
-  restore: async () => {
-    const session = await apiRequest<AuthResponse>(SESSION_API_URL, '/api/auth/browser/refresh', { method: 'POST' }, false);
-    saveSession(session);
-    return session;
-  },
+  restore: () => refreshSession(),
   profile: () => apiRequest<UserProfileResponse>(SESSION_API_URL, '/api/users/me'),
   updateProfile: (firstName: string, lastName: string) =>
     apiRequest<UserProfileResponse>(SESSION_API_URL, '/api/users/me', {
@@ -41,6 +37,8 @@ export const sessionApi = {
   searchUsers: (query: string) => apiRequest<UserSearchResult[]>(SESSION_API_URL, `/api/users/search?query=${encodeURIComponent(query)}`),
   sendEmailVerification: () => apiRequest<EmailVerificationResponse>(SESSION_API_URL, '/api/email-verification/send', { method: 'POST' }),
   confirmEmail: (token: string) => apiRequest<EmailVerificationResponse>(SESSION_API_URL, '/api/email-verification/confirm', { method: 'POST', body: JSON.stringify({ token }) }, false),
+  requestPasswordReset: (email: string) => apiRequest<{ status: string }>(SESSION_API_URL, '/api/auth/browser/password-reset/request', { method: 'POST', body: JSON.stringify({ email }) }, false),
+  resetPassword: (token: string, password: string) => apiRequest<{ status: string }>(SESSION_API_URL, '/api/auth/browser/password-reset/confirm', { method: 'POST', body: JSON.stringify({ token, password }) }, false),
   logout: async () => {
     await apiRequest<void>(SESSION_API_URL, '/api/auth/browser/logout', { method: 'POST' });
     saveSession(null);

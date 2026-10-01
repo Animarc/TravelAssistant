@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ApiError, apiRequest, getStoredSession, saveSession, SESSION_API_URL } from './client';
+import { sessionApi } from './sessionApi';
 import type { AuthResponse } from './contracts';
 
 const session: AuthResponse = {
@@ -41,4 +42,17 @@ describe('API session client', () => {
     const error = await apiRequest(SESSION_API_URL, '/failure', {}, false).catch(reason => reason);
     expect(error).toMatchObject({ status: 0, code: 'network.unavailable', message: 'network.unavailable' });
   });
+});
+
+it('shares a single rotation between simultaneous session restorations', async () => {
+  let finish!: (response: Response) => void;
+  const fetchMock = vi.fn().mockImplementation(() => new Promise<Response>(resolve => { finish = resolve; }));
+  vi.stubGlobal('fetch', fetchMock);
+  const first = sessionApi.restore();
+  const second = sessionApi.restore();
+  expect(fetchMock).toHaveBeenCalledOnce();
+  finish(new Response(JSON.stringify(session), { status: 200, headers: { 'Content-Type': 'application/json' } }));
+  expect(await first).toEqual(session);
+  expect(await second).toEqual(session);
+  saveSession(null); vi.unstubAllGlobals();
 });

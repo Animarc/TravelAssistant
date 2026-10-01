@@ -17,9 +17,9 @@ const TripRating = ({ tripId, authenticated, language, initialAverage = 0, initi
 
   useEffect(() => {
     let active = true;
-    void travelsApi.getTripRating(tripId, authenticated).then(value => { if (active) { setRating(value); setDraftScore(value.userRating ?? 0); setReview(value.userReview ?? ''); } }).catch(() => undefined);
+    void travelsApi.getTripRating(tripId, authenticated).then(value => { if (active) { setRating(value); setDraftScore(value.userRating ?? 0); setReview(value.userReview ?? ''); } }).catch(reason => { if (active) setError(t(getErrorKey(reason))); });
     return () => { active = false; };
-  }, [authenticated, tripId]);
+  }, [authenticated, tripId, t]);
 
   const rate = async (score: number, opinion?: string) => {
     if (!rating.canRate || saving) return;

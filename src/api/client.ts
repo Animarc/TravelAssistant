@@ -24,7 +24,7 @@ export const saveSession = (session: AuthResponse | null) => {
 
 let refreshPromise: Promise<AuthResponse> | null = null;
 
-const refreshSession = async (): Promise<AuthResponse> => {
+export const refreshSession = async (): Promise<AuthResponse> => {
   if (refreshPromise) return refreshPromise;
   refreshPromise = fetch(`${SESSION_API_URL}/api/auth/browser/refresh`, {
     method: 'POST',

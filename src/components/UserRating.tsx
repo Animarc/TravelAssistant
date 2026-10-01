@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { travelsApi } from '../api/travelsApi';
 import type { UserRatingDto } from '../api/contracts';
 import { useTranslation } from '../hooks/useTranslation';
+import { getErrorKey } from '../hooks/useAsyncOperation';
 import type { Language } from '../types';
 
 interface Props { tripId: string; userId: string; language: Language; initialAverage: number; initialCount: number; }
@@ -11,14 +12,22 @@ const UserRating = ({ tripId, userId, language, initialAverage, initialCount }: 
   const [value, setValue] = useState<UserRatingDto>({ userId, averageRating: initialAverage, ratingCount: initialCount, userRating: null, userReview: null, canRate: false, reviews: [] });
   const [score, setScore] = useState(0);
   const [review, setReview] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => { void travelsApi.getUserRating(tripId, userId).then(result => { setValue(result); setScore(result.userRating ?? 0); setReview(result.userReview ?? ''); }); }, [tripId, userId]);
+  useEffect(() => {
+    let active = true;
+    setError(null);
+    setValue({ userId, averageRating: initialAverage, ratingCount: initialCount, userRating: null, userReview: null, canRate: false, reviews: [] });
+    void travelsApi.getUserRating(tripId, userId).then(result => { if (active) { setValue(result); setScore(result.userRating ?? 0); setReview(result.userReview ?? ''); } }).catch(reason => { if (active) setError(t(getErrorKey(reason))); });
+    return () => { active = false; };
+  }, [tripId, userId, initialAverage, initialCount, t]);
 
   const save = async () => {
     if (!score || saving || !value.canRate) return;
-    setSaving(true);
+    setSaving(true); setError(null);
     try { const result = await travelsApi.rateUser(tripId, userId, score, review); setValue(result); setScore(result.userRating ?? 0); setReview(result.userReview ?? ''); }
+    catch (reason) { setError(t(getErrorKey(reason))); }
     finally { setSaving(false); }
   };
 
@@ -29,6 +38,7 @@ const UserRating = ({ tripId, userId, language, initialAverage, initialCount }: 
       <textarea maxLength={2000} rows={3} value={review} onChange={event => setReview(event.target.value)} placeholder={t('userReviewPlaceholder')} />
       <button type="button" disabled={!score || saving} onClick={() => void save()}>{saving ? t('saving') : t('publishUserRating')}</button>
     </>}
+    {error && <p role="alert" className="form-error">{error}</p>}
     {value.reviews.length > 0 && <div className="user-reviews"><h4>{t('travelerReviews')}</h4>{value.reviews.map(item => <article key={`${item.username}-${item.updatedAt}`}><header><strong>@{item.username}</strong><span>{'★'.repeat(item.score)}</span></header><p>{item.review}</p></article>)}</div>}
   </div>;
 };
