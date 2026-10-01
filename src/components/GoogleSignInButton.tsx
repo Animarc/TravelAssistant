@@ -1,3 +1,4 @@
+import { useResolvedTheme } from '../theme';
 import { useEffect, useRef, useState } from 'react';
 import { prepareGoogleButton } from '../api/socialAuth';
 import { useTranslation } from '../hooks/useTranslation';
@@ -5,6 +6,7 @@ import type { Language } from '../types';
 
 interface Props { language: Language; onCredential: (credential: string) => Promise<void>; onError: () => void; }
 export default function GoogleSignInButton({ language, onCredential, onError }: Props) {
+  const appearance = useResolvedTheme();
   const container = useRef<HTMLDivElement>(null);
   const { t } = useTranslation(language);
   const [attempt, setAttempt] = useState(0);
@@ -34,14 +36,14 @@ export default function GoogleSignInButton({ language, onCredential, onError }: 
           // Keep this challenge stable while Google is returning the credential.
           clearTimeout(refresh);
           expiry = setTimeout(() => void setup(), 5 * 60_000);
-        });
+        }, appearance);
         setStatus('ready');
         refresh = setTimeout(() => void setup(), 4 * 60_000);
       } catch { fail(); }
     };
     void setup();
     return () => { active = false; controller.abort(); clearTimeout(refresh); clearTimeout(expiry); element?.replaceChildren(); };
-  }, [language, onCredential, onError, attempt]);
+  }, [language, onCredential, onError, attempt, appearance]);
   return <div className="google-sign-in">
     <div ref={container} hidden={status !== 'ready'} />
     {status !== 'ready' && <button type="button" disabled={status === 'loading'} onClick={() => setAttempt(value => value + 1)}>{status === 'loading' ? t('connecting') : t('continueGoogle')}</button>}

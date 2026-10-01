@@ -42,3 +42,5 @@ if (import.meta.hot) import.meta.hot.dispose(() => {
 });
 const subscribe = (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; };
 export const useTheme = () => useSyncExternalStore(subscribe, () => preference);
+
+export const useResolvedTheme = () => useSyncExternalStore(subscribe, () => resolveTheme(preference, media?.matches ?? false));

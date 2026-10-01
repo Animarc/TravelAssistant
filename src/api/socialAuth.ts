@@ -21,7 +21,7 @@ const loadScript = (src: string): Promise<void> => {
 
 type GoogleIdentity = {
   initialize: (options: { client_id: string; nonce: string; callback: (response: { credential: string }) => void; auto_select: boolean; ux_mode: 'popup' }) => void;
-  renderButton: (element: HTMLElement, options: { type: 'standard'; theme: 'outline'; size: 'large'; text: 'continue_with'; shape: 'rectangular'; locale: string; width: number; click_listener: () => void }) => void;
+  renderButton: (element: HTMLElement, options: { type: 'standard'; theme: 'outline' | 'outline_dark'; size: 'large'; text: 'continue_with'; shape: 'pill'; locale: string; width: number; click_listener: () => void }) => void;
 };
 
 export const prepareGoogleButton = async (signal?: AbortSignal) => {
@@ -32,9 +32,9 @@ export const prepareGoogleButton = async (signal?: AbortSignal) => {
   const google = (window as unknown as { google?: { accounts: { id: GoogleIdentity } } }).google?.accounts.id;
   if (!google) throw new Error('social.google_unavailable');
   const { nonce } = await challenge('google', signal);
-  return (element: HTMLElement, language: string, onCredential: (credential: string) => void, onClick: () => void) => {
+  return (element: HTMLElement, language: string, onCredential: (credential: string) => void, onClick: () => void, appearance: 'light' | 'dark' = 'light') => {
     google.initialize({ client_id: clientId, nonce, callback: response => onCredential(response.credential), auto_select: false, ux_mode: 'popup' });
-    google.renderButton(element, { type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular', locale: language, width: Math.max(200, Math.min(400, element.parentElement?.clientWidth || 240)), click_listener: onClick });
+    google.renderButton(element, { type: 'standard', theme: appearance === 'dark' ? 'outline_dark' : 'outline', size: 'large', text: 'continue_with', shape: 'pill', locale: language, width: Math.max(200, Math.min(400, element.parentElement?.clientWidth || 240)), click_listener: onClick });
   };
 };
 

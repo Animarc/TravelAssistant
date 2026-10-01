@@ -120,6 +120,12 @@
   .welcome-preview > p { margin-top: -105px; padding-inline: 1rem; font-size: var(--font-size-sm); }
 }
 
-.social-access { grid-template-columns: minmax(0, 1fr); }
+.social-access { grid-template-columns: minmax(0, 1fr); width: 100%; max-width: 400px; }
 .google-sign-in { min-width: 0; min-height: 44px; display: grid; justify-items: center; }
 .google-sign-in > button { width: 100%; }
+
+.social-access > button, .google-sign-in > button { min-height: 40px; border-radius: 999px; border-color: #747775; background: #fff; color: #1f1f1f; font-size: 14px; font-weight: 500; }
+[data-theme="dark"] .social-access > button, [data-theme="dark"] .google-sign-in > button { background: #131314; border-color: #8e918f; color: #fff; }
+.social-access > button { position: relative; padding-inline: 40px; }
+.social-access > button .social-provider-icon { position: absolute; left: 14px; }
+.google-sign-in { min-height: 40px; justify-items: stretch; }
