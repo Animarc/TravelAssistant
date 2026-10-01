@@ -45,7 +45,7 @@ export default function GoogleSignInButton({ language, onCredential, onError }: 
     return () => { active = false; controller.abort(); clearTimeout(refresh); clearTimeout(expiry); element?.replaceChildren(); };
   }, [language, onCredential, onError, attempt, appearance]);
   return <div className="google-sign-in">
-    <div ref={container} hidden={status !== 'ready'} />
+    <div className="google-button-slot" ref={container} hidden={status !== 'ready'} />
     {status !== 'ready' && <button type="button" disabled={status === 'loading'} onClick={() => setAttempt(value => value + 1)}>{status === 'loading' ? t('connecting') : t('continueGoogle')}</button>}
   </div>;
 }

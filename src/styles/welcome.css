@@ -129,3 +129,10 @@
 .social-access > button { position: relative; padding-inline: 40px; }
 .social-access > button .social-provider-icon { position: absolute; left: 14px; }
 .google-sign-in { min-height: 40px; justify-items: stretch; }
+
+/* Keep recovery styling in the eagerly loaded login stylesheet. */
+.welcome-access > .text-button { display: block; width: 100%; min-height: 36px; margin-top: 4px; padding: 8px 0; border: 0; background: transparent; color: var(--color-primary); font-size: var(--font-size-sm); font-weight: 600; text-align: right; cursor: pointer; }
+.welcome-access > .text-button:hover { text-decoration: underline; text-underline-offset: 3px; }
+/* Google adds iframe margins around its 40px button. Contain that outer frame. */
+.google-button-slot { width: 100%; max-width: 400px; height: 40px; border-radius: 999px; overflow: hidden; }
+.google-button-slot:focus-within { outline: 3px solid var(--text-primary); outline-offset: 3px; }
