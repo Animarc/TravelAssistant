@@ -119,3 +119,7 @@
   .preview-window { width: 620px; transform: rotate(.6deg) scale(.72); transform-origin: top left; }
   .welcome-preview > p { margin-top: -105px; padding-inline: 1rem; font-size: var(--font-size-sm); }
 }
+
+.social-access { grid-template-columns: minmax(0, 1fr); }
+.google-sign-in { min-width: 0; min-height: 44px; display: grid; justify-items: center; }
+.google-sign-in > button { width: 100%; }

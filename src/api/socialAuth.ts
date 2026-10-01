@@ -1,25 +1,41 @@
 import { apiRequest, SESSION_API_URL } from './client';
 
-const challenge = (provider: 'google' | 'apple') =>
-  apiRequest<{ nonce: string; state: string }>(SESSION_API_URL, `/api/auth/browser/challenge/${provider}`, { method: 'POST' }, false);
+const challenge = (provider: 'google' | 'apple', signal?: AbortSignal) =>
+  apiRequest<{ nonce: string; state: string }>(SESSION_API_URL, `/api/auth/browser/challenge/${provider}`, { method: 'POST', signal }, false);
 
-const loadScript = (src: string) => new Promise<void>((resolve, reject) => {
-  const existing = document.querySelector(`script[src="${src}"]`);
-  if (existing) { resolve(); return; }
-  const script = document.createElement('script'); script.src = src; script.async = true; script.onload = () => resolve(); script.onerror = () => reject(new Error('social_sdk_unavailable')); document.head.appendChild(script);
-});
 
-export const requestGoogleCredential = async (): Promise<string> => {
+const scripts = new Map<string, Promise<void>>();
+const loadScript = (src: string): Promise<void> => {
+  const pending = scripts.get(src);
+  if (pending) return pending;
+  const promise = new Promise<void>((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src; script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => { scripts.delete(src); script.remove(); reject(new Error('social_sdk_unavailable')); };
+    document.head.appendChild(script);
+  });
+  scripts.set(src, promise);
+  return promise;
+};
+
+type GoogleIdentity = {
+  initialize: (options: { client_id: string; nonce: string; callback: (response: { credential: string }) => void; auto_select: boolean; ux_mode: 'popup' }) => void;
+  renderButton: (element: HTMLElement, options: { type: 'standard'; theme: 'outline'; size: 'large'; text: 'continue_with'; shape: 'rectangular'; locale: string; width: number; click_listener: () => void }) => void;
+};
+
+export const prepareGoogleButton = async (signal?: AbortSignal) => {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   if (!clientId) throw new Error('social.google_unavailable');
   await loadScript('https://accounts.google.com/gsi/client');
-  const { nonce } = await challenge('google');
-  return new Promise((resolve, reject) => {
-    const google = (window as unknown as { google?: { accounts: { id: { initialize: (options: object) => void; prompt: (callback: (event: { isNotDisplayed: () => boolean; isSkippedMoment: () => boolean }) => void) => void } } } }).google;
-    if (!google) { reject(new Error('social.google_unavailable')); return; }
-    google.accounts.id.initialize({ client_id: clientId, nonce, callback: (response: { credential: string }) => resolve(response.credential), auto_select: false });
-    google.accounts.id.prompt(event => { if (event.isNotDisplayed() || event.isSkippedMoment()) reject(new Error('social.google_cancelled')); });
-  });
+  signal?.throwIfAborted();
+  const google = (window as unknown as { google?: { accounts: { id: GoogleIdentity } } }).google?.accounts.id;
+  if (!google) throw new Error('social.google_unavailable');
+  const { nonce } = await challenge('google', signal);
+  return (element: HTMLElement, language: string, onCredential: (credential: string) => void, onClick: () => void) => {
+    google.initialize({ client_id: clientId, nonce, callback: response => onCredential(response.credential), auto_select: false, ux_mode: 'popup' });
+    google.renderButton(element, { type: 'standard', theme: 'outline', size: 'large', text: 'continue_with', shape: 'rectangular', locale: language, width: Math.max(200, Math.min(400, element.parentElement?.clientWidth || 240)), click_listener: onClick });
+  };
 };
 
 export const requestAppleCredential = async (): Promise<{ idToken: string; firstName?: string; lastName?: string }> => {
