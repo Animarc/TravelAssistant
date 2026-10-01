@@ -1,15 +1,23 @@
 /* ==================== ACCOUNT VIEW ==================== */
 
 .account-view {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
   overflow-y: auto;
 }
 
 .account-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+  gap: var(--space-xl);
+  align-items: start;
   padding: var(--space-xl);
 }
 
 .account-section {
-  margin-bottom: var(--space-2xl);
+  min-width: 0;
+  margin-bottom: 0;
   padding: var(--space-xl);
   background: var(--bg-elevated);
   border-radius: var(--radius-xl);
@@ -235,3 +243,16 @@
 .user-search > input { width: 100%; min-height: 44px; padding: .65rem .8rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); }
 .user-results { display: grid; gap: .5rem; margin-top: .75rem; }
 .user-result { display: flex; align-items: center; gap: .75rem; padding: .65rem; border-radius: var(--radius-md); background: var(--color-gray-100); }
+
+.account-section .signed-user,
+.account-section .trip-card,
+.account-section .collaboration-row { flex-wrap: wrap; }
+.account-section .signed-user > div:nth-child(2),
+.account-section .trip-info,
+.account-section .member-identity { min-width: 0; overflow-wrap: anywhere; }
+.account-section .trip-actions,
+.account-section .collaboration-row > div:last-child { flex-wrap: wrap; }
+.account-section .invite-form { display: flex; flex-wrap: wrap; }
+.account-section .invite-form input { flex: 1 1 180px; min-width: 0; }
+.account-section .invite-form select { width: auto; }
+.account-content > .discovery-section { grid-column: 1 / -1; }

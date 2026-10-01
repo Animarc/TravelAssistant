@@ -56,7 +56,7 @@ const AccountView = () => {
   };
 
   return (
-    <div className="left-panel account-view">
+    <div className="account-view">
       <div className="account-content">
         <section className="account-section auth-section">
           <div className="signed-user">

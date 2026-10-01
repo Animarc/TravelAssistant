@@ -9,7 +9,7 @@ const Footer = () => {
     <footer className="site-footer">
       <p>
         {t('footerBeta')} | {t('footerContact')}:{' '}
-        <a href="mailto:animarc@gmail.com">animarc@gmail.com</a>
+        <a href="mailto:support@tabijilog.com">support@tabijilog.com</a>
       </p>
     </footer>
   );
