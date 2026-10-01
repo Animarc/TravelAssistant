@@ -1,3 +1,4 @@
+import type { TranslationKey } from '../../i18n/translations';
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -14,7 +15,7 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
   const { t } = useTranslation(state.language);
   const isEditing = editIndex !== undefined;
   const tripCurrency = state.trips.find(trip => trip.id === state.activeTripId)?.currency ?? 'EUR';
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<TranslationKey | null>(null);
   const { isSubmitting, submitOnce } = useSubmitLock();
 
   const [formData, setFormData] = useState<Partial<Activity>>({
@@ -43,7 +44,7 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
     e.preventDefault();
 
     if (!formData.name?.trim()) {
-      setValidationError(t('fillRequiredFields'));
+      setValidationError('fillRequiredFields');
       return;
     }
 
@@ -86,7 +87,7 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
       <section className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <h2>{isEditing ? t('editActivity') : t('addNewActivity')}</h2>
-        {validationError && <p className="form-error" role="alert">{validationError}</p>}
+        {validationError && <p className="form-error" role="alert">{t(validationError)}</p>}
         <form onSubmit={handleSubmit}>
           <label>
             <input
@@ -157,10 +158,7 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
 
           <label>{t('currency')}:
             <select name="currency" value={formData.currency} onChange={handleChange}>
-              <option value="EUR">EUR - Euro (€)</option>
-              <option value="USD">USD - US Dollar ($)</option>
-              <option value="JPY">JPY - Japanese Yen (¥)</option>
-              <option value="GBP">GBP - British Pound (£)</option>
+              {['EUR', 'USD', 'JPY', 'GBP'].map(code => <option key={code} value={code}>{code} - {new Intl.DisplayNames(state.language, { type: 'currency' }).of(code)}</option>)}
             </select>
           </label><br />
 

@@ -24,7 +24,7 @@ const AccountView = lazy(() => import('./components/AccountView'));
 const AppContent = () => {
   const { state, clearError } = useApp();
   const { t } = useTranslation(state.language);
-  if (new URLSearchParams(window.location.search).has('verify-email') || window.location.pathname.replace(/\/$/, '').endsWith('/verify-email')) return <div className="app welcome-app"><VerifyEmailView /></div>;
+  if (new URLSearchParams(window.location.search).has('verify-email') || window.location.pathname.replace(/\/$/, '').endsWith('/verify-email')) return <div className="app welcome-app"><VerifyEmailView language={state.language} /></div>;
   if (new URLSearchParams(window.location.search).has('reset-password')) return <div className="app welcome-app"><PasswordResetView confirm /></div>;
   if (new URLSearchParams(window.location.search).has('forgot-password')) return <div className="app welcome-app"><PasswordResetView /></div>;
   if (state.authLoading && !state.isAuthenticated) {

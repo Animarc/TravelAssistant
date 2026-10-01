@@ -1,10 +1,11 @@
+import type { Language } from '../types';
 import { useEffect, useRef, useState } from 'react';
 import { ApiError } from '../api/client';
 import { sessionApi } from '../api/sessionApi';
 import { useTranslation } from '../hooks/useTranslation';
 import { resolveLanguage } from '../i18n/language';
-const VerifyEmailView = () => {
-  const { t } = useTranslation(resolveLanguage(localStorage.getItem('travelAssistantLang'), navigator.languages));
+const VerifyEmailView = ({ language }: { language?: Language }) => {
+  const { t } = useTranslation(language ?? resolveLanguage(localStorage.getItem('travelAssistantLang'), navigator.languages));
   const [status, setStatus] = useState<'checking' | 'verified' | 'invalid' | 'unavailable'>('checking');
   const token = useRef(new URLSearchParams(window.location.search).get('token'));
   const request = useRef<ReturnType<typeof sessionApi.confirmEmail> | null>(null);

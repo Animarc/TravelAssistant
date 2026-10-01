@@ -1,3 +1,5 @@
+import { translations } from '../i18n/translations';
+import type { Language } from '../types';
 import { Day, Accommodation } from '../types';
 
 /**
@@ -46,11 +48,11 @@ export const formatPrice = (price: number | string | undefined, currency: string
 /**
  * Format day range
  */
-export const formatDayRange = (fromDay: number, toDay: number): string => {
+export const formatDayRange = (fromDay: number, toDay: number, language: Language = 'es'): string => {
   if (fromDay === toDay) {
-    return `Día ${fromDay + 1}`;
+    return `${translations[language].day} ${fromDay + 1}`;
   }
-  return `Días ${fromDay + 1} - ${toDay + 1}`;
+  return `${translations[language].days} ${fromDay + 1} - ${toDay + 1}`;
 };
 
 /**

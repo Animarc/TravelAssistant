@@ -23,3 +23,18 @@ it('keeps the draft when saving fails and displays an error', async () => {
   expect(await screen.findByRole('alert')).toBeInTheDocument();
   expect(screen.getByRole('textbox')).toHaveValue('Gran compañera');
 });
+
+it('translates an existing save error without reloading or discarding the draft', async () => {
+  vi.mocked(travelsApi.getUserRating).mockResolvedValue({ userId: 'user', averageRating: 4, ratingCount: 1, userRating: null, userReview: null, canRate: true, reviews: [] });
+  vi.mocked(travelsApi.rateUser).mockRejectedValue(new Error('failure'));
+  const view = render(<UserRating {...props} />);
+  await userEvent.click(await screen.findByRole('button', { name: '5 estrellas' }));
+  await userEvent.type(screen.getByRole('textbox'), 'Great companion');
+  await userEvent.click(screen.getByRole('button', { name: /publicar/i }));
+  await screen.findByRole('alert');
+  view.rerender(<UserRating {...props} language="ja" />);
+  expect(screen.getByRole('alert')).toHaveTextContent(/[\u3040-\u30ff\u3400-\u9fff]/);
+  expect(screen.getByRole('button', { name: '評価を投稿' })).toBeInTheDocument();
+  expect(screen.getByRole('textbox')).toHaveValue('Great companion');
+  expect(travelsApi.getUserRating).toHaveBeenCalledTimes(1);
+});

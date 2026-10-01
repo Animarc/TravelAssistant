@@ -1,3 +1,4 @@
+import type { TranslationKey } from '../i18n/translations';
 import { useEffect, useState } from 'react';
 import { travelsApi } from '../api/travelsApi';
 import type { TripRatingDto } from '../api/contracts';
@@ -13,19 +14,19 @@ const TripRating = ({ tripId, authenticated, language, initialAverage = 0, initi
   const [draftScore, setDraftScore] = useState(0);
   const [review, setReview] = useState('');
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<TranslationKey | null>(null);
 
   useEffect(() => {
     let active = true;
-    void travelsApi.getTripRating(tripId, authenticated).then(value => { if (active) { setRating(value); setDraftScore(value.userRating ?? 0); setReview(value.userReview ?? ''); } }).catch(reason => { if (active) setError(t(getErrorKey(reason))); });
+    void travelsApi.getTripRating(tripId, authenticated).then(value => { if (active) { setRating(value); setDraftScore(value.userRating ?? 0); setReview(value.userReview ?? ''); } }).catch(reason => { if (active) setError(getErrorKey(reason)); });
     return () => { active = false; };
-  }, [authenticated, tripId, t]);
+  }, [authenticated, tripId]);
 
   const rate = async (score: number, opinion?: string) => {
     if (!rating.canRate || saving) return;
     setSaving(true); setError(null);
     try { const value = await travelsApi.rateTrip(tripId, score, opinion); setRating(value); setDraftScore(value.userRating ?? 0); setReview(value.userReview ?? ''); }
-    catch (reason) { setError(t(getErrorKey(reason))); }
+    catch (reason) { setError(getErrorKey(reason)); }
     finally { setSaving(false); }
   };
 
@@ -44,7 +45,7 @@ const TripRating = ({ tripId, authenticated, language, initialAverage = 0, initi
     </div>}
     {!authenticated && <small>{t('loginToRate')}</small>}
     {authenticated && !rating.canRate && <small>{t('cannotRateOwnTrip')}</small>}
-    {error && <p role="alert" className="form-error">{error}</p>}
+    {error && <p role="alert" className="form-error">{t(error)}</p>}
     {expanded && <section className="reviews-list"><h2>{t('travelerOpinions')}</h2>
       {rating.reviews.length === 0 ? <p className="empty-state">{t('noReviewsYet')}</p> : rating.reviews.map(item => <article key={`${item.username}-${item.updatedAt}`}><header><strong>@{item.username}</strong><span aria-label={`${item.score} ${t('stars')}`}>{'★'.repeat(item.score)}</span></header><p>{item.review}</p></article>)}
     </section>}

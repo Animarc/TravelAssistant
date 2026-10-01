@@ -1,3 +1,4 @@
+import type { TranslationKey } from '../i18n/translations';
 import { useState, type FormEvent } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
@@ -27,7 +28,7 @@ const WelcomeView = () => {
     return requested === 'register' ? 'register' : 'login';
   });
   const [recovering, setRecovering] = useState(false);
-  const [socialError, setSocialError] = useState<string | null>(null);
+  const [socialError, setSocialError] = useState<TranslationKey | null>(null);
   const [form, setForm] = useState({ email: '', password: '', username: '' });
 
   const submit = async (event: FormEvent) => {
@@ -60,10 +61,10 @@ const WelcomeView = () => {
         {mode === 'login' && <button type="button" className="text-button" onClick={() => setRecovering(true)}>{t('forgotPassword')}</button>}
         <div className="social-divider"><span>{t('or')}</span></div>
         <div className="social-access">
-          <button type="button" onClick={() => { setSocialError(null); void requestGoogleCredential().then(loginWithGoogle).catch(() => setSocialError(t('socialLoginError'))); }}><GoogleIcon />{t('continueGoogle')}</button>
-          <button type="button" onClick={() => { setSocialError(null); void requestAppleCredential().then(value => loginWithApple(value.idToken, value.firstName, value.lastName)).catch(() => setSocialError(t('socialLoginError'))); }}><AppleIcon />{t('continueApple')}</button>
+          <button type="button" onClick={() => { setSocialError(null); void requestGoogleCredential().then(loginWithGoogle).catch(() => setSocialError('socialLoginError')); }}><GoogleIcon />{t('continueGoogle')}</button>
+          <button type="button" onClick={() => { setSocialError(null); void requestAppleCredential().then(value => loginWithApple(value.idToken, value.firstName, value.lastName)).catch(() => setSocialError('socialLoginError')); }}><AppleIcon />{t('continueApple')}</button>
         </div>
-        {socialError && <div className="welcome-error" role="alert">{socialError}</div>}
+        {socialError && <div className="welcome-error" role="alert">{t(socialError)}</div>}
         {state.browserSessionSupport === 'unsupported' && <div className="welcome-error" role="alert">{t('browserSessionUnsupported')}</div>}
         {state.error && <div className="welcome-error" role="alert">{t(state.error)}</div>}
       </section>

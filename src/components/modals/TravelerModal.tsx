@@ -1,3 +1,4 @@
+import type { TranslationKey } from '../../i18n/translations';
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -13,7 +14,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
   const { state, addTraveler, updateTraveler } = useApp();
   const { t } = useTranslation(state.language);
   const isEditing = editId !== undefined;
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<TranslationKey | null>(null);
   const { isSubmitting, submitOnce } = useSubmitLock();
 
   const [formData, setFormData] = useState({
@@ -52,12 +53,12 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
     e.preventDefault();
 
     if (!formData.firstName.trim() || !formData.lastName.trim()) {
-      setValidationError(t('enterTravelerName'));
+      setValidationError('enterTravelerName');
       return;
     }
 
     if (!formData.age || parseInt(formData.age) < 0) {
-      setValidationError(t('enterValidAge'));
+      setValidationError('enterValidAge');
       return;
     }
 
@@ -121,7 +122,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
       <section className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <h2>{isEditing ? t('editTraveler') : t('addNewTraveler')}</h2>
-        {validationError && <p className="form-error" role="alert">{validationError}</p>}
+        {validationError && <p className="form-error" role="alert">{t(validationError)}</p>}
         <form onSubmit={handleSubmit}>
           <label>{t('firstName')}:
             <input

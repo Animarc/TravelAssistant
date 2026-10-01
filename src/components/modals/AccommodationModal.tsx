@@ -1,3 +1,4 @@
+import type { TranslationKey } from '../../i18n/translations';
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
@@ -13,7 +14,7 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
   const { state, addAccommodation, updateAccommodation } = useApp();
   const { t } = useTranslation(state.language);
   const isEditing = editId !== undefined;
-  const [validationError, setValidationError] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<TranslationKey | null>(null);
   const { isSubmitting, submitOnce } = useSubmitLock();
 
   const [formData, setFormData] = useState({
@@ -47,12 +48,12 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      setValidationError(t('enterAccommodationName'));
+      setValidationError('enterAccommodationName');
       return;
     }
 
     if (formData.toDay < formData.fromDay) {
-      setValidationError(t('checkoutAfterCheckin'));
+      setValidationError('checkoutAfterCheckin');
       return;
     }
 
@@ -92,7 +93,7 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
       <section className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <h2>{isEditing ? t('editAccommodation') : t('addNewAccommodation')}</h2>
-        {validationError && <p className="form-error" role="alert">{validationError}</p>}
+        {validationError && <p className="form-error" role="alert">{t(validationError)}</p>}
         <form onSubmit={handleSubmit}>
           <label>{t('placeName')}:
             <input
