@@ -44,3 +44,10 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   .app-notice { left: .75rem; right: .75rem; max-width: none; }
 }
 @media (prefers-reduced-motion: reduce) { .loading-spinner { animation: none; } }
+
+.registration-confirmation { width: min(100% - 2rem, 640px); margin: 3rem auto; padding: 2rem; text-align: center; border: 1px solid var(--border-color); border-radius: 20px; background: var(--bg-panel); }
+.registration-confirmation > img { width: 72px; height: 72px; }
+.registration-confirmation > p { line-height: 1.6; }
+.registration-confirmation > strong { overflow-wrap: anywhere; }
+.registration-confirmation .email-verification-banner { margin: 1.5rem 0; flex-wrap: wrap; justify-content: center; text-align: left; }
+.registration-confirmation > button { margin-top: 1rem; }

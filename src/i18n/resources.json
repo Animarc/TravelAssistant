@@ -326,7 +326,11 @@
     "searchPeople": "Buscar personas",
     "searchPeopleHint": "Encuentra a alguien para preparar futuros viajes juntos.",
     "searchUsersPlaceholder": "Nombre de usuario",
-    "unconverted": "Sin convertir"
+    "unconverted": "Sin convertir",
+    "registrationConfirmTitle": "Confirma tu correo",
+    "registrationConfirmIntro": "Te hemos enviado un enlace para confirmar tu dirección de correo.",
+    "registrationConfirmHelp": "Abre el mensaje y pulsa Confirmar correo. Si no lo encuentras, revisa la carpeta de spam o solicita otro envío.",
+    "registrationContinue": "Continuar a mi cuenta"
   },
   "en": {
     "loading": "Loading…",
@@ -644,7 +648,11 @@
     "searchPeople": "Find people",
     "searchPeopleHint": "Find someone to plan future trips with.",
     "searchUsersPlaceholder": "Username",
-    "unconverted": "Not converted"
+    "unconverted": "Not converted",
+    "registrationConfirmTitle": "Confirm your email",
+    "registrationConfirmIntro": "We've sent you a link to confirm your email address.",
+    "registrationConfirmHelp": "Open the message and select Confirm email. If you can't find it, check your spam folder or request another email.",
+    "registrationContinue": "Continue to my account"
   },
   "fr": {
     "loading": "Chargement…",
@@ -798,7 +806,11 @@
     "searchPeople": "Rechercher des personnes",
     "searchPeopleHint": "Trouvez quelqu’un avec qui préparer de futurs voyages.",
     "searchUsersPlaceholder": "Nom d’utilisateur",
-    "unconverted": "Non converti"
+    "unconverted": "Non converti",
+    "registrationConfirmTitle": "Confirmez votre adresse e-mail",
+    "registrationConfirmIntro": "Nous vous avons envoyé un lien pour confirmer votre adresse e-mail.",
+    "registrationConfirmHelp": "Ouvrez le message et confirmez votre adresse. Vérifiez les courriers indésirables ou demandez un nouvel envoi.",
+    "registrationContinue": "Continuer vers mon compte"
   },
   "de": {
     "loading": "Wird geladen…",
@@ -952,7 +964,11 @@
     "searchPeople": "Personen suchen",
     "searchPeopleHint": "Finde jemanden für die Planung künftiger Reisen.",
     "searchUsersPlaceholder": "Benutzername",
-    "unconverted": "Nicht umgerechnet"
+    "unconverted": "Nicht umgerechnet",
+    "registrationConfirmTitle": "Bestätige deine E-Mail-Adresse",
+    "registrationConfirmIntro": "Wir haben dir einen Link zur Bestätigung deiner E-Mail-Adresse geschickt.",
+    "registrationConfirmHelp": "Öffne die Nachricht und bestätige deine E-Mail-Adresse. Prüfe den Spamordner oder fordere eine neue Nachricht an.",
+    "registrationContinue": "Weiter zu meinem Konto"
   },
   "zh": {
     "loading": "正在加载…",
@@ -1106,7 +1122,11 @@
     "searchPeople": "搜索用户",
     "searchPeopleHint": "寻找一起规划未来旅行的人。",
     "searchUsersPlaceholder": "用户名",
-    "unconverted": "未换算"
+    "unconverted": "未换算",
+    "registrationConfirmTitle": "确认你的邮箱",
+    "registrationConfirmIntro": "我们已发送确认邮箱的链接。",
+    "registrationConfirmHelp": "打开邮件并确认邮箱。如果没有找到，请检查垃圾邮件文件夹或重新发送。",
+    "registrationContinue": "前往我的账户"
   },
   "ru": {
     "loading": "Загрузка…",
@@ -1260,7 +1280,11 @@
     "searchPeople": "Найти людей",
     "searchPeopleHint": "Найдите партнёра для планирования будущих поездок.",
     "searchUsersPlaceholder": "Имя пользователя",
-    "unconverted": "Без конвертации"
+    "unconverted": "Без конвертации",
+    "registrationConfirmTitle": "Подтвердите электронную почту",
+    "registrationConfirmIntro": "Мы отправили вам ссылку для подтверждения адреса электронной почты.",
+    "registrationConfirmHelp": "Откройте письмо и подтвердите адрес. Если письма нет, проверьте папку «Спам» или запросите повторную отправку.",
+    "registrationContinue": "Перейти в мой аккаунт"
   },
   "ja": {
     "loading": "読み込み中…",
@@ -1414,6 +1438,10 @@
     "searchPeople": "ユーザーを検索",
     "searchPeopleHint": "今後の旅行を一緒に計画する人を探しましょう。",
     "searchUsersPlaceholder": "ユーザー名",
-    "unconverted": "未換算"
+    "unconverted": "未換算",
+    "registrationConfirmTitle": "メールアドレスを確認してください",
+    "registrationConfirmIntro": "メールアドレス確認用のリンクを送信しました。",
+    "registrationConfirmHelp": "メールを開いて確認してください。見つからない場合は迷惑メールフォルダーを確認するか、再送信してください。",
+    "registrationContinue": "アカウントへ進む"
   }
 }

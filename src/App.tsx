@@ -11,6 +11,7 @@ import './styles/theme.css';
 import './styles/experience.css';
 import EmailVerificationBanner from './components/EmailVerificationBanner';
 import VerifyEmailView from './components/VerifyEmailView';
+import RegistrationConfirmation from './components/RegistrationConfirmation';
 
 const PlanningView = lazy(() => import('./components/PlanningView'));
 const BudgetView = lazy(() => import('./components/BudgetView'));
@@ -29,6 +30,7 @@ const AppContent = () => {
   if (!state.isAuthenticated && !state.publicPreview) {
     return <div className="app welcome-app"><Navbar /><WelcomeView /></div>;
   }
+  if (state.isAuthenticated && state.user && !state.user.emailVerified && state.trips.length === 0 && !state.publicPreview && state.currentView !== 'account') return <div className="app welcome-app"><Navbar /><RegistrationConfirmation /><Footer /></div>;
   const renderView = () => {
     switch (state.currentView) {
       case 'planning':
