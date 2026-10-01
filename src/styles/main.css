@@ -104,7 +104,7 @@
 
   /* Layout */
   --header-height: 72px;
-  --footer-height: 36px;
+  --footer-height: 20px;
   --panel-left-width: 55%;
   --panel-right-width: 45%;
   --container-padding: 14px;
@@ -1752,7 +1752,9 @@ textarea:focus-visible {
 /* ==================== FOOTER ==================== */
 
 .site-footer {
-  height: var(--footer-height);
+  min-height: var(--footer-height);
+  flex-shrink: 0;
+  padding: 2px 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1761,6 +1763,8 @@ textarea:focus-visible {
 }
 
 .site-footer p {
+  line-height: 16px;
+  text-align: center;
   font-size: var(--font-size-xs);
   color: var(--text-muted);
   margin: 0;
