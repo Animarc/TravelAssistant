@@ -69,6 +69,7 @@
 }
 
 .account-form label {
+  min-width: 0;
   display: grid;
   gap: var(--space-xs);
   color: var(--text-secondary);
@@ -89,6 +90,12 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   font: inherit;
+}
+
+.account-form textarea {
+  resize: vertical;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .account-form input:focus,

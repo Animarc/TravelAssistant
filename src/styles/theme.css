@@ -79,7 +79,7 @@ input, select, textarea { color: var(--text-primary); }
 input::placeholder, textarea::placeholder { color: var(--text-muted); opacity: 1; }
 
 @media screen {
-[data-theme="dark"] :is(.navbar-logo, .auth-restoring-mark img) { filter: brightness(0) invert(.9); }
+[data-theme="dark"] .brand-mark { content: url("/tabiji-log-mark-dark.svg"); }
 [data-theme="dark"] :is(.welcome-form input, .public-explorer-heading input, .public-trip-card, .user-search > input) {
   background: var(--bg-elevated); color: var(--text-primary);
 }

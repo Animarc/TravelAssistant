@@ -35,7 +35,7 @@ const PasswordResetView = ({ confirm = false, onBack }: { confirm?: boolean; onB
     } finally { setBusy(false); }
   };
   return <main className="verify-email-view password-reset-view">
-    <img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" />
+    <img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" className="brand-mark" />
     <h1>{done && confirm ? t('passwordUpdated') : t('recoverPassword')}</h1>
     {done ? <p role="status">{t(confirm ? 'passwordUpdatedHelp' : 'resetRequested')}</p> : invalid ? <><p role="alert">{t('passwordResetInvalid')}</p><a href={`${import.meta.env.BASE_URL}?forgot-password=1`}>{t('requestAnotherLink')}</a></> :
       <form className="account-form" onSubmit={submit}>

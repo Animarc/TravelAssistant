@@ -34,7 +34,7 @@ const VerifyEmailView = ({ language }: { language?: Language }) => {
     request.current = null; setStatus('checking');
     void confirm().then(() => setStatus('verified')).catch(reason => setStatus(reason instanceof ApiError && reason.status === 400 ? 'invalid' : 'unavailable'));
   };
-  return <main className="verify-email-view"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" />
+  return <main className="verify-email-view"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" className="brand-mark" />
     <h1>{t(status === 'checking' ? 'emailChecking' : status === 'verified' ? 'emailConfirmed' : status === 'unavailable' ? 'emailConnectionFailed' : 'emailInvalid')}</h1>
     <p>{t(status === 'checking' ? 'emailCheckingHelp' : status === 'verified' ? 'emailConfirmedHelp' : status === 'unavailable' ? 'emailConnectionHelp' : 'emailInvalidHelp')}</p>
     {status === 'unavailable' && <button type="button" onClick={retry}>{t('retryAction')}</button>}

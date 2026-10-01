@@ -28,7 +28,7 @@ const AppContent = () => {
   if (new URLSearchParams(window.location.search).has('reset-password')) return <div className="app welcome-app"><PasswordResetView confirm /></div>;
   if (new URLSearchParams(window.location.search).has('forgot-password')) return <div className="app welcome-app"><PasswordResetView /></div>;
   if (state.authLoading && !state.isAuthenticated) {
-    return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark" role="status"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" /><span>{t('loading')}</span></div></div>;
+    return <div className="app auth-restoring"><Navbar /><div className="auth-restoring-mark" role="status"><img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" className="brand-mark" /><span>{t('loading')}</span></div></div>;
   }
   if (!state.isAuthenticated && !state.publicPreview) {
     return <div className="app welcome-app"><Navbar /><WelcomeView /></div>;
