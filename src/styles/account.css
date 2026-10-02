@@ -7,13 +7,56 @@
   overflow-y: auto;
 }
 
-.account-content {
+.account-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
-  gap: var(--space-xl);
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: clamp(24px, 3vw, 48px);
+  padding: clamp(16px, 2.5vw, 40px);
   align-items: start;
-  padding: var(--space-xl);
 }
+
+.account-content { min-width: 0; padding: 0; }
+
+.account-sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+  padding-right: var(--space-xl);
+  border-right: 1px solid var(--border-color);
+}
+
+.account-sidebar-user { display: flex; align-items: center; gap: var(--space-sm); min-width: 0; }
+.account-sidebar-user > div:last-child { min-width: 0; }
+.account-sidebar-user strong { display: block; color: var(--text-primary); }
+.account-sidebar-user span { display: block; margin-top: 4px; font-size: var(--font-size-xs); color: var(--text-secondary); overflow-wrap: anywhere; }
+.account-navigation { display: grid; gap: 6px; }
+.account-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  text-align: left;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.account-nav-item:hover { background: var(--bg-elevated); color: var(--text-primary); }
+.account-nav-item.active { background: var(--color-primary-subtle); color: var(--color-primary); border-color: var(--border-color); }
+.account-nav-icon { width: 20px; flex: 0 0 20px; text-align: center; font-size: 1.25rem; line-height: 1; }
+.account-nav-count { margin-left: auto; padding: 2px 7px; border-radius: 999px; background: var(--bg-elevated); font-size: var(--font-size-xs); }
+.account-sidebar-logout { align-self: start; }
+.account-content > .account-section { padding: 0; background: transparent; border: 0; border-radius: 0; }
+.account-content > .auth-section,
+.account-content > .account-section:has(> .account-form) { max-width: 680px; }
+.account-content > .discovery-section { max-width: none; }
 
 .account-section {
   min-width: 0;
@@ -262,10 +305,8 @@
 .account-section .invite-form { display: flex; flex-wrap: wrap; }
 .account-section .invite-form input { flex: 1 1 180px; min-width: 0; }
 .account-section .invite-form select { width: auto; }
-.account-content > .discovery-section { grid-column: 1 / -1; }
-/* The travel library is the main workspace; access belongs to its trip. */
-.account-content { grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); }
-.saved-trips-section { grid-column: 1 / -1; order: -3; background: transparent; border: 0; padding: 0; }
+
+.saved-trips-section { background: transparent; border: 0; padding: 0; }
 .saved-trips-section > .account-section-heading { flex-wrap: wrap; margin-bottom: var(--space-lg); }
 .saved-trip-search { width: min(100%, 360px); min-height: 44px; padding: .7rem .85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); background: var(--bg-elevated); font: inherit; }
 .saved-trip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: var(--space-lg); align-items: start; }
@@ -275,5 +316,15 @@
 .saved-trip-description { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: var(--space-md) 0; line-height: 1.6; }
 .trip-access-panel { margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--border-color); min-width: 0; }
 .trip-access-panel h4 { color: var(--text-primary); }
-.account-content > .discovery-section { order: -2; }
+
 .saved-trip-search:focus-visible { outline: 3px solid var(--color-accent-subtle); border-color: var(--color-accent); }
+
+@media (max-width: 760px) {
+  .account-layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); padding: var(--space-lg); }
+  .account-sidebar { position: static; padding: 0 0 var(--space-md); border-right: 0; border-bottom: 1px solid var(--border-color); gap: var(--space-md); }
+  .account-sidebar-user { display: none; }
+  .account-navigation { display: flex; overflow-x: auto; gap: var(--space-xs); padding-bottom: 4px; }
+  .account-nav-item { width: auto; flex: 0 0 auto; min-height: 44px; gap: 8px; white-space: nowrap; padding: 10px 12px; }
+  .account-nav-count { margin-left: 0; }
+  .account-sidebar-logout { align-self: end; padding: .4rem .7rem; font-size: var(--font-size-xs); }
+}

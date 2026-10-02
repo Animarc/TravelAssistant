@@ -16,12 +16,17 @@ const context = {
 };
 const setup = () => { vi.mocked(useApp).mockReturnValue(context as unknown as ReturnType<typeof useApp>); return render(<AccountView />); };
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
-it('keeps discovery visible alongside saved trips and filters the library', async () => {
+it('filters saved trips and opens discovery from the account menu', async () => {
   setup();
-  expect(screen.getByText('Public trip discovery')).toBeInTheDocument();
+  expect(screen.queryByText('Public trip discovery')).not.toBeInTheDocument();
   await userEvent.type(screen.getByRole('searchbox'), 'Okinawa');
   expect(screen.queryByRole('heading', { name: 'Islandia' })).not.toBeInTheDocument();
   expect(screen.getByRole('heading', { name: 'Okinawa' })).toBeInTheDocument();
+  await userEvent.click(screen.getByRole('button', { name: 'Explorar' }));
+  expect(screen.getByText('Public trip discovery')).toBeInTheDocument();
+  expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+  await userEvent.click(screen.getByRole('button', { name: /Mis Viajes/ }));
+  expect(screen.getByRole('searchbox')).toHaveValue('Okinawa');
 });
 it('places access inside its trip and keeps switching access on the account screen', async () => {
   setup();
@@ -33,4 +38,16 @@ it('places access inside its trip and keeps switching access on the account scre
   expect(switchTrip).toHaveBeenLastCalledWith('two');
   expect(setCurrentView).toHaveBeenLastCalledWith('account');
   expect(within(first).queryByRole('region')).not.toBeInTheDocument();
+});
+
+it('separates profile, creation and invitations into their own sections', async () => {
+  setup();
+  expect(screen.queryByRole('button', { name: 'Guardar perfil' })).not.toBeInTheDocument();
+  await userEvent.click(screen.getByRole('button', { name: 'Mi perfil' }));
+  expect(screen.getByRole('button', { name: 'Guardar perfil' })).toBeInTheDocument();
+  await userEvent.click(screen.getByRole('button', { name: 'Nuevo viaje' }));
+  expect(screen.getByRole('button', { name: 'Crear viaje' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Guardar perfil' })).not.toBeInTheDocument();
+  await userEvent.click(screen.getByRole('button', { name: 'Invitaciones' }));
+  expect(screen.getByText('No tienes invitaciones pendientes.')).toBeInTheDocument();
 });

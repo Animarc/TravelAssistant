@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
+import type { TranslationKey } from '../i18n/translations';
 import type { TripRole } from '../types';
 import ConfirmDialog from './ConfirmDialog';
 import '../styles/account.css';
@@ -15,6 +16,16 @@ const AccountView = () => {
     removeMember, acceptInvitation, declineInvitation
   } = useApp();
   const { t } = useTranslation(state.language);
+  const [activeSection, setActiveSection] = useState<'trips' | 'explore' | 'create' | 'profile' | 'invitations'>('trips');
+  const accountSections: { id: typeof activeSection; label: TranslationKey; icon: string }[] = [
+    { id: 'trips', label: 'myTrips', icon: '▦' },
+    { id: 'explore', label: 'accountExplore', icon: '◎' },
+    ...(state.isAuthenticated ? [
+      { id: 'create' as const, label: 'newTrip' as const, icon: '+' },
+      { id: 'invitations' as const, label: 'accountInvitations' as const, icon: '↗' },
+      { id: 'profile' as const, label: 'accountProfile' as const, icon: '○' }
+    ] : [])
+  ];
   const [tripQuery, setTripQuery] = useState('');
   const [accessTripId, setAccessTripId] = useState<string | null>(null);
   const [tripForm, setTripForm] = useState({ name: '', description: '', currency: 'EUR' });
@@ -59,12 +70,27 @@ const AccountView = () => {
 
   return (
     <div className="account-view">
-      <div className="account-content">
-        <section className="account-section auth-section">
+      <div className="account-layout">
+        <aside className="account-sidebar">
+          <div className="account-sidebar-user">
+            <div className="user-avatar">{state.user?.username[0]?.toUpperCase() ?? 'T'}</div>
+            <div><strong>{state.user?.username ?? t('demoMode')}</strong><span>{state.user?.email}</span></div>
+          </div>
+          <nav className="account-navigation" aria-label={t('connectedAccount')}>
+            {accountSections.map(section => <button key={section.id} type="button" className={`account-nav-item ${activeSection === section.id ? 'active' : ''}`} aria-current={activeSection === section.id ? 'page' : undefined} aria-controls="account-detail" onClick={() => setActiveSection(section.id)}>
+              <span className="account-nav-icon" aria-hidden="true">{section.icon}</span><span>{t(section.label)}</span>
+              {section.id === 'trips' && <span className="account-nav-count">{state.trips.length}</span>}
+              {section.id === 'invitations' && invitations.length > 0 && <span className="account-nav-count">{invitations.length}</span>}
+            </button>)}
+          </nav>
+          {state.isAuthenticated && <button className="account-sidebar-logout secondary-button" onClick={() => void logout()}>{t('logout')}</button>}
+        </aside>
+        <div className="account-content" id="account-detail">
+        {activeSection === 'profile' && <section className="account-section auth-section">
           <div className="signed-user">
             <div className="user-avatar">{state.user?.username[0]?.toUpperCase()}</div>
-            <div><span className="section-kicker">{t('connectedAccount')}</span><h2>{state.user?.username}</h2><p>{state.user?.email}</p></div>
-            <button className="secondary-button" onClick={() => void logout()}>{t('logout')}</button>
+            <div><span className="section-kicker">{t('connectedAccount')}</span><h2>{t('accountProfile')}</h2><p>{state.user?.email}</p></div>
+
           </div>
           <form className="account-form" onSubmit={handleProfile}>
             <p className="account-helper">{t('optionalProfileHint')}</p>
@@ -72,9 +98,9 @@ const AccountView = () => {
             <label>{t('lastName')}<input maxLength={100} autoComplete="family-name" value={profileForm.lastName} onChange={event => setProfileForm({ ...profileForm, lastName: event.target.value })} /></label>
             <button disabled={profileSaving}>{profileSaving ? t('saving') : t('saveProfile')}</button>
           </form>
-        </section>
+        </section>}
 
-        {state.isAuthenticated && (
+        {state.isAuthenticated && activeSection === 'create' && (
           <section className="account-section">
             <div className="account-section-heading"><div><span className="section-kicker">{t('newTrip')}</span><h2>{t('startPlanning')}</h2></div></div>
             <form className="account-form" onSubmit={handleCreateTrip}>
@@ -86,7 +112,7 @@ const AccountView = () => {
           </section>
         )}
 
-        <section className="account-section saved-trips-section">
+        {activeSection === 'trips' && <section className="account-section saved-trips-section">
           <div className="account-section-heading"><div><span className="section-kicker">{state.isAuthenticated ? t('synced') : t('demoMode')}</span><h2>{t('myTrips')}</h2></div><input className="saved-trip-search" type="search" value={tripQuery} onChange={event => setTripQuery(event.target.value)} placeholder={t('searchTrips')} aria-label={t('searchTrips')} /></div>
           {state.trips.length === 0 && <p className="account-helper">{t('noTripsYet')}</p>}
           <div className="saved-trip-grid">
@@ -107,18 +133,16 @@ const AccountView = () => {
             </article>
           ))}
           </div>
-        </section>
+        </section>}
 
-        <section className="account-section discovery-section"><PublicTripsExplorer authenticated={state.isAuthenticated} onOpen={openPublicPreview} /><UserSearch /></section>
+        {activeSection === 'explore' && <section className="account-section discovery-section"><PublicTripsExplorer authenticated={state.isAuthenticated} onOpen={openPublicPreview} /><UserSearch /></section>}
 
-        {state.isAuthenticated && invitations.length > 0 && (
-          <section className="account-section"><h2>{t('pendingInvitations')}</h2>{invitations.map(invitation => (
+        {state.isAuthenticated && activeSection === 'invitations' && (
+          <section className="account-section"><h2>{t('pendingInvitations')}</h2>{invitations.length === 0 && <p className="account-helper">{t('accountNoInvitations')}</p>}{invitations.map(invitation => (
             <div className="collaboration-row" key={invitation.id}><div><strong>{t('tripInvitation')}</strong><span>{t(invitation.role === 'editor' ? 'roleEditor' : 'roleViewer')}</span></div><div><button onClick={() => void acceptInvitation(invitation.id).catch(() => undefined)}>{t('accept')}</button><button className="secondary-button" onClick={() => void declineInvitation(invitation.id).catch(() => undefined)}>{t('decline')}</button></div></div>
           ))}</section>
         )}
-
-
-
+        </div>
       </div>
       <ConfirmDialog open={pendingRemoveMember !== null} message={t('confirmRemoveMember')} confirmLabel={t('remove')} cancelLabel={t('cancel')} onCancel={() => setPendingRemoveMember(null)} onConfirm={async () => {
         if (!pendingRemoveMember) return;

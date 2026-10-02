@@ -1,5 +1,9 @@
 {
   "es": {
+    "accountProfile": "Mi perfil",
+    "accountExplore": "Explorar",
+    "accountInvitations": "Invitaciones",
+    "accountNoInvitations": "No tienes invitaciones pendientes.",
     "loading": "Cargando…",
     "retry": "Reintentar",
     "clearSearch": "Limpiar búsqueda",
@@ -365,6 +369,10 @@
     "enterTransportCoordinates": "Introduce coordenadas válidas de origen y destino."
   },
   "en": {
+    "accountProfile": "My profile",
+    "accountExplore": "Explore",
+    "accountInvitations": "Invitations",
+    "accountNoInvitations": "You have no pending invitations.",
     "loading": "Loading…",
     "retry": "Try again",
     "clearSearch": "Clear search",
@@ -730,6 +738,10 @@
     "enterTransportCoordinates": "Enter valid origin and destination coordinates."
   },
   "fr": {
+    "accountProfile": "Mon profil",
+    "accountExplore": "Explorer",
+    "accountInvitations": "Invitations",
+    "accountNoInvitations": "Aucune invitation en attente.",
     "loading": "Chargement…",
     "retry": "Réessayer",
     "clearSearch": "Effacer la recherche",
@@ -1095,6 +1107,10 @@
     "enterTransportCoordinates": "Saisissez des coordonnées de départ et d’arrivée valides."
   },
   "de": {
+    "accountProfile": "Mein Profil",
+    "accountExplore": "Entdecken",
+    "accountInvitations": "Einladungen",
+    "accountNoInvitations": "Du hast keine offenen Einladungen.",
     "loading": "Wird geladen…",
     "retry": "Erneut versuchen",
     "clearSearch": "Suche löschen",
@@ -1460,6 +1476,10 @@
     "enterTransportCoordinates": "Gültige Start- und Zielkoordinaten eingeben."
   },
   "zh": {
+    "accountProfile": "我的个人资料",
+    "accountExplore": "探索",
+    "accountInvitations": "邀请",
+    "accountNoInvitations": "暂无待处理邀请。",
     "loading": "正在加载…",
     "retry": "重试",
     "clearSearch": "清除搜索",
@@ -1825,6 +1845,10 @@
     "enterTransportCoordinates": "请输入有效的起点和终点坐标。"
   },
   "ru": {
+    "accountProfile": "Мой профиль",
+    "accountExplore": "Обзор",
+    "accountInvitations": "Приглашения",
+    "accountNoInvitations": "У вас нет ожидающих приглашений.",
     "loading": "Загрузка…",
     "retry": "Повторить",
     "clearSearch": "Очистить поиск",
@@ -2190,6 +2214,10 @@
     "enterTransportCoordinates": "Введите корректные координаты отправления и прибытия."
   },
   "ja": {
+    "accountProfile": "プロフィール",
+    "accountExplore": "旅を探す",
+    "accountInvitations": "招待",
+    "accountNoInvitations": "未回答の招待はありません。",
     "loading": "読み込み中…",
     "retry": "再試行",
     "clearSearch": "検索をクリア",

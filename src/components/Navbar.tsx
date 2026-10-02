@@ -89,10 +89,10 @@ const Navbar = () => {
   return (
     <nav className={`navbar ${state.currentView === 'account' ? 'navbar-global-view' : ''} ${!state.isAuthenticated ? 'navbar-auth' : ''}`} aria-label={t('appTitle')}>
       <div className="navbar-primary">
-        <div className="navbar-left">
+        <a className="navbar-left navbar-home-link" href="/">
           <img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" className="navbar-logo brand-mark" />
           <span className="navbar-title">{t('appTitle')}</span>
-        </div>
+        </a>
 
         {state.isAuthenticated && !state.publicPreview && <div className="trip-switcher" ref={tripDropdownRef}>
           <button
