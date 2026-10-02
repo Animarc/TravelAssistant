@@ -1,24 +1,36 @@
 /* ==================== ACCOUNT VIEW ==================== */
 
+/* Account navigation occupies a fixed row; only the detail pane scrolls. */
+.account-view-active > .container.centered-view {
+  justify-content: flex-start;
+  align-items: stretch;
+  min-height: 0;
+}
+
 .account-view {
+  flex: 1;
+  min-height: 0;
   width: 100%;
   max-width: none;
   min-width: 0;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .account-layout {
+  height: 100%;
+  min-height: 0;
   display: grid;
+  grid-template-rows: minmax(0, 1fr);
   grid-template-columns: 230px minmax(0, 1fr);
   gap: clamp(24px, 3vw, 48px);
   padding: clamp(16px, 2.5vw, 40px);
   align-items: start;
 }
 
-.account-content { min-width: 0; padding: 0; }
+.account-content { align-self: stretch; min-width: 0; min-height: 0; padding: 0; overflow-y: auto; overscroll-behavior-y: contain; scrollbar-gutter: stable; }
 
 .account-sidebar {
-  position: sticky;
+  position: static;
   top: 0;
   display: flex;
   flex-direction: column;
@@ -320,10 +332,10 @@
 .saved-trip-search:focus-visible { outline: 3px solid var(--color-accent-subtle); border-color: var(--color-accent); }
 
 @media (max-width: 800px) {
-  .account-layout { display: block; padding: 0; }
+  .account-layout { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); gap: 0; padding: 0; align-items: stretch; }
   .account-content { padding: var(--space-lg); }
   .account-sidebar {
-    position: sticky;
+    position: static;
     top: 0;
     z-index: 2;
     padding: var(--space-sm) var(--space-md);
