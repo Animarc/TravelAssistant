@@ -82,7 +82,7 @@ const TravelersView = () => {
                   <strong className="traveler-name">
                     {traveler.firstName} {traveler.lastName}
                   </strong>
-                  <span className="traveler-age">{traveler.age} {t('yearsOld')}</span>
+                  {traveler.age != null && <span className="traveler-age">{traveler.age} {t('yearsOld')}</span>}
                 </div>
                 {traveler.paysBudget && (
                   <span className="traveler-pays-badge">{t('paysBudgetShort')}</span>

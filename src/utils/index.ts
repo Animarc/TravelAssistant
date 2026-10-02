@@ -65,7 +65,8 @@ export const calculateNights = (fromDay: number, toDay: number): number => {
 /**
  * Get activity type icon
  */
-export const getActivityTypeIcon = (type?: string): string => {
+export const getActivityTypeIcon = (type?: string, transportMode?: string): string => {
+  if (type === 'transporte' && transportMode) return ({ vehicle: '🚗', train: '🚆', plane: '✈️' } as Record<string, string>)[transportMode] ?? '🚗';
   const icons: Record<string, string> = {
     normal: '📌',
     vuelo: '✈️',

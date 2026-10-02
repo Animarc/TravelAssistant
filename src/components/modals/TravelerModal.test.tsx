@@ -1,0 +1,21 @@
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { afterEach, expect, it, vi } from 'vitest';
+import TravelerModal from './TravelerModal';
+import { useApp } from '../../context/AppContext';
+vi.mock('../../context/AppContext', () => ({ useApp: vi.fn() }));
+afterEach(() => { cleanup(); vi.clearAllMocks(); });
+it('creates a traveler with only a name and an unspecified age', async () => {
+  const addTraveler = vi.fn().mockResolvedValue(undefined);
+  vi.mocked(useApp).mockReturnValue({ state: { language: 'es', travelers: [] }, addTraveler } as unknown as ReturnType<typeof useApp>);
+  const onClose = vi.fn();
+  render(<TravelerModal onClose={onClose} />);
+  const name = screen.getByRole('textbox', { name: 'Nombre:' });
+  expect(name).toBeRequired();
+  expect(screen.getByRole('textbox', { name: 'Apellidos:' })).not.toBeRequired();
+  expect(screen.getByRole('spinbutton')).not.toBeRequired();
+  await userEvent.type(name, 'Yui');
+  await userEvent.click(screen.getByRole('button', { name: /añadir/i }));
+  expect(addTraveler).toHaveBeenCalledWith(expect.objectContaining({ firstName: 'Yui', lastName: '', age: null }));
+  expect(onClose).toHaveBeenCalled();
+});

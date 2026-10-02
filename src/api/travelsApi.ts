@@ -4,6 +4,11 @@ import type { AccommodationDto, ActivityDto, DayDto, PublicTripDto, ShoppingItem
 
 const json = (body: unknown): RequestInit => ({ method: 'POST', body: JSON.stringify(body) });
 const put = (body: unknown): RequestInit => ({ method: 'PUT', body: JSON.stringify(body) });
+const transport = (activity: Activity) => ({
+  transportMode: activity.transportMode ?? null,
+  startLatitude: activity.startCoordinates?.[0] ?? null, startLongitude: activity.startCoordinates?.[1] ?? null,
+  endLatitude: activity.endCoordinates?.[0] ?? null, endLongitude: activity.endCoordinates?.[1] ?? null
+});
 const coordinates = (value?: [number, number]) => ({ latitude: value?.[0] ?? null, longitude: value?.[1] ?? null });
 
 export const travelsApi = {
@@ -34,12 +39,12 @@ export const travelsApi = {
   createActivity: (tripId: string, dayId: string, activity: Activity) => apiRequest<ActivityDto>(TRAVELS_API_URL, `/api/trips/${tripId}/days/${dayId}/activities`, json({
     time: activity.time || null, name: activity.name, description: activity.description, importantInfo: activity.importantInfo ?? null,
     price: activity.price === undefined || activity.price === '' ? null : Number(activity.price), currency: activity.currency ?? null,
-    ...coordinates(activity.coordinates), type: activity.type ?? 'normal', isOptional: activity.isOptional ?? false
+    ...coordinates(activity.coordinates), ...transport(activity), type: activity.type ?? 'normal', isOptional: activity.isOptional ?? false
   })),
   updateActivity: (tripId: string, dayId: string, activityId: string, activity: Activity) => apiRequest<ActivityDto>(TRAVELS_API_URL, `/api/trips/${tripId}/days/${dayId}/activities/${activityId}`, put({
     time: activity.time || null, name: activity.name, description: activity.description, importantInfo: activity.importantInfo ?? null,
     price: activity.price === undefined || activity.price === '' ? null : Number(activity.price), currency: activity.currency ?? null,
-    ...coordinates(activity.coordinates), type: activity.type ?? 'normal', isOptional: activity.isOptional ?? false, isDone: activity.isDone ?? false
+    ...coordinates(activity.coordinates), ...transport(activity), type: activity.type ?? 'normal', isOptional: activity.isOptional ?? false, isDone: activity.isDone ?? false
   })),
   deleteActivity: (tripId: string, dayId: string, activityId: string) => apiRequest<void>(TRAVELS_API_URL, `/api/trips/${tripId}/days/${dayId}/activities/${activityId}`, { method: 'DELETE' }),
 

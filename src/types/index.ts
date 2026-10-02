@@ -1,5 +1,6 @@
 // Activity types
 export type ActivityType = 'normal' | 'vuelo' | 'transporte' | 'comida' | 'visita';
+export type TransportMode = 'vehicle' | 'train' | 'plane';
 export type EntityId = string | number;
 export type TripRole = 'viewer' | 'editor' | 'owner';
 
@@ -12,6 +13,9 @@ export interface Activity {
   price?: string | number;
   currency?: string;
   coordinates?: [number, number];
+  transportMode?: TransportMode;
+  startCoordinates?: [number, number];
+  endCoordinates?: [number, number];
   type?: ActivityType;
   isOptional?: boolean;
   isDone?: boolean;
@@ -59,7 +63,7 @@ export interface Traveler {
   id: EntityId;
   firstName: string;
   lastName: string;
-  age: number;
+  age: number | null;
   email?: string;
   phonePrefix?: string;
   phone?: string;

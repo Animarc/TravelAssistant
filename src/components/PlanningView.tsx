@@ -57,7 +57,7 @@ const PlanningView = () => {
   const activeTrip = state.trips.find(trip => trip.id === state.activeTripId);
   const canEdit = !state.publicPreview && activeTrip?.capabilities?.canEdit === true;
   const accommodations = getAccommodationsForDay(state.currentDay);
-  const mapRef = usePlanningMap(currentDay, accommodations);
+  const mapRef = usePlanningMap(currentDay, accommodations, state.language);
 
   useEffect(() => {
     if (!focusNewDayList) return;
@@ -394,7 +394,7 @@ const PlanningView = () => {
                   </button>
                   <span className="activity-time">{activity.time || t('noTime')}</span>
                   <span className="activity-type-badge">
-                    {getActivityTypeIcon(activity.type)}
+                    {getActivityTypeIcon(activity.type, activity.transportMode)}
                   </span>
                   <div className="activity-details">
                     <strong className="activity-name">{activity.name}</strong>

@@ -1406,6 +1406,9 @@ export interface components {
             type: string;
             isOptional: boolean;
             isDone: boolean;
+            transportMode?: string | null;
+            startCoordinates?: (number | string)[] | null;
+            endCoordinates?: (number | string)[] | null;
         };
         CreateAccommodationRequest: {
             name: string;
@@ -1438,6 +1441,11 @@ export interface components {
             type: string;
             /** @default false */
             isOptional: boolean;
+            transportMode?: string | null;
+            startLatitude?: number | string | null;
+            startLongitude?: number | string | null;
+            endLatitude?: number | string | null;
+            endLongitude?: number | string | null;
         };
         CreateDayRequest: {
             title: string;
@@ -1453,9 +1461,9 @@ export interface components {
         };
         CreateTravelerRequest: {
             firstName: string;
-            lastName: string;
+            lastName?: string | null;
             /** Format: int32 */
-            age: number | string;
+            age?: null | number | string;
             email?: null | string;
             phonePrefix?: null | string;
             phone?: null | string;
@@ -1514,7 +1522,7 @@ export interface components {
             firstName: string;
             lastName: string;
             /** Format: int32 */
-            age: number | string;
+            age: null | number | string;
             email: null | string;
             phonePrefix: null | string;
             phone: null | string;
@@ -1613,6 +1621,11 @@ export interface components {
             type: null | string;
             isOptional: null | boolean;
             isDone: null | boolean;
+            transportMode?: string | null;
+            startLatitude?: number | string | null;
+            startLongitude?: number | string | null;
+            endLatitude?: number | string | null;
+            endLongitude?: number | string | null;
         };
         UpdateDayRequest: {
             title: string;

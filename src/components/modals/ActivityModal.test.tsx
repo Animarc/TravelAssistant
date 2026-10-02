@@ -1,0 +1,20 @@
+import { cleanup, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { afterEach, expect, it, vi } from 'vitest';
+import ActivityModal from './ActivityModal';
+import { useApp } from '../../context/AppContext';
+vi.mock('../../context/AppContext', () => ({ useApp: vi.fn() }));
+afterEach(() => { cleanup(); vi.clearAllMocks(); });
+it('saves a train journey with separate origin and destination coordinates', async () => {
+  const addActivity = vi.fn().mockResolvedValue(undefined);
+  vi.mocked(useApp).mockReturnValue({ state: { language: 'es', trips: [], days: [], currentDay: 0 }, addActivity } as unknown as ReturnType<typeof useApp>);
+  render(<ActivityModal onClose={vi.fn()} />);
+  await userEvent.selectOptions(screen.getByLabelText('Tipo de actividad:'), 'transporte');
+  await userEvent.selectOptions(screen.getByLabelText('Medio de transporte'), 'train');
+  await userEvent.type(screen.getByRole('textbox', { name: 'Nombre:' }), 'Tokyo → Kyoto');
+  const latitudes = screen.getAllByLabelText('Latitud'); const longitudes = screen.getAllByLabelText('Longitud');
+  await userEvent.type(latitudes[0], '35'); await userEvent.type(longitudes[0], '139');
+  await userEvent.type(latitudes[1], '34'); await userEvent.type(longitudes[1], '135');
+  await userEvent.click(screen.getByRole('button', { name: /añadir actividad/i }));
+  expect(addActivity).toHaveBeenCalledWith(expect.objectContaining({ type: 'transporte', transportMode: 'train', startCoordinates: [35,139], endCoordinates: [34,135] }));
+});

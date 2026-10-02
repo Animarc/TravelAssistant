@@ -38,7 +38,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
         setFormData({
           firstName: traveler.firstName,
           lastName: traveler.lastName,
-          age: traveler.age.toString(),
+          age: traveler.age?.toString() ?? '',
           email: traveler.email || '',
           phonePrefix: traveler.phonePrefix || '',
           phone: traveler.phone || '',
@@ -52,12 +52,12 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.firstName.trim() || !formData.lastName.trim()) {
+    if (!formData.firstName.trim()) {
       setValidationError('enterTravelerName');
       return;
     }
 
-    if (!formData.age || parseInt(formData.age) < 0) {
+    if (formData.age !== '' && (!Number.isInteger(Number(formData.age)) || Number(formData.age) < 0 || Number(formData.age) > 150)) {
       setValidationError('enterValidAge');
       return;
     }
@@ -65,7 +65,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
     const traveler: Omit<Traveler, 'id'> = {
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
-      age: parseInt(formData.age),
+      age: formData.age === '' ? null : Number(formData.age),
       email: formData.email || undefined,
       phonePrefix: formData.phonePrefix || undefined,
       phone: formData.phone || undefined,
@@ -140,7 +140,7 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
-              required
+              placeholder={t('optional')}
             />
           </label><br />
 
@@ -149,10 +149,10 @@ const TravelerModal = ({ editId, onClose }: TravelerModalProps) => {
               type="number"
               name="age"
               min="0"
-              max="120"
+              max="150"
               value={formData.age}
               onChange={handleChange}
-              required
+              placeholder={t('optional')}
             />
           </label><br />
 

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
 import { useTranslation } from '../../hooks/useTranslation';
 import { useSubmitLock } from '../../hooks/useSubmitLock';
-import { Activity, ActivityType } from '../../types';
+import { Activity, ActivityType, TransportMode } from '../../types';
 
 interface ActivityModalProps {
   editIndex?: number;
@@ -30,13 +30,18 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
     coordinates: undefined
   });
 
+  const [route, setRoute] = useState({ startLat: '', startLng: '', endLat: '', endLng: '' });
+
   useEffect(() => {
     if (isEditing && state.days[state.currentDay]?.activities[editIndex]) {
       const activity = state.days[state.currentDay].activities[editIndex];
       setFormData({
         ...activity,
+        type: activity.type === 'vuelo' ? 'transporte' : activity.type,
+        transportMode: activity.transportMode ?? (activity.type === 'vuelo' ? 'plane' : 'vehicle'),
         price: activity.price?.toString() || ''
       });
+      setRoute({ startLat: activity.startCoordinates?.[0]?.toString() ?? '', startLng: activity.startCoordinates?.[1]?.toString() ?? '', endLat: activity.endCoordinates?.[0]?.toString() ?? '', endLng: activity.endCoordinates?.[1]?.toString() ?? '' });
     }
   }, [isEditing, editIndex, state.currentDay, state.days]);
 
@@ -48,6 +53,10 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
       return;
     }
 
+    const isTransport = formData.type === 'transporte' || formData.type === 'vuelo';
+    if (isTransport && (Object.values(route).some(value => value.trim() === '' || !Number.isFinite(Number(value))) || Math.abs(Number(route.startLat)) > 90 || Math.abs(Number(route.endLat)) > 90 || Math.abs(Number(route.startLng)) > 180 || Math.abs(Number(route.endLng)) > 180)) {
+      setValidationError('enterTransportCoordinates'); return;
+    }
     const activity: Activity = {
       time: formData.time || '',
       name: formData.name.trim(),
@@ -57,7 +66,10 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
       currency: formData.currency || tripCurrency,
       type: formData.type as ActivityType,
       isOptional: formData.isOptional,
-      coordinates: formData.coordinates
+      coordinates: isTransport ? [Number(route.endLat), Number(route.endLng)] : formData.coordinates,
+      transportMode: isTransport ? formData.transportMode ?? 'vehicle' : undefined,
+      startCoordinates: isTransport ? [Number(route.startLat), Number(route.startLng)] : undefined,
+      endCoordinates: isTransport ? [Number(route.endLat), Number(route.endLng)] : undefined
     };
 
     setValidationError(null);
@@ -101,12 +113,22 @@ const ActivityModal = ({ editIndex, onClose }: ActivityModalProps) => {
           <label>{t('activityType')}:
             <select name="type" value={formData.type} onChange={handleChange}>
               <option value="normal">📌 {t('typeNormal')}</option>
-              <option value="vuelo">✈️ {t('typeFlight')}</option>
               <option value="transporte">🚆 {t('typeTransport')}</option>
               <option value="comida">🍽️ {t('typeFood')}</option>
               <option value="visita">🏛️ {t('typeVisit')}</option>
             </select>
           </label><br />
+
+          {formData.type === 'transporte' && <fieldset className="transport-route-fields">
+            <legend>{t('typeTransport')}</legend>
+            <label>{t('transportMode')}<select value={formData.transportMode ?? 'vehicle'} onChange={event => setFormData(previous => ({ ...previous, transportMode: event.target.value as TransportMode }))}>
+              <option value="vehicle">{t('transportVehicle')}</option><option value="train">{t('transportTrain')}</option><option value="plane">{t('transportPlane')}</option>
+            </select></label>
+            {(['start', 'end'] as const).map(side => <div className="transport-coordinate-group" key={side}>
+              <strong>{t(side === 'start' ? 'transportOrigin' : 'transportDestination')}</strong>
+              {(['Lat', 'Lng'] as const).map(axis => { const key = `${side}${axis}` as keyof typeof route; return <label key={key}>{t(axis === 'Lat' ? 'latitude' : 'longitude')}<input type="number" step="any" required min={axis === 'Lat' ? -90 : -180} max={axis === 'Lat' ? 90 : 180} value={route[key]} onChange={event => setRoute(previous => ({ ...previous, [key]: event.target.value }))} /></label>; })}
+            </div>)}
+          </fieldset>}
 
           <label>{t('time')}:
             <input

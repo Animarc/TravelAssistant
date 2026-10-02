@@ -1,4 +1,4 @@
-import type { ActivityType, DocumentType, ShoppingCategory, Trip, TripRole } from '../types';
+import type { ActivityType, DocumentType, ShoppingCategory, Trip, TripRole, TransportMode } from '../types';
 import type { TripDetailDto } from './contracts';
 
 const role = (value: string | number): TripRole =>
@@ -28,7 +28,10 @@ export const mapTrip = (dto: TripDetailDto, currentDay = 0): Trip => ({
       price: activity.price === null ? undefined : Number(activity.price),
       currency: optional(activity.currency),
       coordinates: coordinates(activity.coordinates),
-      type: activity.type as ActivityType
+      transportMode: (activity.transportMode ?? (activity.type === 'vuelo' ? 'plane' : undefined)) as TransportMode | undefined,
+      startCoordinates: coordinates(activity.startCoordinates ?? null),
+      endCoordinates: coordinates(activity.endCoordinates ?? null),
+      type: (activity.type === 'vuelo' ? 'transporte' : activity.type) as ActivityType
     }))
   })),
   accommodations: dto.accommodations.map(item => ({
@@ -40,7 +43,7 @@ export const mapTrip = (dto: TripDetailDto, currentDay = 0): Trip => ({
   })),
   travelers: dto.travelers.map(traveler => ({
     ...traveler,
-    age: Number(traveler.age),
+    age: traveler.age == null ? null : Number(traveler.age),
     email: optional(traveler.email),
     phonePrefix: optional(traveler.phonePrefix),
     phone: optional(traveler.phone),

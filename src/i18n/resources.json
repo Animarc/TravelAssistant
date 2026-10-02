@@ -307,7 +307,7 @@
     "updateTravelerBtn": "Actualizar Integrante",
     "noTravelers": "No hay integrantes registrados",
     "confirmDeleteTraveler": "¿Estás seguro de que quieres eliminar este integrante?",
-    "enterTravelerName": "Por favor introduce nombre y apellidos.",
+    "enterTravelerName": "Por favor introduce el nombre.",
     "enterValidAge": "Por favor introduce una edad válida.",
     "yearsOld": "años",
     "edit": "Editar",
@@ -355,7 +355,14 @@
     "requestAnotherLink": "Solicitar otro enlace",
     "roleOwner": "Propietario",
     "roleEditor": "Puede editar",
-    "roleViewer": "Solo lectura"
+    "roleViewer": "Solo lectura",
+    "transportMode": "Medio de transporte",
+    "transportVehicle": "Vehículo",
+    "transportTrain": "Tren",
+    "transportPlane": "Avión",
+    "transportOrigin": "Origen",
+    "transportDestination": "Destino",
+    "enterTransportCoordinates": "Introduce coordenadas válidas de origen y destino."
   },
   "en": {
     "loading": "Loading…",
@@ -665,7 +672,7 @@
     "updateTravelerBtn": "Update Traveler",
     "noTravelers": "No travelers registered",
     "confirmDeleteTraveler": "Are you sure you want to delete this traveler?",
-    "enterTravelerName": "Please enter first and last name.",
+    "enterTravelerName": "Please enter the first name.",
     "enterValidAge": "Please enter a valid age.",
     "yearsOld": "years old",
     "edit": "Edit",
@@ -713,7 +720,14 @@
     "requestAnotherLink": "Request another link",
     "roleOwner": "Owner",
     "roleEditor": "Can edit",
-    "roleViewer": "View only"
+    "roleViewer": "View only",
+    "transportMode": "Transport mode",
+    "transportVehicle": "Vehicle",
+    "transportTrain": "Train",
+    "transportPlane": "Plane",
+    "transportOrigin": "Origin",
+    "transportDestination": "Destination",
+    "enterTransportCoordinates": "Enter valid origin and destination coordinates."
   },
   "fr": {
     "loading": "Chargement…",
@@ -1023,7 +1037,7 @@
     "updateTravelerBtn": "Mettre à jour",
     "noTravelers": "Aucun voyageur enregistré",
     "confirmDeleteTraveler": "Êtes-vous sûr de vouloir supprimer ce voyageur?",
-    "enterTravelerName": "Veuillez entrer le prénom et le nom.",
+    "enterTravelerName": "Veuillez entrer le prénom.",
     "enterValidAge": "Veuillez entrer un âge valide.",
     "yearsOld": "ans",
     "edit": "Modifier",
@@ -1071,7 +1085,14 @@
     "requestAnotherLink": "Demander un autre lien",
     "roleOwner": "Propriétaire",
     "roleEditor": "Peut modifier",
-    "roleViewer": "Lecture seule"
+    "roleViewer": "Lecture seule",
+    "transportMode": "Moyen de transport",
+    "transportVehicle": "Véhicule",
+    "transportTrain": "Train",
+    "transportPlane": "Avion",
+    "transportOrigin": "Départ",
+    "transportDestination": "Arrivée",
+    "enterTransportCoordinates": "Saisissez des coordonnées de départ et d’arrivée valides."
   },
   "de": {
     "loading": "Wird geladen…",
@@ -1381,7 +1402,7 @@
     "updateTravelerBtn": "Aktualisieren",
     "noTravelers": "Keine Reisenden registriert",
     "confirmDeleteTraveler": "Möchten Sie diesen Reisenden wirklich löschen?",
-    "enterTravelerName": "Bitte Vor- und Nachnamen eingeben.",
+    "enterTravelerName": "Bitte den Vornamen eingeben.",
     "enterValidAge": "Bitte gültiges Alter eingeben.",
     "yearsOld": "Jahre alt",
     "edit": "Bearbeiten",
@@ -1429,7 +1450,14 @@
     "requestAnotherLink": "Neuen Link anfordern",
     "roleOwner": "Eigentümer",
     "roleEditor": "Kann bearbeiten",
-    "roleViewer": "Nur ansehen"
+    "roleViewer": "Nur ansehen",
+    "transportMode": "Verkehrsmittel",
+    "transportVehicle": "Fahrzeug",
+    "transportTrain": "Zug",
+    "transportPlane": "Flugzeug",
+    "transportOrigin": "Start",
+    "transportDestination": "Ziel",
+    "enterTransportCoordinates": "Gültige Start- und Zielkoordinaten eingeben."
   },
   "zh": {
     "loading": "正在加载…",
@@ -1739,7 +1767,7 @@
     "updateTravelerBtn": "更新",
     "noTravelers": "暂无旅行者",
     "confirmDeleteTraveler": "确定要删除此旅行者吗？",
-    "enterTravelerName": "请输入姓名。",
+    "enterTravelerName": "请输入名字。",
     "enterValidAge": "请输入有效年龄。",
     "yearsOld": "岁",
     "edit": "编辑",
@@ -1787,7 +1815,14 @@
     "requestAnotherLink": "申请新链接",
     "roleOwner": "所有者",
     "roleEditor": "可编辑",
-    "roleViewer": "仅查看"
+    "roleViewer": "仅查看",
+    "transportMode": "交通方式",
+    "transportVehicle": "车辆",
+    "transportTrain": "火车",
+    "transportPlane": "飞机",
+    "transportOrigin": "起点",
+    "transportDestination": "终点",
+    "enterTransportCoordinates": "请输入有效的起点和终点坐标。"
   },
   "ru": {
     "loading": "Загрузка…",
@@ -2097,7 +2132,7 @@
     "updateTravelerBtn": "Обновить",
     "noTravelers": "Нет зарегистрированных участников",
     "confirmDeleteTraveler": "Вы уверены, что хотите удалить этого участника?",
-    "enterTravelerName": "Пожалуйста, введите имя и фамилию.",
+    "enterTravelerName": "Пожалуйста, введите имя.",
     "enterValidAge": "Пожалуйста, введите корректный возраст.",
     "yearsOld": "лет",
     "edit": "Редактировать",
@@ -2145,7 +2180,14 @@
     "requestAnotherLink": "Запросить новую ссылку",
     "roleOwner": "Владелец",
     "roleEditor": "Может редактировать",
-    "roleViewer": "Только просмотр"
+    "roleViewer": "Только просмотр",
+    "transportMode": "Вид транспорта",
+    "transportVehicle": "Автомобиль",
+    "transportTrain": "Поезд",
+    "transportPlane": "Самолёт",
+    "transportOrigin": "Отправление",
+    "transportDestination": "Прибытие",
+    "enterTransportCoordinates": "Введите корректные координаты отправления и прибытия."
   },
   "ja": {
     "loading": "読み込み中…",
@@ -2503,6 +2545,13 @@
     "requestAnotherLink": "新しいリンクを申請",
     "roleOwner": "オーナー",
     "roleEditor": "編集可能",
-    "roleViewer": "閲覧のみ"
+    "roleViewer": "閲覧のみ",
+    "transportMode": "移動手段",
+    "transportVehicle": "車",
+    "transportTrain": "電車",
+    "transportPlane": "飛行機",
+    "transportOrigin": "出発地",
+    "transportDestination": "到着地",
+    "enterTransportCoordinates": "出発地と到着地の有効な座標を入力してください。"
   }
 }
