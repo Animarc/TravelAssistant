@@ -15,6 +15,8 @@ const AccountView = () => {
     removeMember, acceptInvitation, declineInvitation
   } = useApp();
   const { t } = useTranslation(state.language);
+  const [tripQuery, setTripQuery] = useState('');
+  const [accessTripId, setAccessTripId] = useState<string | null>(null);
   const [tripForm, setTripForm] = useState({ name: '', description: '', currency: 'EUR' });
   const [inviteForm, setInviteForm] = useState({ email: '', role: 'editor' as Exclude<TripRole, 'owner'> });
   const [pendingDeleteTrip, setPendingDeleteTrip] = useState<string | null>(null);
@@ -84,21 +86,30 @@ const AccountView = () => {
           </section>
         )}
 
-        <section className="account-section">
-          <div className="account-section-heading"><div><span className="section-kicker">{state.isAuthenticated ? t('synced') : t('demoMode')}</span><h2>{t('myTrips')}</h2></div></div>
+        <section className="account-section saved-trips-section">
+          <div className="account-section-heading"><div><span className="section-kicker">{state.isAuthenticated ? t('synced') : t('demoMode')}</span><h2>{t('myTrips')}</h2></div><input className="saved-trip-search" type="search" value={tripQuery} onChange={event => setTripQuery(event.target.value)} placeholder={t('searchTrips')} aria-label={t('searchTrips')} /></div>
           {state.trips.length === 0 && <p className="account-helper">{t('noTripsYet')}</p>}
-          {state.trips.map(trip => (
-            <div key={trip.id} className={`trip-card ${trip.id === state.activeTripId ? 'current' : ''}`}>
-              <div className="trip-info"><h3>{trip.tripName}</h3><p>{trip.days.length} {t('days')} · {trip.days.reduce((sum, day) => sum + day.activities.length, 0)} {t('activitiesCount')}</p>{trip.currentUserRole && <span className="role-badge">{t(trip.currentUserRole === 'owner' ? 'roleOwner' : trip.currentUserRole === 'editor' ? 'roleEditor' : 'roleViewer')}</span>}</div>
+          <div className="saved-trip-grid">
+          {state.trips.filter(trip => `${trip.tripName} ${trip.description ?? ''}`.toLocaleLowerCase().includes(tripQuery.trim().toLocaleLowerCase())).map(trip => (
+            <article key={trip.id} className={`trip-card ${trip.id === state.activeTripId ? 'current' : ''}`}>
+              <div className="trip-info"><h3>{trip.tripName}</h3><p>{trip.days.length} {t('days')} · {trip.days.reduce((sum, day) => sum + day.activities.length, 0)} {t('activitiesCount')}</p>{trip.description && <p className="saved-trip-description">{trip.description.split('\n')[0]}</p>}{trip.currentUserRole && <span className="role-badge">{t(trip.currentUserRole === 'owner' ? 'roleOwner' : trip.currentUserRole === 'editor' ? 'roleEditor' : 'roleViewer')}</span>}</div>
               <div className="trip-actions">
                 <button onClick={() => { switchTrip(trip.id); setCurrentView('planning'); }}>{t('open')}</button>
+                {state.isAuthenticated && !state.publicPreview && <button className="secondary-button" aria-expanded={accessTripId === trip.id} onClick={() => { setInviteForm({ email: '', role: 'editor' }); setRatingMember(null); setPendingRemoveMember(null); if (accessTripId === trip.id) setAccessTripId(null); else { switchTrip(trip.id); setCurrentView('account'); setAccessTripId(trip.id); } }}>{t('tripMembers')}</button>}
                 {trip.capabilities?.canDelete && <button className="danger-button" onClick={() => setPendingDeleteTrip(trip.id)}>{t('delete')}</button>}
               </div>
-            </div>
+        {state.isAuthenticated && activeTrip && trip.id === state.activeTripId && accessTripId === trip.id && !state.publicPreview && (
+          <section className="trip-access-panel" aria-label={`${t('tripMembers')}: ${trip.tripName}`}><h4>{t('tripMembers')}</h4>
+            {activeTrip.capabilities?.canManageMembers && <form className="invite-form" onSubmit={handleInvite}><input type="email" required placeholder={t('inviteEmailPlaceholder')} value={inviteForm.email} onChange={e => setInviteForm({ ...inviteForm, email: e.target.value })} /><select value={inviteForm.role} onChange={e => setInviteForm({ ...inviteForm, role: e.target.value as Exclude<TripRole, 'owner'> })}><option value="editor">{t('roleEditor')}</option><option value="viewer">{t('roleViewer')}</option></select><button disabled={saveStatus === 'saving'}>{saveStatus === 'saving' ? t('saving') : t('invite')}</button></form>}
+            <div className="members-list">{members.map(member => <div className="member-rating-card" key={member.userId}><div className="collaboration-row"><div className="member-identity"><strong>@{member.username || t('traveler')}</strong><span className="member-score">★ {member.ratingCount ? member.averageRating.toFixed(1) : '—'} · {member.ratingCount}</span></div><div>{member.userId !== state.user?.userId && <button className="secondary-button" onClick={() => setRatingMember(ratingMember === member.userId ? null : member.userId)}>{t('rateTraveler')}</button>}{activeTrip.capabilities?.canManageMembers && member.role !== 'owner' ? <><select value={member.role} onChange={e => void updateMemberRole(member.userId, e.target.value as Exclude<TripRole, 'owner'>).catch(() => undefined)}><option value="editor">{t('roleEditor')}</option><option value="viewer">{t('roleViewer')}</option></select><button className="danger-button" onClick={() => setPendingRemoveMember(member.userId)}>{t('remove')}</button></> : <span className="role-badge">{member.userId === state.user?.userId ? t('you') : t(member.role === 'owner' ? 'roleOwner' : member.role === 'editor' ? 'roleEditor' : 'roleViewer')}</span>}</div></div>{ratingMember === member.userId && <UserRating tripId={activeTrip.id} userId={member.userId} language={state.language} initialAverage={member.averageRating} initialCount={member.ratingCount} />}</div>)}</div>
+          </section>
+        )}
+            </article>
           ))}
+          </div>
         </section>
 
-        {state.trips.length === 0 && <section className="account-section discovery-section"><PublicTripsExplorer authenticated onOpen={openPublicPreview} /><UserSearch /></section>}
+        <section className="account-section discovery-section"><PublicTripsExplorer authenticated={state.isAuthenticated} onOpen={openPublicPreview} /><UserSearch /></section>
 
         {state.isAuthenticated && invitations.length > 0 && (
           <section className="account-section"><h2>{t('pendingInvitations')}</h2>{invitations.map(invitation => (
@@ -106,12 +117,7 @@ const AccountView = () => {
           ))}</section>
         )}
 
-        {state.isAuthenticated && activeTrip && !state.publicPreview && (
-          <section className="account-section"><h2>{t('tripMembers')}</h2>
-            {activeTrip.capabilities?.canManageMembers && <form className="invite-form" onSubmit={handleInvite}><input type="email" required placeholder={t('inviteEmailPlaceholder')} value={inviteForm.email} onChange={e => setInviteForm({ ...inviteForm, email: e.target.value })} /><select value={inviteForm.role} onChange={e => setInviteForm({ ...inviteForm, role: e.target.value as Exclude<TripRole, 'owner'> })}><option value="editor">{t('roleEditor')}</option><option value="viewer">{t('roleViewer')}</option></select><button disabled={saveStatus === 'saving'}>{saveStatus === 'saving' ? t('saving') : t('invite')}</button></form>}
-            <div className="members-list">{members.map(member => <div className="member-rating-card" key={member.userId}><div className="collaboration-row"><div className="member-identity"><strong>@{member.username || t('traveler')}</strong><span className="member-score">★ {member.ratingCount ? member.averageRating.toFixed(1) : '—'} · {member.ratingCount}</span></div><div>{member.userId !== state.user?.userId && <button className="secondary-button" onClick={() => setRatingMember(ratingMember === member.userId ? null : member.userId)}>{t('rateTraveler')}</button>}{activeTrip.capabilities?.canManageMembers && member.role !== 'owner' ? <><select value={member.role} onChange={e => void updateMemberRole(member.userId, e.target.value as Exclude<TripRole, 'owner'>).catch(() => undefined)}><option value="editor">{t('roleEditor')}</option><option value="viewer">{t('roleViewer')}</option></select><button className="danger-button" onClick={() => setPendingRemoveMember(member.userId)}>{t('remove')}</button></> : <span className="role-badge">{member.userId === state.user?.userId ? t('you') : t(member.role === 'owner' ? 'roleOwner' : member.role === 'editor' ? 'roleEditor' : 'roleViewer')}</span>}</div></div>{ratingMember === member.userId && <UserRating tripId={activeTrip.id} userId={member.userId} language={state.language} initialAverage={member.averageRating} initialCount={member.ratingCount} />}</div>)}</div>
-          </section>
-        )}
+
 
       </div>
       <ConfirmDialog open={pendingRemoveMember !== null} message={t('confirmRemoveMember')} confirmLabel={t('remove')} cancelLabel={t('cancel')} onCancel={() => setPendingRemoveMember(null)} onConfirm={async () => {

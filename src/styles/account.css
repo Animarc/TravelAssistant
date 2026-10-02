@@ -263,3 +263,17 @@
 .account-section .invite-form input { flex: 1 1 180px; min-width: 0; }
 .account-section .invite-form select { width: auto; }
 .account-content > .discovery-section { grid-column: 1 / -1; }
+/* The travel library is the main workspace; access belongs to its trip. */
+.account-content { grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); }
+.saved-trips-section { grid-column: 1 / -1; order: -3; background: transparent; border: 0; padding: 0; }
+.saved-trips-section > .account-section-heading { flex-wrap: wrap; margin-bottom: var(--space-lg); }
+.saved-trip-search { width: min(100%, 360px); min-height: 44px; padding: .7rem .85rem; border: 1px solid var(--border-color); border-radius: var(--radius-md); color: var(--text-primary); background: var(--bg-elevated); font: inherit; }
+.saved-trip-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: var(--space-lg); align-items: start; }
+.saved-trip-grid .trip-card { display: block; margin: 0; background: var(--bg-elevated); }
+.saved-trip-grid .trip-card.current { border-color: var(--border-color); background: var(--bg-elevated); }
+.saved-trip-grid .trip-actions { flex-wrap: wrap; margin-top: var(--space-lg); }
+.saved-trip-description { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; margin: var(--space-md) 0; line-height: 1.6; }
+.trip-access-panel { margin-top: var(--space-lg); padding-top: var(--space-lg); border-top: 1px solid var(--border-color); min-width: 0; }
+.trip-access-panel h4 { color: var(--text-primary); }
+.account-content > .discovery-section { order: -2; }
+.saved-trip-search:focus-visible { outline: 3px solid var(--color-accent-subtle); border-color: var(--color-accent); }

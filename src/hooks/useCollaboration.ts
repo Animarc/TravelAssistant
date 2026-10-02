@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { travelsApi } from '../api/travelsApi';
 import type { TripInvitation, TripMember, TripRole } from '../types';
 import { getErrorKey } from './useAsyncOperation';
@@ -13,21 +13,25 @@ export const useCollaboration = (
   loadTrips: () => Promise<void>,
   setError: (message: TranslationKey | null) => void
 ) => {
-  const [members, setMembers] = useState<TripMember[]>([]);
+  const [memberState, setMemberState] = useState<{ tripId: string; members: TripMember[] }>({ tripId: '', members: [] });
+  const requestId = useRef(0);
+  const members = memberState.tripId === tripId ? memberState.members : [];
   const [invitations, setInvitations] = useState<TripInvitation[]>([]);
 
   const loadCollaboration = useCallback(async () => {
     if (!isAuthenticated) return;
+    const request = ++requestId.current;
     setError(null);
     try {
       const [pending, currentMembers] = await Promise.all([
         travelsApi.getInvitations(),
         tripId ? travelsApi.getMembers(tripId) : Promise.resolve([])
       ]);
+      if (request !== requestId.current) return;
       setInvitations(pending);
-      setMembers(currentMembers);
+      setMemberState({ tripId, members: currentMembers });
     } catch (reason) {
-      setError(getErrorKey(reason));
+      if (request === requestId.current) setError(getErrorKey(reason));
     }
   }, [isAuthenticated, setError, tripId]);
 
@@ -53,7 +57,7 @@ export const useCollaboration = (
     await loadCollaboration();
   }), [loadCollaboration, run]);
 
-  const resetCollaboration = useCallback(() => { setMembers([]); setInvitations([]); }, []);
+  const resetCollaboration = useCallback(() => { requestId.current++; setMemberState({ tripId: '', members: [] }); setInvitations([]); }, []);
 
   return { members, invitations, loadCollaboration, inviteMember, updateMemberRole, removeMember, acceptInvitation, declineInvitation, resetCollaboration };
 };
