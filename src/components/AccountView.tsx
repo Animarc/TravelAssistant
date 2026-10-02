@@ -13,7 +13,7 @@ import { travelsApi } from '../api/travelsApi';
 
 const AccountView = () => {
   const {
-    state, saveStatus, members, invitations, logout, updateProfile, createTrip, openPublicPreview, deleteTrip,
+    state, saveStatus, members, invitations, createTrip, openPublicPreview, deleteTrip,
     switchTrip, setCurrentView, loadCollaboration, inviteMember, updateMemberRole,
     removeMember, acceptInvitation, declineInvitation
   } = useApp();
@@ -24,14 +24,13 @@ const AccountView = () => {
     if (state.isAuthenticated) void travelsApi.moderationAccess().then(result => { if (active) setCanModerate(result.canModerate); }).catch(() => { /* Access stays closed if unavailable. */ });
     return () => { active = false; };
   }, [state.isAuthenticated, state.user?.userId]);
-  const [activeSection, setActiveSection] = useState<'trips' | 'explore' | 'create' | 'profile' | 'invitations' | 'moderation'>('trips');
+  const [activeSection, setActiveSection] = useState<'trips' | 'explore' | 'create' | 'invitations' | 'moderation'>('trips');
   const accountSections: { id: typeof activeSection; label: TranslationKey; icon: string }[] = [
     { id: 'trips', label: 'myTrips', icon: '▦' },
     { id: 'explore', label: 'accountExplore', icon: '◎' },
     ...(state.isAuthenticated ? [
       { id: 'create' as const, label: 'newTrip' as const, icon: '+' },
-      { id: 'invitations' as const, label: 'accountInvitations' as const, icon: '↗' },
-      { id: 'profile' as const, label: 'accountProfile' as const, icon: '○' }
+      { id: 'invitations' as const, label: 'accountInvitations' as const, icon: '↗' }
     ] : []),
     ...(canModerate ? [{ id: 'moderation' as const, label: 'moderation' as const, icon: '⚑' }] : [])
   ];
@@ -41,18 +40,12 @@ const AccountView = () => {
   const [inviteForm, setInviteForm] = useState({ email: '', role: 'editor' as Exclude<TripRole, 'owner'> });
   const [pendingDeleteTrip, setPendingDeleteTrip] = useState<string | null>(null);
   const [pendingRemoveMember, setPendingRemoveMember] = useState<string | null>(null);
-  const [profileForm, setProfileForm] = useState({ firstName: state.user?.firstName ?? '', lastName: state.user?.lastName ?? '' });
-  const [profileSaving, setProfileSaving] = useState(false);
   const [ratingMember, setRatingMember] = useState<string | null>(null);
   const activeTrip = state.trips.find(trip => trip.id === state.activeTripId);
 
   useEffect(() => {
     if (state.isAuthenticated) void loadCollaboration();
   }, [loadCollaboration, state.isAuthenticated, state.activeTripId]);
-
-  useEffect(() => {
-    setProfileForm({ firstName: state.user?.firstName ?? '', lastName: state.user?.lastName ?? '' });
-  }, [state.user?.firstName, state.user?.lastName]);
 
   const handleCreateTrip = async (event: FormEvent) => {
     event.preventDefault();
@@ -68,48 +61,21 @@ const AccountView = () => {
     catch { /* displayed from state.error */ }
   };
 
-  const handleProfile = async (event: FormEvent) => {
-    event.preventDefault();
-    if (profileSaving) return;
-    setProfileSaving(true);
-    try { await updateProfile(profileForm.firstName, profileForm.lastName); }
-    catch { /* displayed from state.error */ }
-    finally { setProfileSaving(false); }
-  };
-
   return (
     <div className="account-view">
       <div className="account-layout">
         <aside className="account-sidebar">
-          <div className="account-sidebar-user">
-            <div className="user-avatar">{state.user?.username[0]?.toUpperCase() ?? 'T'}</div>
-            <div><strong>{state.user?.username ?? t('demoMode')}</strong><span>{state.user?.email}</span></div>
-          </div>
-          <nav className="account-navigation" aria-label={t('connectedAccount')}>
+          <h1 className="account-sidebar-title">{t('accountCenter')}</h1>
+          <nav className="account-navigation" aria-label={t('accountCenter')}>
             {accountSections.map(section => <button key={section.id} type="button" className={`account-nav-item ${activeSection === section.id ? 'active' : ''}`} aria-current={activeSection === section.id ? 'page' : undefined} aria-controls="account-detail" onClick={() => setActiveSection(section.id)}>
               <span className="account-nav-icon" aria-hidden="true">{section.icon}</span><span>{t(section.label)}</span>
               {section.id === 'trips' && <span className="account-nav-count">{state.trips.length}</span>}
               {section.id === 'invitations' && invitations.length > 0 && <span className="account-nav-count">{invitations.length}</span>}
             </button>)}
           </nav>
-          {state.isAuthenticated && <button className="account-sidebar-logout secondary-button" onClick={() => void logout()}>{t('logout')}</button>}
         </aside>
         <div className="account-content" id="account-detail">
         {activeSection === 'moderation' && canModerate && <RatingModeration key={state.user?.userId} language={state.language} />}
-        {activeSection === 'profile' && <section className="account-section auth-section">
-          <div className="signed-user">
-            <div className="user-avatar">{state.user?.username[0]?.toUpperCase()}</div>
-            <div><span className="section-kicker">{t('connectedAccount')}</span><h2>{t('accountProfile')}</h2><p>{state.user?.email}</p></div>
-
-          </div>
-          <form className="account-form" onSubmit={handleProfile}>
-            <p className="account-helper">{t('optionalProfileHint')}</p>
-            <label>{t('firstName')}<input maxLength={100} autoComplete="given-name" value={profileForm.firstName} onChange={event => setProfileForm({ ...profileForm, firstName: event.target.value })} /></label>
-            <label>{t('lastName')}<input maxLength={100} autoComplete="family-name" value={profileForm.lastName} onChange={event => setProfileForm({ ...profileForm, lastName: event.target.value })} /></label>
-            <button disabled={profileSaving}>{profileSaving ? t('saving') : t('saveProfile')}</button>
-          </form>
-        </section>}
-
         {state.isAuthenticated && activeSection === 'create' && (
           <section className="account-section">
             <div className="account-section-heading"><div><span className="section-kicker">{t('newTrip')}</span><h2>{t('startPlanning')}</h2></div></div>

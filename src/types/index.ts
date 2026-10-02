@@ -124,7 +124,7 @@ export interface TripInvitation {
 }
 
 // Views
-export type ViewType = 'planning' | 'budget' | 'objects' | 'travelers' | 'ratings' | 'account';
+export type ViewType = 'planning' | 'budget' | 'objects' | 'travelers' | 'ratings' | 'account' | 'settings';
 
 // Language
 export type Language = 'es' | 'en' | 'fr' | 'de' | 'zh' | 'ru' | 'ja';
@@ -140,7 +140,7 @@ export interface AppState {
   travelers: Traveler[];
   currentDay: number;
   currentView: ViewType;
-  lastTripView: Exclude<ViewType, 'account'>;
+  lastTripView: Exclude<ViewType, 'account' | 'settings'>;
   language: Language;
   isAuthenticated: boolean;
   authLoading: boolean;

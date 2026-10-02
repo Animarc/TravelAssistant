@@ -5,7 +5,7 @@ import { travelsApi } from '../api/travelsApi';
 import type { Accommodation, Activity, EntityId, ShoppingItem, Traveler, Trip, ViewType } from '../types';
 
 type RemoteRunner = (operation: () => Promise<void>) => Promise<void>;
-type TripView = Exclude<ViewType, 'account'>;
+type TripView = Exclude<ViewType, 'account' | 'settings'>;
 
 interface TripUiState {
   trips: Trip[];
@@ -16,7 +16,7 @@ interface TripUiState {
 }
 
 const emptyTrip: Trip = { id: '', tripName: '', currency: 'EUR', days: [], accommodations: [], shoppingItems: [], travelers: [], currentDay: 0 };
-const viewRoutes: Record<ViewType, string> = { planning: '/planning', budget: '/budget', objects: '/objects', travelers: '/travelers', ratings: '/ratings', account: '/account' };
+const viewRoutes: Record<ViewType, string> = { planning: '/planning', budget: '/budget', objects: '/objects', travelers: '/travelers', ratings: '/ratings', account: '/account', settings: '/settings' };
 const routeViews = new Map(Object.entries(viewRoutes).map(([view, route]) => [route, view as ViewType]));
 const remoteId = (id: EntityId | undefined): string | null => typeof id === 'string' ? id : null;
 
@@ -33,7 +33,7 @@ export const useTripState = (run: RemoteRunner) => {
   useEffect(() => {
     const routeView = routeViews.get(location.pathname);
     if (routeView) setStore(previous => previous.currentView === routeView ? previous : {
-      ...previous, currentView: routeView, lastTripView: routeView === 'account' ? previous.lastTripView : routeView
+      ...previous, currentView: routeView, lastTripView: (routeView === 'account' || routeView === 'settings') ? previous.lastTripView : routeView
     });
   }, [location.pathname]);
 
@@ -42,7 +42,7 @@ export const useTripState = (run: RemoteRunner) => {
       ...previous,
       trips,
       activeTripId: trips.some(trip => trip.id === previous.activeTripId) ? previous.activeTripId : (trips[0]?.id ?? ''),
-      currentView: trips.length ? previous.currentView : 'account',
+      currentView: trips.length || previous.currentView === 'settings' ? previous.currentView : 'account',
       publicPreview: false
     }));
   }, []);
@@ -79,9 +79,9 @@ export const useTripState = (run: RemoteRunner) => {
   const closePublicPreview = useCallback(() => {
     const previous = previewReturnRef.current;
     previewReturnRef.current = null;
-    if (previous?.currentView === 'account') {
-      setStore({ ...previous, currentView: 'account', publicPreview: false });
-      navigate('/account', { replace: true });
+    if (previous?.currentView === 'account' || previous?.currentView === 'settings') {
+      setStore({ ...previous, publicPreview: false });
+      navigate(viewRoutes[previous.currentView], { replace: true });
     } else {
       setStore({ trips: [], activeTripId: '', currentView: 'planning', lastTripView: 'planning', publicPreview: false });
       navigate('/', { replace: true });
@@ -117,18 +117,18 @@ export const useTripState = (run: RemoteRunner) => {
     const hasRemainingTrips = store.trips.some(trip => trip.id !== tripId);
     setStore(previous => {
       const trips = previous.trips.filter(trip => trip.id !== tripId);
-      return { ...previous, trips, activeTripId: trips[0]?.id ?? '', currentView: trips.length ? previous.currentView : 'account' };
+      return { ...previous, trips, activeTripId: trips[0]?.id ?? '', currentView: trips.length || previous.currentView === 'settings' ? previous.currentView : 'account' };
     });
     navigate(hasRemainingTrips ? viewRoutes[store.currentView] : '/account');
   }), [navigate, run, store.currentView, store.trips]);
 
   const switchTrip = useCallback((tripId: string) => setStore(previous => previous.trips.some(trip => trip.id === tripId) ? {
-    ...previous, activeTripId: tripId, currentView: previous.currentView === 'account' ? previous.lastTripView : previous.currentView
+    ...previous, activeTripId: tripId, currentView: (previous.currentView === 'account' || previous.currentView === 'settings') ? previous.lastTripView : previous.currentView
   } : previous), []);
 
   const setCurrentDay = useCallback((day: number) => updateActiveTrip(trip => ({ ...trip, currentDay: Math.max(0, Math.min(day, trip.days.length - 1)) })), [updateActiveTrip]);
   const setCurrentView = useCallback((view: ViewType) => {
-    setStore(previous => ({ ...previous, currentView: view, lastTripView: view === 'account' ? previous.lastTripView : view }));
+    setStore(previous => ({ ...previous, currentView: view, lastTripView: (view === 'account' || view === 'settings') ? previous.lastTripView : view }));
     navigate(viewRoutes[view]);
   }, [navigate]);
 

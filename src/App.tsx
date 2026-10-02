@@ -19,6 +19,7 @@ const BudgetView = lazy(() => import('./components/BudgetView'));
 const ObjectsView = lazy(() => import('./components/ObjectsView'));
 const TravelersView = lazy(() => import('./components/TravelersView'));
 const RatingsView = lazy(() => import('./components/RatingsView'));
+const SettingsView = lazy(() => import('./components/SettingsView'));
 const AccountView = lazy(() => import('./components/AccountView'));
 
 const AppContent = () => {
@@ -33,7 +34,7 @@ const AppContent = () => {
   if (!state.isAuthenticated && !state.publicPreview) {
     return <div className="app welcome-app"><Navbar /><WelcomeView /></div>;
   }
-  if (state.isAuthenticated && state.user && !state.user.emailVerified && state.trips.length === 0 && !state.publicPreview && state.currentView !== 'account') return <div className="app welcome-app"><Navbar /><RegistrationConfirmation /><Footer /></div>;
+  if (state.isAuthenticated && state.user && !state.user.emailVerified && state.trips.length === 0 && !state.publicPreview && state.currentView !== 'account' && state.currentView !== 'settings') return <div className="app welcome-app"><Navbar /><RegistrationConfirmation /><Footer /></div>;
   const renderView = () => {
     switch (state.currentView) {
       case 'planning':
@@ -46,6 +47,8 @@ const AppContent = () => {
         return <TravelersView />;
       case 'ratings':
         return <RatingsView />;
+      case 'settings':
+        return <SettingsView key={state.user?.userId} />;
       case 'account':
         return <AccountView />;
       default:
@@ -54,7 +57,7 @@ const AppContent = () => {
   };
 
   return (
-    <div className={`app ${state.currentView === 'account' ? 'account-view-active' : ''}`}>
+    <div className={`app ${state.currentView === 'account' ? 'account-view-active' : state.currentView === 'settings' ? 'settings-view-active' : ''}`}>
       <Navbar />
       <EmailVerificationBanner />
       <main className={`container ${state.currentView !== 'planning' ? 'centered-view' : ''}`}>

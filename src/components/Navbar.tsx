@@ -4,6 +4,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import { Language } from '../types';
 import { printItinerary } from '../utils';
 import ThemePicker from './ThemePicker';
+import UserMenu from './UserMenu';
 
 type IconName = 'print' | 'language' | 'trips';
 
@@ -86,10 +87,11 @@ const Navbar = () => {
     { code: 'ru', name: 'Русский' },
     { code: 'ja', name: '日本語' }
   ];
+  const isGlobalView = state.currentView === 'account' || state.currentView === 'settings';
   const hasTripContext = state.isAuthenticated || state.publicPreview;
 
   return (
-    <nav className={`navbar ${state.currentView === 'account' ? 'navbar-global-view' : ''} ${!state.isAuthenticated ? 'navbar-auth' : ''}`} aria-label={t('appTitle')}>
+    <nav className={`navbar ${isGlobalView ? 'navbar-global-view' : ''} ${!state.isAuthenticated ? 'navbar-auth' : ''}`} aria-label={t('appTitle')}>
       <div className="navbar-primary">
         <a className="navbar-left navbar-home-link" href="/">
           <img src={`${import.meta.env.BASE_URL}tabiji-log-mark.svg`} alt="" className="navbar-logo brand-mark" />
@@ -128,7 +130,7 @@ const Navbar = () => {
                   className={`trip-option ${trip.id === state.activeTripId ? 'active' : ''}`}
                   onClick={() => {
                     switchTrip(trip.id);
-                    if (state.currentView === 'account') setCurrentView(state.lastTripView);
+                    if (isGlobalView) setCurrentView(state.lastTripView);
                     setShowTripMenu(false);
                   }}
                   role="option"
@@ -164,7 +166,7 @@ const Navbar = () => {
             </span>
             <span className="save-status-label">{saveStatus === 'saveError' && canRetrySave ? t('retrySync') : t(saveStatus)}</span>
           </button>}
-          {hasTripContext && state.currentView !== 'account' && (
+          {hasTripContext && !isGlobalView && (
             <button
               className="nav-icon-btn"
               title={t('printItinerary')}
@@ -223,10 +225,11 @@ const Navbar = () => {
               </div>
             )}
           </div>
+          <UserMenu />
         </div>
       </div>
 
-      {hasTripContext && state.currentView !== 'account' && <div className="trip-context-nav">
+      {hasTripContext && !isGlobalView && <div className="trip-context-nav">
         <div className="nav-buttons-scroll" aria-label={t('tripNavigation')}>
           <button
             className={`nav-btn ${state.currentView === 'planning' ? 'active' : ''}`}

@@ -352,3 +352,5 @@
   .account-nav-count { margin-left: 0; flex-shrink: 0; }
   .account-sidebar-logout { align-self: end; padding: .3rem .7rem; font-size: var(--font-size-xs); }
 }
+.account-sidebar-title { margin: 0; color: var(--color-primary); font-size: 1.15rem; font-family: var(--font-family-heading); }
+@media (max-width: 800px) { .account-sidebar-title { display: none; } }

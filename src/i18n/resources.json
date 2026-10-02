@@ -389,7 +389,14 @@
     "reportResolved": "Denuncia revisada.",
     "reportChanged": "La valoración ya cambió o fue eliminada; no se ha retirado el nuevo contenido.",
     "moreReports": "Cargar más",
-    "refreshReports": "Actualizar denuncias"
+    "refreshReports": "Actualizar denuncias",
+    "settings": "Ajustes",
+    "accountMenu": "Menú de cuenta",
+    "accountSettingsIntro": "Tu perfil y la seguridad de tu cuenta.",
+    "accountSecurity": "Seguridad",
+    "accountPasswordHelp": "Te enviaremos un enlace al correo de tu cuenta para cambiar la contraseña. Si accedes solo con Google, gestiona la contraseña desde tu cuenta de Google.",
+    "accountResetSent": "Si tu cuenta tiene contraseña, recibirás un enlace en tu correo. Revisa también la carpeta de spam.",
+    "profileSaved": "Perfil guardado."
   },
   "en": {
     "accountCenter": "Travel center",
@@ -781,7 +788,14 @@
     "reportResolved": "Report reviewed.",
     "reportChanged": "The rating has changed or was deleted; replacement content was not removed.",
     "moreReports": "Load more",
-    "refreshReports": "Refresh reports"
+    "refreshReports": "Refresh reports",
+    "settings": "Settings",
+    "accountMenu": "Account menu",
+    "accountSettingsIntro": "Your profile and account security.",
+    "accountSecurity": "Security",
+    "accountPasswordHelp": "We will email a link to your account address to change your password. If you only sign in with Google, manage your password through your Google account.",
+    "accountResetSent": "If your account has a password, you will receive an email with a link. Check your spam folder too.",
+    "profileSaved": "Profile saved."
   },
   "fr": {
     "accountCenter": "Espace voyages",
@@ -1173,7 +1187,14 @@
     "reportResolved": "Signalement examiné.",
     "reportChanged": "L’évaluation a changé ou a été supprimée ; le nouveau contenu n’a pas été retiré.",
     "moreReports": "Afficher plus",
-    "refreshReports": "Actualiser les signalements"
+    "refreshReports": "Actualiser les signalements",
+    "settings": "Paramètres",
+    "accountMenu": "Menu du compte",
+    "accountSettingsIntro": "Votre profil et la sécurité de votre compte.",
+    "accountSecurity": "Sécurité",
+    "accountPasswordHelp": "Nous enverrons un lien à votre adresse pour changer le mot de passe. Si vous vous connectez uniquement avec Google, gérez le mot de passe dans votre compte Google.",
+    "accountResetSent": "Si votre compte possède un mot de passe, vous recevrez un lien par e-mail. Vérifiez aussi les courriers indésirables.",
+    "profileSaved": "Profil enregistré."
   },
   "de": {
     "accountCenter": "Reisezentrale",
@@ -1565,7 +1586,14 @@
     "reportResolved": "Meldung geprüft.",
     "reportChanged": "Die Bewertung wurde geändert oder gelöscht; neuer Inhalt wurde nicht entfernt.",
     "moreReports": "Mehr laden",
-    "refreshReports": "Meldungen aktualisieren"
+    "refreshReports": "Meldungen aktualisieren",
+    "settings": "Einstellungen",
+    "accountMenu": "Kontomenü",
+    "accountSettingsIntro": "Dein Profil und die Sicherheit deines Kontos.",
+    "accountSecurity": "Sicherheit",
+    "accountPasswordHelp": "Wir senden einen Link zum Ändern des Passworts an deine Konto-Adresse. Wenn du dich nur mit Google anmeldest, verwalte dein Passwort in deinem Google-Konto.",
+    "accountResetSent": "Wenn dein Konto ein Passwort hat, erhältst du einen Link per E-Mail. Prüfe auch den Spam-Ordner.",
+    "profileSaved": "Profil gespeichert."
   },
   "zh": {
     "accountCenter": "旅行中心",
@@ -1957,7 +1985,14 @@
     "reportResolved": "举报已审核。",
     "reportChanged": "评分已修改或删除，新内容未被移除。",
     "moreReports": "加载更多",
-    "refreshReports": "刷新举报"
+    "refreshReports": "刷新举报",
+    "settings": "设置",
+    "accountMenu": "账户菜单",
+    "accountSettingsIntro": "您的个人资料和账户安全。",
+    "accountSecurity": "安全",
+    "accountPasswordHelp": "我们会将修改密码的链接发送到您的账户邮箱。如果您仅通过Google登录，请在Google账户中管理密码。",
+    "accountResetSent": "如果您的账户已设置密码，您将收到包含链接的邮件。也请检查垃圾邮件文件夹。",
+    "profileSaved": "个人资料已保存。"
   },
   "ru": {
     "accountCenter": "Центр путешествий",
@@ -2349,7 +2384,14 @@
     "reportResolved": "Жалоба рассмотрена.",
     "reportChanged": "Оценка уже изменена или удалена; новый контент не был удалён.",
     "moreReports": "Загрузить ещё",
-    "refreshReports": "Обновить жалобы"
+    "refreshReports": "Обновить жалобы",
+    "settings": "Настройки",
+    "accountMenu": "Меню аккаунта",
+    "accountSettingsIntro": "Ваш профиль и безопасность аккаунта.",
+    "accountSecurity": "Безопасность",
+    "accountPasswordHelp": "Мы отправим ссылку для смены пароля на почту аккаунта. Если вы входите только через Google, управляйте паролем в аккаунте Google.",
+    "accountResetSent": "Если у аккаунта есть пароль, вы получите письмо со ссылкой. Проверьте также папку спама.",
+    "profileSaved": "Профиль сохранён."
   },
   "ja": {
     "accountCenter": "旅の管理",
@@ -2741,6 +2783,13 @@
     "reportResolved": "報告を確認しました。",
     "reportChanged": "評価は変更または削除済みです。新しい内容は削除されませんでした。",
     "moreReports": "さらに表示",
-    "refreshReports": "報告を更新"
+    "refreshReports": "報告を更新",
+    "settings": "設定",
+    "accountMenu": "アカウントメニュー",
+    "accountSettingsIntro": "プロフィールとアカウントのセキュリティ。",
+    "accountSecurity": "セキュリティ",
+    "accountPasswordHelp": "パスワード変更用のリンクを登録メールアドレスに送信します。Googleでのみログインする場合は、Googleアカウントでパスワードを管理してください。",
+    "accountResetSent": "パスワードを設定済みのアカウントには、リンク付きメールが届きます。迷惑メールフォルダも確認してください。",
+    "profileSaved": "プロフィールを保存しました。"
   }
 }

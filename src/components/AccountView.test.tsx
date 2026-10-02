@@ -42,11 +42,12 @@ it('places access inside its trip and keeps switching access on the account scre
   expect(within(first).queryByRole('region')).not.toBeInTheDocument();
 });
 
-it('separates profile, creation and invitations into their own sections', async () => {
+it('keeps account identity and profile settings outside travel management', async () => {
   setup();
   expect(screen.queryByRole('button', { name: 'Guardar perfil' })).not.toBeInTheDocument();
-  await userEvent.click(screen.getByRole('button', { name: 'Mi perfil' }));
-  expect(screen.getByRole('button', { name: 'Guardar perfil' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Mi perfil' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Cerrar sesión' })).not.toBeInTheDocument();
+  expect(screen.queryByText('yui@example.com')).not.toBeInTheDocument();
   await userEvent.click(screen.getByRole('button', { name: 'Nuevo viaje' }));
   expect(screen.getByRole('button', { name: 'Crear viaje' })).toBeInTheDocument();
   expect(screen.queryByRole('button', { name: 'Guardar perfil' })).not.toBeInTheDocument();
