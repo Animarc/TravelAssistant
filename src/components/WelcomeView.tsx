@@ -6,14 +6,9 @@ import { useTranslation } from '../hooks/useTranslation';
 import '../styles/welcome.css';
 import PublicTripsExplorer from './PublicTripsExplorer';
 import PasswordResetView from './PasswordResetView';
-import { requestAppleCredential } from '../api/socialAuth';
-
-const AppleIcon = () => <svg className="social-provider-icon apple-icon" viewBox="0 0 16 16" aria-hidden="true">
-  <path d="M11.182.008c.163 1.106-.3 2.2-.9 2.91-.64.76-1.74 1.34-2.8 1.26-.19-1.06.3-2.16.9-2.84.67-.75 1.78-1.32 2.8-1.33ZM14.44 11.2c-.32.74-.7 1.42-1.22 2.21-.67 1.02-1.62 2.29-2.8 2.3-1.04.01-1.31-.68-2.73-.67-1.42.01-1.71.69-2.75.68-1.18-.01-2.08-1.16-2.75-2.18C.31 10.68.11 7.33 1.27 5.55c.83-1.27 2.14-2.01 3.38-2.01 1.26 0 2.05.69 3.09.69 1 0 1.62-.69 3.07-.69 1.1 0 2.26.6 3.09 1.64-2.72 1.49-2.28 5.37.54 6.02Z" />
-</svg>;
 
 const WelcomeView = () => {
-  const { state, login, register, loginWithGoogle, loginWithApple, openPublicPreview } = useApp();
+  const { state, login, register, loginWithGoogle, openPublicPreview } = useApp();
   const { t } = useTranslation(state.language);
   const [mode, setMode] = useState<'login' | 'register'>(() => {
     const requested = sessionStorage.getItem('tabiji-log.authMode') ?? sessionStorage.getItem('kakomu.authMode');
@@ -23,7 +18,6 @@ const WelcomeView = () => {
   });
   const [recovering, setRecovering] = useState(false);
   const [socialError, setSocialError] = useState<TranslationKey | null>(null);
-  const [googleAttempt, setGoogleAttempt] = useState(0);
   const googleCredential = useCallback((credential: string) => { setSocialError(null); return loginWithGoogle(credential); }, [loginWithGoogle]);
   const googleError = useCallback(() => setSocialError('socialLoginError'), []);
   const [form, setForm] = useState({ email: '', password: '', username: '' });
@@ -58,8 +52,7 @@ const WelcomeView = () => {
         {mode === 'login' && <button type="button" className="text-button" onClick={() => setRecovering(true)}>{t('forgotPassword')}</button>}
         <div className="social-divider"><span>{t('or')}</span></div>
         <div className="social-access">
-          <GoogleSignInButton key={googleAttempt} language={state.language} onCredential={googleCredential} onError={googleError} />
-          <button type="button" onClick={() => { setSocialError(null); void requestAppleCredential().then(value => loginWithApple(value.idToken, value.firstName, value.lastName)).catch(() => setSocialError('socialLoginError')).finally(() => setGoogleAttempt(value => value + 1)); }}><AppleIcon />{t('continueApple')}</button>
+          <GoogleSignInButton language={state.language} onCredential={googleCredential} onError={googleError} />
         </div>
         {socialError && <div className="welcome-error" role="alert">{t(socialError)}</div>}
         {state.browserSessionSupport === 'unsupported' && <div className="welcome-error" role="alert">{t('browserSessionUnsupported')}</div>}
