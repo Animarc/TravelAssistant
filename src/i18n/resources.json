@@ -1,5 +1,6 @@
 {
   "es": {
+    "accountCenter": "Centro de viajes",
     "accountProfile": "Mi perfil",
     "accountExplore": "Explorar",
     "accountInvitations": "Invitaciones",
@@ -369,6 +370,7 @@
     "enterTransportCoordinates": "Introduce coordenadas válidas de origen y destino."
   },
   "en": {
+    "accountCenter": "Travel center",
     "accountProfile": "My profile",
     "accountExplore": "Explore",
     "accountInvitations": "Invitations",
@@ -738,6 +740,7 @@
     "enterTransportCoordinates": "Enter valid origin and destination coordinates."
   },
   "fr": {
+    "accountCenter": "Espace voyages",
     "accountProfile": "Mon profil",
     "accountExplore": "Explorer",
     "accountInvitations": "Invitations",
@@ -1107,6 +1110,7 @@
     "enterTransportCoordinates": "Saisissez des coordonnées de départ et d’arrivée valides."
   },
   "de": {
+    "accountCenter": "Reisezentrale",
     "accountProfile": "Mein Profil",
     "accountExplore": "Entdecken",
     "accountInvitations": "Einladungen",
@@ -1476,6 +1480,7 @@
     "enterTransportCoordinates": "Gültige Start- und Zielkoordinaten eingeben."
   },
   "zh": {
+    "accountCenter": "旅行中心",
     "accountProfile": "我的个人资料",
     "accountExplore": "探索",
     "accountInvitations": "邀请",
@@ -1845,6 +1850,7 @@
     "enterTransportCoordinates": "请输入有效的起点和终点坐标。"
   },
   "ru": {
+    "accountCenter": "Центр путешествий",
     "accountProfile": "Мой профиль",
     "accountExplore": "Обзор",
     "accountInvitations": "Приглашения",
@@ -2214,6 +2220,7 @@
     "enterTransportCoordinates": "Введите корректные координаты отправления и прибытия."
   },
   "ja": {
+    "accountCenter": "旅の管理",
     "accountProfile": "プロフィール",
     "accountExplore": "旅を探す",
     "accountInvitations": "招待",

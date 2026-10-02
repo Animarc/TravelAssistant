@@ -5,7 +5,7 @@ import { Language } from '../types';
 import { printItinerary } from '../utils';
 import ThemePicker from './ThemePicker';
 
-type IconName = 'print' | 'language' | 'settings';
+type IconName = 'print' | 'language' | 'trips';
 
 const InterfaceIcon = ({ name }: { name: IconName }) => {
   const paths: Record<IconName, React.ReactNode> = {
@@ -24,10 +24,12 @@ const InterfaceIcon = ({ name }: { name: IconName }) => {
         <path d="M12 3c2.15 2.45 3.25 5.45 3.25 9S14.15 18.55 12 21c-2.15-2.45-3.25-5.45-3.25-9S9.85 5.45 12 3Z" />
       </>
     ),
-    settings: (
+    trips: (
       <>
-        <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06-2.12 2.12-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V20.25h-3v-.13a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06-2.12-2.12.06-.06A1.65 1.65 0 0 0 7.2 15a1.65 1.65 0 0 0-1.51-1H5.56v-3h.13a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06L8.93 6l.06.06a1.65 1.65 0 0 0 1.82.33 1.65 1.65 0 0 0 1-1.51v-.13h3v.13a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06 2.12 2.12-.06.06A1.65 1.65 0 0 0 19.4 10a1.65 1.65 0 0 0 1.51 1h.13v3h-.13a1.65 1.65 0 0 0-1.51 1Z" />
+        <rect x="3" y="3" width="7" height="7" rx="1.5" />
+        <rect x="14" y="3" width="7" height="7" rx="1.5" />
+        <rect x="3" y="14" width="7" height="7" rx="1.5" />
+        <rect x="14" y="14" width="7" height="7" rx="1.5" />
       </>
     )
   };
@@ -145,16 +147,16 @@ const Navbar = () => {
 
         {state.publicPreview && <div className="public-preview-title"><span>{t('publicTrip')}</span><strong>{state.tripName}</strong></div>}
 
-        {state.isAuthenticated && !state.publicPreview && state.trips.length > 0 && <div className="navbar-page-title">
-          <button
+        {state.isAuthenticated && !state.publicPreview && <div className="navbar-page-title">
+          {state.trips.length > 0 && <button
             type="button"
             className="global-back-btn"
             onClick={() => setCurrentView(state.lastTripView)}
             aria-label={t('backToTrip')}
           >
             ←
-          </button>
-          <strong>{t('options')}</strong>
+          </button>}
+          <strong>{t('accountCenter')}</strong>
         </div>}
 
         <div className="navbar-right">
@@ -193,19 +195,7 @@ const Navbar = () => {
               ? <button type="button" className="preview-copy-btn" onClick={() => void importPublicPreview().catch(() => undefined)}>{t('importToMyTrips')}</button>
               : <button type="button" className="preview-copy-btn" onClick={() => { sessionStorage.setItem('tabiji-log.authMode', 'register'); closePublicPreview(); }}>{t('useThisTrip')}</button>}
           </>}
-          {state.isAuthenticated && !state.publicPreview && <button
-            className={`nav-icon-btn ${state.currentView === 'account' ? 'active' : ''}`}
-            title={t('options')}
-            aria-label={t('options')}
-            aria-current={state.currentView === 'account' ? 'page' : undefined}
-            onClick={() => {
-              setShowTripMenu(false);
-              setShowLanguageMenu(false);
-              setCurrentView('account');
-            }}
-          >
-            <InterfaceIcon name="settings" />
-          </button>}
+
           <ThemePicker />
           <div className="language-dropdown" ref={languageDropdownRef}>
             <button
@@ -239,8 +229,14 @@ const Navbar = () => {
         </div>
       </div>
 
-      {hasTripContext && state.currentView !== 'account' && <div className="trip-context-nav">
-        <div className="nav-buttons-scroll" aria-label={t('tripNavigation')}>
+      {hasTripContext && <div className="trip-context-nav">
+        {state.isAuthenticated && !state.publicPreview && <button type="button"
+          className={`workspace-home-btn ${state.currentView === 'account' ? 'active' : ''}`}
+          aria-current={state.currentView === 'account' ? 'page' : undefined}
+          onClick={() => { setShowTripMenu(false); setShowLanguageMenu(false); setCurrentView('account'); }}>
+          <InterfaceIcon name="trips" /><span>{t('myTrips')}</span>
+        </button>}
+        {state.currentView !== 'account' && <div className="nav-buttons-scroll" aria-label={t('tripNavigation')}>
           <button
             className={`nav-btn ${state.currentView === 'planning' ? 'active' : ''}`}
             onClick={() => setCurrentView('planning')}
@@ -276,7 +272,7 @@ const Navbar = () => {
           >
             {t('opinions')}
           </button>}
-        </div>
+        </div>}
       </div>}
     </nav>
   );

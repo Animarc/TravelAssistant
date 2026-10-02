@@ -319,12 +319,24 @@
 
 .saved-trip-search:focus-visible { outline: 3px solid var(--color-accent-subtle); border-color: var(--color-accent); }
 
-@media (max-width: 760px) {
-  .account-layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-xl); padding: var(--space-lg); }
-  .account-sidebar { position: static; padding: 0 0 var(--space-md); border-right: 0; border-bottom: 1px solid var(--border-color); gap: var(--space-md); }
+@media (max-width: 800px) {
+  .account-layout { display: block; padding: 0; }
+  .account-content { padding: var(--space-lg); }
+  .account-sidebar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: var(--space-sm) var(--space-md);
+    border-right: 0;
+    border-bottom: 1px solid var(--border-color);
+    gap: var(--space-xs);
+    background: var(--bg-body);
+  }
   .account-sidebar-user { display: none; }
-  .account-navigation { display: flex; overflow-x: auto; gap: var(--space-xs); padding-bottom: 4px; }
-  .account-nav-item { width: auto; flex: 0 0 auto; min-height: 44px; gap: 8px; white-space: nowrap; padding: 10px 12px; }
-  .account-nav-count { margin-left: 0; }
-  .account-sidebar-logout { align-self: end; padding: .4rem .7rem; font-size: var(--font-size-xs); }
+  .account-navigation { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+  .account-nav-item { grid-column: span 2; min-width: 0; min-height: 48px; gap: 4px; justify-content: center; padding: 8px 4px; text-align: center; font-size: var(--font-size-xs); }
+  .account-nav-item:nth-child(n + 4) { grid-column: span 3; min-height: 40px; }
+  .account-nav-icon { display: none; }
+  .account-nav-count { margin-left: 0; flex-shrink: 0; }
+  .account-sidebar-logout { align-self: end; padding: .3rem .7rem; font-size: var(--font-size-xs); }
 }

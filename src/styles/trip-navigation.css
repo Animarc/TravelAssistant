@@ -462,3 +462,33 @@
     padding-inline: var(--space-sm);
   }
 }
+
+/* The travel library remains a visible destination beside trip navigation. */
+.workspace-home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 7px;
+  min-height: 38px;
+  padding: 7px 12px;
+  margin-right: var(--space-sm);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  color: var(--color-primary);
+  background: var(--bg-elevated);
+  font: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.workspace-home-btn .interface-icon { width: 17px; height: 17px; }
+.workspace-home-btn:hover,
+.workspace-home-btn.active { background: var(--color-primary-subtle); border-color: var(--color-primary); }
+.trip-context-nav .nav-buttons-scroll { min-width: 0; }
+@media (max-width: 800px) {
+  .workspace-home-btn { min-height: 36px; padding: 7px 8px; font-size: var(--font-size-xs); }
+  .trip-context-nav .nav-buttons-scroll { flex: 1; width: auto; }
+  .navbar-global-view .trip-context-nav { justify-content: flex-start; }
+}
