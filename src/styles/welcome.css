@@ -136,3 +136,5 @@
 /* Google adds iframe margins around its 40px button. Contain that outer frame. */
 .google-button-slot { width: 100%; max-width: 400px; height: 40px; border-radius: 999px; overflow: hidden; }
 .google-button-slot:focus-within { outline: 3px solid var(--text-primary); outline-offset: 3px; }
+
+.social-divider, .social-access { width: 100%; max-width: 400px; margin-inline: auto; }
