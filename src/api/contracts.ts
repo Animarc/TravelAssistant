@@ -10,10 +10,12 @@ export interface EmailVerificationResponse { verified: boolean; status: 'sent' |
 export type TripListDto = TravelsSchema['TripListDto'] & { currency: string };
 export type TripDetailDto = TravelsSchema['TripDetailDto'] & { currency: string };
 export interface PublicTripDto { id: string; name: string; description?: string | null; coverImageUrl?: string | null; currency: string; dayCount: number; activityCount: number; updatedAt: string; language?: string | null; authorUsername?: string | null; averageRating: number; ratingCount: number; }
-export interface TripReviewDto { username: string; score: number; review: string; updatedAt: string; }
-export interface TripRatingDto { averageRating: number; ratingCount: number; userRating?: number | null; userReview?: string | null; canRate: boolean; reviews: TripReviewDto[]; }
-export interface UserReviewDto { username: string; score: number; review: string; updatedAt: string; }
-export interface UserRatingDto { userId: string; averageRating: number; ratingCount: number; userRating?: number | null; userReview?: string | null; canRate: boolean; reviews: UserReviewDto[]; }
+export interface TripReviewDto { username: string; score: number; review: string; updatedAt: string; authorId?: string; isOwn?: boolean; }
+export interface TripRatingDto { averageRating: number; ratingCount: number; userRating?: number | null; userReview?: string | null; canRate: boolean; isBlocked?: boolean; reviews: TripReviewDto[]; }
+export interface UserReviewDto { username: string; score: number; review: string; updatedAt: string; authorId?: string; isOwn?: boolean; }
+export interface UserRatingDto { userId: string; averageRating: number; ratingCount: number; userRating?: number | null; userReview?: string | null; canRate: boolean; isBlocked?: boolean; reviews: UserReviewDto[]; }
+export interface RatingReportDto { id: string; kind: 'trip' | 'user'; tripId: string; ratedUserId: string; authorUsername: string; score: number; review?: string | null; reason: string; status: 'pending' | 'dismissed' | 'removed' | 'changed'; createdAt: string; resolvedAt?: string | null; }
+export interface ReportRatingRequest { kind: 'trip' | 'user'; tripId: string; ratedUserId?: string; authorId: string; reason: string; }
 export interface UserSearchResult { id: string; username: string; avatarUrl?: string | null; }
 export type DayDto = TravelsSchema['DayDto'];
 export type ActivityDto = TravelsSchema['ActivityDto'];

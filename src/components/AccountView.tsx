@@ -8,6 +8,8 @@ import '../styles/account.css';
 import PublicTripsExplorer from './PublicTripsExplorer';
 import UserSearch from './UserSearch';
 import UserRating from './UserRating';
+import RatingModeration from './RatingModeration';
+import { travelsApi } from '../api/travelsApi';
 
 const AccountView = () => {
   const {
@@ -16,7 +18,13 @@ const AccountView = () => {
     removeMember, acceptInvitation, declineInvitation
   } = useApp();
   const { t } = useTranslation(state.language);
-  const [activeSection, setActiveSection] = useState<'trips' | 'explore' | 'create' | 'profile' | 'invitations'>('trips');
+  const [canModerate, setCanModerate] = useState(false);
+  useEffect(() => {
+    let active = true; setCanModerate(false);
+    if (state.isAuthenticated) void travelsApi.moderationAccess().then(result => { if (active) setCanModerate(result.canModerate); }).catch(() => { /* Access stays closed if unavailable. */ });
+    return () => { active = false; };
+  }, [state.isAuthenticated, state.user?.userId]);
+  const [activeSection, setActiveSection] = useState<'trips' | 'explore' | 'create' | 'profile' | 'invitations' | 'moderation'>('trips');
   const accountSections: { id: typeof activeSection; label: TranslationKey; icon: string }[] = [
     { id: 'trips', label: 'myTrips', icon: '▦' },
     { id: 'explore', label: 'accountExplore', icon: '◎' },
@@ -24,7 +32,8 @@ const AccountView = () => {
       { id: 'create' as const, label: 'newTrip' as const, icon: '+' },
       { id: 'invitations' as const, label: 'accountInvitations' as const, icon: '↗' },
       { id: 'profile' as const, label: 'accountProfile' as const, icon: '○' }
-    ] : [])
+    ] : []),
+    ...(canModerate ? [{ id: 'moderation' as const, label: 'moderation' as const, icon: '⚑' }] : [])
   ];
   const [tripQuery, setTripQuery] = useState('');
   const [accessTripId, setAccessTripId] = useState<string | null>(null);
@@ -86,6 +95,7 @@ const AccountView = () => {
           {state.isAuthenticated && <button className="account-sidebar-logout secondary-button" onClick={() => void logout()}>{t('logout')}</button>}
         </aside>
         <div className="account-content" id="account-detail">
+        {activeSection === 'moderation' && canModerate && <RatingModeration key={state.user?.userId} language={state.language} />}
         {activeSection === 'profile' && <section className="account-section auth-section">
           <div className="signed-user">
             <div className="user-avatar">{state.user?.username[0]?.toUpperCase()}</div>
@@ -127,7 +137,7 @@ const AccountView = () => {
         {state.isAuthenticated && activeTrip && trip.id === state.activeTripId && accessTripId === trip.id && !state.publicPreview && (
           <section className="trip-access-panel" aria-label={`${t('tripMembers')}: ${trip.tripName}`}><h4>{t('tripMembers')}</h4>
             {activeTrip.capabilities?.canManageMembers && <form className="invite-form" onSubmit={handleInvite}><input type="email" required placeholder={t('inviteEmailPlaceholder')} value={inviteForm.email} onChange={e => setInviteForm({ ...inviteForm, email: e.target.value })} /><select value={inviteForm.role} onChange={e => setInviteForm({ ...inviteForm, role: e.target.value as Exclude<TripRole, 'owner'> })}><option value="editor">{t('roleEditor')}</option><option value="viewer">{t('roleViewer')}</option></select><button disabled={saveStatus === 'saving'}>{saveStatus === 'saving' ? t('saving') : t('invite')}</button></form>}
-            <div className="members-list">{members.map(member => <div className="member-rating-card" key={member.userId}><div className="collaboration-row"><div className="member-identity"><strong>@{member.username || t('traveler')}</strong><span className="member-score">★ {member.ratingCount ? member.averageRating.toFixed(1) : '—'} · {member.ratingCount}</span></div><div>{member.userId !== state.user?.userId && <button className="secondary-button" onClick={() => setRatingMember(ratingMember === member.userId ? null : member.userId)}>{t('rateTraveler')}</button>}{activeTrip.capabilities?.canManageMembers && member.role !== 'owner' ? <><select value={member.role} onChange={e => void updateMemberRole(member.userId, e.target.value as Exclude<TripRole, 'owner'>).catch(() => undefined)}><option value="editor">{t('roleEditor')}</option><option value="viewer">{t('roleViewer')}</option></select><button className="danger-button" onClick={() => setPendingRemoveMember(member.userId)}>{t('remove')}</button></> : <span className="role-badge">{member.userId === state.user?.userId ? t('you') : t(member.role === 'owner' ? 'roleOwner' : member.role === 'editor' ? 'roleEditor' : 'roleViewer')}</span>}</div></div>{ratingMember === member.userId && <UserRating tripId={activeTrip.id} userId={member.userId} language={state.language} initialAverage={member.averageRating} initialCount={member.ratingCount} />}</div>)}</div>
+            <div className="members-list">{members.map(member => <div className="member-rating-card" key={member.userId}><div className="collaboration-row"><div className="member-identity"><strong>@{member.username || t('traveler')}</strong><span className="member-score">★ {member.ratingCount ? member.averageRating.toFixed(1) : '—'} · {member.ratingCount}</span></div><div>{member.userId !== state.user?.userId && <button className="secondary-button" onClick={() => setRatingMember(ratingMember === member.userId ? null : member.userId)}>{t('rateTraveler')}</button>}{activeTrip.capabilities?.canManageMembers && member.role !== 'owner' ? <><select value={member.role} onChange={e => void updateMemberRole(member.userId, e.target.value as Exclude<TripRole, 'owner'>).catch(() => undefined)}><option value="editor">{t('roleEditor')}</option><option value="viewer">{t('roleViewer')}</option></select><button className="danger-button" onClick={() => setPendingRemoveMember(member.userId)}>{t('remove')}</button></> : <span className="role-badge">{member.userId === state.user?.userId ? t('you') : t(member.role === 'owner' ? 'roleOwner' : member.role === 'editor' ? 'roleEditor' : 'roleViewer')}</span>}</div></div>{ratingMember === member.userId && <UserRating tripId={activeTrip.id} userId={member.userId} language={state.language} initialAverage={member.averageRating} initialCount={member.ratingCount} onChanged={() => void loadCollaboration().catch(() => undefined)} />}</div>)}</div>
           </section>
         )}
             </article>

@@ -96,7 +96,8 @@ const Navbar = () => {
           <span className="navbar-title">{t('appTitle')}</span>
         </a>
 
-        {state.isAuthenticated && !state.publicPreview && <div className="trip-switcher" ref={tripDropdownRef}>
+        {state.isAuthenticated && !state.publicPreview && <div className="navbar-trip-controls">
+          {state.trips.length > 0 && <div className="trip-switcher" ref={tripDropdownRef}>
           <button
             type="button"
             className={`trip-switcher-trigger ${showTripMenu ? 'open' : ''}`}
@@ -127,6 +128,7 @@ const Navbar = () => {
                   className={`trip-option ${trip.id === state.activeTripId ? 'active' : ''}`}
                   onClick={() => {
                     switchTrip(trip.id);
+                    if (state.currentView === 'account') setCurrentView(state.lastTripView);
                     setShowTripMenu(false);
                   }}
                   role="option"
@@ -143,21 +145,16 @@ const Navbar = () => {
               ))}
             </div>
           )}
+          </div>}
+          <button type="button"
+            className={`workspace-home-btn ${state.currentView === 'account' ? 'active' : ''}`}
+            aria-current={state.currentView === 'account' ? 'page' : undefined}
+            onClick={() => { setShowTripMenu(false); setShowLanguageMenu(false); setCurrentView('account'); }}>
+            <InterfaceIcon name="trips" /><span>{t('accountCenter')}</span>
+          </button>
         </div>}
 
         {state.publicPreview && <div className="public-preview-title"><span>{t('publicTrip')}</span><strong>{state.tripName}</strong></div>}
-
-        {state.isAuthenticated && !state.publicPreview && <div className="navbar-page-title">
-          {state.trips.length > 0 && <button
-            type="button"
-            className="global-back-btn"
-            onClick={() => setCurrentView(state.lastTripView)}
-            aria-label={t('backToTrip')}
-          >
-            ←
-          </button>}
-          <strong>{t('accountCenter')}</strong>
-        </div>}
 
         <div className="navbar-right">
           {state.isAuthenticated && saveStatus !== 'idle' && <button type="button" className={`save-status ${saveStatus}`} role="status" aria-live="polite"
@@ -229,14 +226,8 @@ const Navbar = () => {
         </div>
       </div>
 
-      {hasTripContext && <div className="trip-context-nav">
-        {state.isAuthenticated && !state.publicPreview && <button type="button"
-          className={`workspace-home-btn ${state.currentView === 'account' ? 'active' : ''}`}
-          aria-current={state.currentView === 'account' ? 'page' : undefined}
-          onClick={() => { setShowTripMenu(false); setShowLanguageMenu(false); setCurrentView('account'); }}>
-          <InterfaceIcon name="trips" /><span>{t('myTrips')}</span>
-        </button>}
-        {state.currentView !== 'account' && <div className="nav-buttons-scroll" aria-label={t('tripNavigation')}>
+      {hasTripContext && state.currentView !== 'account' && <div className="trip-context-nav">
+        <div className="nav-buttons-scroll" aria-label={t('tripNavigation')}>
           <button
             className={`nav-btn ${state.currentView === 'planning' ? 'active' : ''}`}
             onClick={() => setCurrentView('planning')}
@@ -265,14 +256,14 @@ const Navbar = () => {
           >
             {t('travelers')}
           </button>
-          {state.publicPreview && <button
-            className={`nav-btn desktop-ratings-nav ${state.currentView === 'ratings' ? 'active' : ''}`}
+          {(state.publicPreview || state.trips.find(trip => trip.id === state.activeTripId)?.isPublic) && <button
+            className={`nav-btn ratings-nav ${state.currentView === 'ratings' ? 'active' : ''}`}
             onClick={() => setCurrentView('ratings')}
             aria-current={state.currentView === 'ratings' ? 'page' : undefined}
           >
             {t('opinions')}
           </button>}
-        </div>}
+        </div>
       </div>}
     </nav>
   );

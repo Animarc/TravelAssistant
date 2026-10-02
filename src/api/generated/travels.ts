@@ -557,6 +557,150 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/ratings/moderation-access": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ratings/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    skip?: number | string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["RatingReportDto"][];
+                        "application/json": components["schemas"]["RatingReportDto"][];
+                        "text/json": components["schemas"]["RatingReportDto"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReportRatingRequest"];
+                    "text/json": components["schemas"]["ReportRatingRequest"];
+                    "application/*+json": components["schemas"]["ReportRatingRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["RatingReportDto"];
+                        "application/json": components["schemas"]["RatingReportDto"];
+                        "text/json": components["schemas"]["RatingReportDto"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/ratings/reports/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ResolveRatingReportRequest"];
+                    "text/json": components["schemas"]["ResolveRatingReportRequest"];
+                    "application/*+json": components["schemas"]["ResolveRatingReportRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["RatingReportDto"];
+                        "application/json": components["schemas"]["RatingReportDto"];
+                        "text/json": components["schemas"]["RatingReportDto"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/trips/{tripId}/shopping": {
         parameters: {
             query?: never;
@@ -1138,7 +1282,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/Trips": {
+    "/api/trips/public/{tripId}/rating": {
         parameters: {
             query?: never;
             header?: never;
@@ -1148,6 +1292,213 @@ export interface paths {
         get: {
             parameters: {
                 query?: never;
+                header?: never;
+                path: {
+                    tripId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["TripRatingDto"];
+                        "application/json": components["schemas"]["TripRatingDto"];
+                        "text/json": components["schemas"]["TripRatingDto"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tripId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RateTripRequest"];
+                    "text/json": components["schemas"]["RateTripRequest"];
+                    "application/*+json": components["schemas"]["RateTripRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["TripRatingDto"];
+                        "application/json": components["schemas"]["TripRatingDto"];
+                        "text/json": components["schemas"]["TripRatingDto"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tripId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["TripRatingDto"];
+                        "application/json": components["schemas"]["TripRatingDto"];
+                        "text/json": components["schemas"]["TripRatingDto"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Trips/public": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    query?: string;
+                    take?: number | string;
+                    language?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["PublicTripDto"][];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Trips/public/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TripDetailDto"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Trips/public/{id}/copy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    id: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["TripDetailDto"];
+                    };
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/Trips": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: {
+                    skip?: number | string;
+                    take?: number | string;
+                };
                 header?: never;
                 path?: never;
                 cookie?: never;
@@ -1373,6 +1724,100 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/trips/{tripId}/members/{ratedUserId}/rating": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tripId: string;
+                    ratedUserId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["UserRatingDto"];
+                        "application/json": components["schemas"]["UserRatingDto"];
+                        "text/json": components["schemas"]["UserRatingDto"];
+                    };
+                };
+            };
+        };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tripId: string;
+                    ratedUserId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RateUserRequest"];
+                    "text/json": components["schemas"]["RateUserRequest"];
+                    "application/*+json": components["schemas"]["RateUserRequest"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["UserRatingDto"];
+                        "application/json": components["schemas"]["UserRatingDto"];
+                        "text/json": components["schemas"]["UserRatingDto"];
+                    };
+                };
+            };
+        };
+        post?: never;
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tripId: string;
+                    ratedUserId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "text/plain": components["schemas"]["UserRatingDto"];
+                        "application/json": components["schemas"]["UserRatingDto"];
+                        "text/json": components["schemas"]["UserRatingDto"];
+                    };
+                };
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1406,9 +1851,9 @@ export interface components {
             type: string;
             isOptional: boolean;
             isDone: boolean;
-            transportMode?: string | null;
-            startCoordinates?: (number | string)[] | null;
-            endCoordinates?: (number | string)[] | null;
+            transportMode?: null | string;
+            startCoordinates?: null | (number | string)[];
+            endCoordinates?: null | (number | string)[];
         };
         CreateAccommodationRequest: {
             name: string;
@@ -1441,11 +1886,15 @@ export interface components {
             type: string;
             /** @default false */
             isOptional: boolean;
-            transportMode?: string | null;
-            startLatitude?: number | string | null;
-            startLongitude?: number | string | null;
-            endLatitude?: number | string | null;
-            endLongitude?: number | string | null;
+            transportMode?: null | string;
+            /** Format: double */
+            startLatitude?: null | number | string;
+            /** Format: double */
+            startLongitude?: null | number | string;
+            /** Format: double */
+            endLatitude?: null | number | string;
+            /** Format: double */
+            endLongitude?: null | number | string;
         };
         CreateDayRequest: {
             title: string;
@@ -1461,7 +1910,7 @@ export interface components {
         };
         CreateTravelerRequest: {
             firstName: string;
-            lastName?: string | null;
+            lastName?: null | string;
             /** Format: int32 */
             age?: null | number | string;
             email?: null | string;
@@ -1481,6 +1930,8 @@ export interface components {
             coverImageUrl?: null | string;
             /** @default false */
             isPublic: boolean;
+            /** @default EUR */
+            currency: string;
         };
         DayDto: {
             /** Format: uuid */
@@ -1498,8 +1949,80 @@ export interface components {
             detail?: null | string;
             instance?: null | string;
         };
+        PublicTripDto: {
+            /** Format: uuid */
+            id: string;
+            name: string;
+            description: null | string;
+            coverImageUrl: null | string;
+            currency: string;
+            /** Format: int32 */
+            dayCount: number | string;
+            /** Format: int32 */
+            activityCount: number | string;
+            /** Format: date-time */
+            updatedAt: string;
+            language?: null | string;
+            authorUsername?: null | string;
+            /**
+             * Format: double
+             * @default 0
+             */
+            averageRating: number | string;
+            /**
+             * Format: int32
+             * @default 0
+             */
+            ratingCount: number | string;
+        };
+        RateTripRequest: {
+            /** Format: int32 */
+            score: number | string;
+            review?: null | string;
+            /** @default false */
+            preserveReview: boolean;
+        };
+        RateUserRequest: {
+            /** Format: int32 */
+            score: number | string;
+            review?: null | string;
+            /** @default false */
+            preserveReview: boolean;
+        };
+        RatingReportDto: {
+            /** Format: uuid */
+            id: string;
+            kind: string;
+            /** Format: uuid */
+            tripId: string;
+            /** Format: uuid */
+            ratedUserId: string;
+            authorUsername: string;
+            /** Format: int32 */
+            score: number | string;
+            review: null | string;
+            reason: string;
+            status: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: date-time */
+            resolvedAt: null | string;
+        };
         ReorderDaysRequest: {
             dayIds: string[];
+        };
+        ReportRatingRequest: {
+            kind: string;
+            /** Format: uuid */
+            tripId: string;
+            /** Format: uuid */
+            authorId: string;
+            reason: string;
+            /** Format: uuid */
+            ratedUserId?: null | string;
+        };
+        ResolveRatingReportRequest: {
+            remove: boolean;
         };
         ShoppingItemDto: {
             /** Format: uuid */
@@ -1541,6 +2064,7 @@ export interface components {
             description: null | string;
             coverImageUrl: null | string;
             isPublic: boolean;
+            currency: string;
             days: components["schemas"]["DayDto"][];
             accommodations: components["schemas"]["AccommodationDto"][];
             shoppingItems: components["schemas"]["ShoppingItemDto"][];
@@ -1576,6 +2100,7 @@ export interface components {
             description: null | string;
             coverImageUrl: null | string;
             isPublic: boolean;
+            currency: string;
             /** Format: int32 */
             dayCount: number | string;
             /** Format: int32 */
@@ -1587,11 +2112,47 @@ export interface components {
         TripMemberDto: {
             /** Format: uuid */
             userId: string;
+            username: string;
             role: components["schemas"]["TripMemberRole"];
             /** Format: date-time */
             joinedAt: string;
+            /**
+             * Format: double
+             * @default 0
+             */
+            averageRating: number | string;
+            /**
+             * Format: int32
+             * @default 0
+             */
+            ratingCount: number | string;
         };
         TripMemberRole: number;
+        TripRatingDto: {
+            /** Format: double */
+            averageRating: number | string;
+            /** Format: int32 */
+            ratingCount: number | string;
+            /** Format: int32 */
+            userRating: null | number | string;
+            userReview: null | string;
+            canRate: boolean;
+            reviews: components["schemas"]["TripReviewDto"][];
+            /** @default false */
+            isBlocked: boolean;
+        };
+        TripReviewDto: {
+            username: string;
+            /** Format: int32 */
+            score: number | string;
+            review: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** Format: uuid */
+            authorId: string;
+            /** @default false */
+            isOwn: boolean;
+        };
         UpdateAccommodationRequest: {
             name: null | string;
             /** Format: double */
@@ -1621,11 +2182,15 @@ export interface components {
             type: null | string;
             isOptional: null | boolean;
             isDone: null | boolean;
-            transportMode?: string | null;
-            startLatitude?: number | string | null;
-            startLongitude?: number | string | null;
-            endLatitude?: number | string | null;
-            endLongitude?: number | string | null;
+            transportMode?: null | string;
+            /** Format: double */
+            startLatitude?: null | number | string;
+            /** Format: double */
+            startLongitude?: null | number | string;
+            /** Format: double */
+            endLatitude?: null | number | string;
+            /** Format: double */
+            endLongitude?: null | number | string;
         };
         UpdateDayRequest: {
             title: string;
@@ -1658,6 +2223,35 @@ export interface components {
             description: null | string;
             coverImageUrl: null | string;
             isPublic: boolean;
+            /** @default EUR */
+            currency: string;
+        };
+        UserRatingDto: {
+            /** Format: uuid */
+            userId: string;
+            /** Format: double */
+            averageRating: number | string;
+            /** Format: int32 */
+            ratingCount: number | string;
+            /** Format: int32 */
+            userRating: null | number | string;
+            userReview: null | string;
+            canRate: boolean;
+            reviews: components["schemas"]["UserReviewDto"][];
+            /** @default false */
+            isBlocked: boolean;
+        };
+        UserReviewDto: {
+            username: string;
+            /** Format: int32 */
+            score: number | string;
+            review: string;
+            /** Format: date-time */
+            updatedAt: string;
+            /** Format: uuid */
+            authorId: string;
+            /** @default false */
+            isOwn: boolean;
         };
         ValidationProblemDetails: {
             type?: null | string;

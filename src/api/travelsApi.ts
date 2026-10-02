@@ -1,6 +1,6 @@
 import type { Accommodation, Activity, ShoppingItem, Traveler, TripInvitation, TripMember, TripRole } from '../types';
 import { apiRequest, TRAVELS_API_URL } from './client';
-import type { AccommodationDto, ActivityDto, DayDto, PublicTripDto, ShoppingItemDto, TravelerDto, TripDetailDto, TripListDto, TripRatingDto, UserRatingDto } from './contracts';
+import type { AccommodationDto, ActivityDto, DayDto, PublicTripDto, ShoppingItemDto, TravelerDto, TripDetailDto, TripListDto, TripRatingDto, UserRatingDto, RatingReportDto, ReportRatingRequest } from './contracts';
 
 const json = (body: unknown): RequestInit => ({ method: 'POST', body: JSON.stringify(body) });
 const put = (body: unknown): RequestInit => ({ method: 'PUT', body: JSON.stringify(body) });
@@ -12,6 +12,12 @@ const transport = (activity: Activity) => ({
 const coordinates = (value?: [number, number]) => ({ latitude: value?.[0] ?? null, longitude: value?.[1] ?? null });
 
 export const travelsApi = {
+  deleteTripRating: (tripId: string) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, { method: 'DELETE' }),
+  deleteUserRating: (tripId: string, userId: string) => apiRequest<UserRatingDto>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}/rating`, { method: 'DELETE' }),
+  reportRating: (request: ReportRatingRequest) => apiRequest<RatingReportDto>(TRAVELS_API_URL, '/api/ratings/reports', json(request)),
+  moderationAccess: () => apiRequest<{ canModerate: boolean }>(TRAVELS_API_URL, '/api/ratings/moderation-access'),
+  ratingReports: (skip = 0) => apiRequest<RatingReportDto[]>(TRAVELS_API_URL, `/api/ratings/reports?skip=${skip}`),
+  resolveRatingReport: (id: string, remove: boolean) => apiRequest<RatingReportDto>(TRAVELS_API_URL, `/api/ratings/reports/${id}`, put({ remove })),
   listTrips: async () => {
     const trips: TripListDto[] = [];
     for (let skip = 0; ; skip += 100) {
@@ -29,7 +35,7 @@ export const travelsApi = {
   getPublicTrip: (tripId: string) => apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}`, {}, false),
   copyPublicTrip: (tripId: string) => apiRequest<TripDetailDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/copy`, { method: 'POST' }),
   getTripRating: (tripId: string, authenticated = false) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, {}, authenticated),
-  rateTrip: (tripId: string, score: number, review?: string) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, { method: 'PUT', body: JSON.stringify({ score, review: review?.trim() || null }) }),
+  rateTrip: (tripId: string, score: number, review?: string) => apiRequest<TripRatingDto>(TRAVELS_API_URL, `/api/trips/public/${tripId}/rating`, { method: 'PUT', body: JSON.stringify({ score, review: review?.trim() || null, preserveReview: review === undefined }) }),
 
   createDay: (tripId: string, title: string) => apiRequest<DayDto>(TRAVELS_API_URL, `/api/trips/${tripId}/days`, json({ title })),
   updateDay: (tripId: string, dayId: string, title: string) => apiRequest<DayDto>(TRAVELS_API_URL, `/api/trips/${tripId}/days/${dayId}`, put({ title })),
@@ -62,7 +68,7 @@ export const travelsApi = {
 
   getMembers: (tripId: string) => apiRequest<TripMember[]>(TRAVELS_API_URL, `/api/trips/${tripId}/members`),
   getUserRating: (tripId: string, userId: string) => apiRequest<UserRatingDto>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}/rating`),
-  rateUser: (tripId: string, userId: string, score: number, review?: string) => apiRequest<UserRatingDto>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}/rating`, put({ score, review: review?.trim() || null })),
+  rateUser: (tripId: string, userId: string, score: number, review?: string) => apiRequest<UserRatingDto>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}/rating`, put({ score, review: review?.trim() || null, preserveReview: review === undefined })),
   invite: (tripId: string, email: string, role: Exclude<TripRole, 'owner'>) => apiRequest<TripInvitation>(TRAVELS_API_URL, `/api/trips/${tripId}/members/invitations`, json({ email, role })),
   updateMember: (tripId: string, userId: string, role: Exclude<TripRole, 'owner'>) => apiRequest<void>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}`, put({ role })),
   removeMember: (tripId: string, userId: string) => apiRequest<void>(TRAVELS_API_URL, `/api/trips/${tripId}/members/${userId}`, { method: 'DELETE' }),

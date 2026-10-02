@@ -1,3 +1,4 @@
+import { travelsApi } from '../api/travelsApi';
 import { cleanup, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, expect, it, vi } from 'vitest';
@@ -5,6 +6,7 @@ import AccountView from './AccountView';
 import { useApp } from '../context/AppContext';
 vi.mock('../context/AppContext', () => ({ useApp: vi.fn() }));
 vi.mock('./PublicTripsExplorer', () => ({ default: () => <div>Public trip discovery</div> }));
+vi.mock('../api/travelsApi', () => ({ travelsApi: { moderationAccess: vi.fn().mockResolvedValue({ canModerate: false }) } }));
 vi.mock('./UserSearch', () => ({ default: () => <div>People search</div> }));
 const switchTrip = vi.fn();
 const setCurrentView = vi.fn();
@@ -50,4 +52,9 @@ it('separates profile, creation and invitations into their own sections', async 
   expect(screen.queryByRole('button', { name: 'Guardar perfil' })).not.toBeInTheDocument();
   await userEvent.click(screen.getByRole('button', { name: 'Invitaciones' }));
   expect(screen.getByText('No tienes invitaciones pendientes.')).toBeInTheDocument();
+});
+it('shows the reports category only when server grants moderation access', async () => {
+  vi.mocked(travelsApi.moderationAccess).mockResolvedValueOnce({ canModerate: true });
+  setup();
+  expect(await screen.findByRole('button', { name: 'Denuncias' })).toBeInTheDocument();
 });

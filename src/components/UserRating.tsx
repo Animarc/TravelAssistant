@@ -1,47 +1,8 @@
-import type { TranslationKey } from '../i18n/translations';
-import { useEffect, useState } from 'react';
 import { travelsApi } from '../api/travelsApi';
-import type { UserRatingDto } from '../api/contracts';
-import { useTranslation } from '../hooks/useTranslation';
-import { getErrorKey } from '../hooks/useAsyncOperation';
 import type { Language } from '../types';
-
-interface Props { tripId: string; userId: string; language: Language; initialAverage: number; initialCount: number; }
-
-const UserRating = ({ tripId, userId, language, initialAverage, initialCount }: Props) => {
-  const { t } = useTranslation(language);
-  const [value, setValue] = useState<UserRatingDto>({ userId, averageRating: initialAverage, ratingCount: initialCount, userRating: null, userReview: null, canRate: false, reviews: [] });
-  const [score, setScore] = useState(0);
-  const [review, setReview] = useState('');
-  const [error, setError] = useState<TranslationKey | null>(null);
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    let active = true;
-    setError(null);
-    setValue({ userId, averageRating: initialAverage, ratingCount: initialCount, userRating: null, userReview: null, canRate: false, reviews: [] });
-    void travelsApi.getUserRating(tripId, userId).then(result => { if (active) { setValue(result); setScore(result.userRating ?? 0); setReview(result.userReview ?? ''); } }).catch(reason => { if (active) setError(getErrorKey(reason)); });
-    return () => { active = false; };
-  }, [tripId, userId, initialAverage, initialCount]);
-
-  const save = async () => {
-    if (!score || saving || !value.canRate) return;
-    setSaving(true); setError(null);
-    try { const result = await travelsApi.rateUser(tripId, userId, score, review); setValue(result); setScore(result.userRating ?? 0); setReview(result.userReview ?? ''); }
-    catch (reason) { setError(getErrorKey(reason)); }
-    finally { setSaving(false); }
-  };
-
-  return <div className="user-rating-panel" onClick={event => event.stopPropagation()}>
-    <div className="user-rating-summary"><span>★</span><strong>{value.ratingCount ? value.averageRating.toFixed(1) : '—'}</strong><small>{value.ratingCount} {value.ratingCount === 1 ? t('rating') : t('ratings')}</small></div>
-    {value.canRate && <>
-      <fieldset disabled={saving} className="rating-stars"><legend>{t('rateThisUser')}</legend>{[1,2,3,4,5].map(item => <button type="button" key={item} className={item <= score ? 'selected' : ''} onClick={() => setScore(item)} aria-label={`${item} ${t('stars')}`}>★</button>)}</fieldset>
-      <textarea maxLength={2000} rows={3} value={review} onChange={event => setReview(event.target.value)} placeholder={t('userReviewPlaceholder')} />
-      <button type="button" disabled={!score || saving} onClick={() => void save()}>{saving ? t('saving') : t('publishUserRating')}</button>
-    </>}
-    {error && <p role="alert" className="form-error">{t(error)}</p>}
-    {value.reviews.length > 0 && <div className="user-reviews"><h4>{t('travelerReviews')}</h4>{value.reviews.map(item => <article key={`${item.username}-${item.updatedAt}`}><header><strong>@{item.username}</strong><span>{'★'.repeat(item.score)}</span></header><p>{item.review}</p></article>)}</div>}
-  </div>;
-};
-
-export default UserRating;
+import RatingPanel from './RatingPanel';
+interface Props { tripId: string; userId: string; language: Language; initialAverage: number; initialCount: number; onChanged?: () => void; }
+export default function UserRating({ tripId, userId, language, initialAverage, initialCount, onChanged }: Props) {
+  return <RatingPanel key={`${tripId}-${userId}`} tripId={tripId} userId={userId} authenticated language={language} initialAverage={initialAverage} initialCount={initialCount} expanded onChanged={onChanged}
+    load={() => travelsApi.getUserRating(tripId, userId)} save={(score, review) => travelsApi.rateUser(tripId, userId, score, review)} remove={() => travelsApi.deleteUserRating(tripId, userId)} />;
+}
