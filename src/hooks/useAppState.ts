@@ -1,6 +1,7 @@
+import { useLocation, useNavigate } from 'react-router-dom';
+import { homeLanguage, homePath, resolvePageLanguage } from '../seo';
 import { useCallback, useEffect, useState } from 'react';
 import type { Language } from '../types';
-import { resolveLanguage } from '../i18n/language';
 import { useAsyncOperation } from './useAsyncOperation';
 import { useAuth } from './useAuth';
 import { useCollaboration } from './useCollaboration';
@@ -11,10 +12,12 @@ export type { SaveStatus } from './useAsyncOperation';
 const initialLanguage = (): Language => {
   const stored = localStorage.getItem('travelAssistantLang');
   const browserLanguages = navigator.languages?.length ? navigator.languages : [navigator.language];
-  return resolveLanguage(stored, browserLanguages);
+  return resolvePageLanguage(window.location.pathname, window.location.search, stored, browserLanguages);
 };
 
 export const useAppState = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [language, setLanguageState] = useState<Language>(initialLanguage);
   const operation = useAsyncOperation();
   const trips = useTripState(operation.run);
@@ -28,6 +31,11 @@ export const useAppState = () => {
   );
 
   useEffect(() => {
+    const locale = homeLanguage(location.pathname);
+    if (location.pathname !== '/' && locale && !location.search) setLanguageState(locale);
+  }, [location.pathname, location.search]);
+
+  useEffect(() => {
     localStorage.setItem('travelAssistantLang', language);
   }, [language]);
 
@@ -36,7 +44,10 @@ export const useAppState = () => {
     if (!auth.isAuthenticated) resetCollaboration();
   }, [auth.isAuthenticated, resetCollaboration]);
 
-  const setLanguage = useCallback((nextLanguage: Language) => setLanguageState(nextLanguage), []);
+  const setLanguage = useCallback((nextLanguage: Language) => {
+    setLanguageState(nextLanguage);
+    if (homeLanguage(location.pathname) && !location.search && !auth.isAuthenticated) navigate(homePath(nextLanguage));
+  }, [location.pathname, location.search, auth.isAuthenticated, navigate]);
   const { activeTrip, store } = trips;
   const state = {
     trips: store.trips,

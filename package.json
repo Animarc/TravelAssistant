@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && node deployment/create-spa-routes.mjs",
+    "build": "tsc -b && vite build && node deployment/create-spa-routes.mjs && node deployment/check-seo.mjs",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",

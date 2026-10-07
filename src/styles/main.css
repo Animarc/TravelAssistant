@@ -2733,3 +2733,6 @@ textarea:focus-visible {
   }
 }
 [hidden] { display: none !important; }
+
+/* Language links share the dropdown button layout. */
+a.dropdown-item { display: block; box-sizing: border-box; text-decoration: none; }

@@ -1,0 +1,79 @@
+{
+  "es": {
+    "title": "Tabiji Log · Planifica y comparte tus viajes",
+    "description": "Organiza tu itinerario por días, sitúa actividades en el mapa, prepara alojamientos y presupuesto y comparte el viaje con tus compañeros.",
+    "heading": "Todo tu viaje en un mismo lugar",
+    "features": [
+      "Organiza los días, las actividades y los transportes de tu itinerario.",
+      "Consulta lugares y trayectos en el mapa y prepara tus alojamientos.",
+      "Gestiona el presupuesto y la lista de equipaje, y comparte el plan con tus compañeros."
+    ],
+    "noScript": "Activa JavaScript para iniciar sesión y organizar tu viaje."
+  },
+  "en": {
+    "title": "Tabiji Log · Plan and share your trips",
+    "description": "Build a day-by-day itinerary, map activities, plan accommodation and your budget, and share the trip with your travel companions.",
+    "heading": "Your whole trip in one place",
+    "features": [
+      "Organise the days, activities and transport in your itinerary.",
+      "View places and routes on the map and plan your accommodation.",
+      "Manage your budget and packing list, and share the plan with your travel companions."
+    ],
+    "noScript": "Enable JavaScript to sign in and plan your trip."
+  },
+  "fr": {
+    "title": "Tabiji Log · Organisez et partagez vos voyages",
+    "description": "Organisez votre itinéraire jour par jour, retrouvez les activités sur la carte, préparez hébergements et budget et partagez votre voyage.",
+    "heading": "Tout votre voyage au même endroit",
+    "features": [
+      "Organisez les journées, les activités et les transports de votre itinéraire.",
+      "Consultez les lieux et les trajets sur la carte et préparez vos hébergements.",
+      "Gérez votre budget et votre liste de bagages, et partagez le programme avec vos compagnons de voyage."
+    ],
+    "noScript": "Activez JavaScript pour vous connecter et organiser votre voyage."
+  },
+  "de": {
+    "title": "Tabiji Log · Reisen planen und teilen",
+    "description": "Plane deine Reise Tag für Tag, finde Aktivitäten auf der Karte, organisiere Unterkünfte und Budget und teile den Reiseplan mit deinen Mitreisenden.",
+    "heading": "Deine ganze Reise an einem Ort",
+    "features": [
+      "Organisiere die Tage, Aktivitäten und Verkehrsmittel deiner Reise.",
+      "Sieh dir Orte und Strecken auf der Karte an und plane deine Unterkünfte.",
+      "Verwalte Budget und Packliste und teile den Plan mit deinen Mitreisenden."
+    ],
+    "noScript": "Aktiviere JavaScript, um dich anzumelden und deine Reise zu planen."
+  },
+  "zh": {
+    "title": "Tabiji Log · 规划与分享旅行",
+    "description": "按天规划行程，在地图上查看活动地点，安排住宿和预算，并与同行伙伴分享旅行计划。",
+    "heading": "在一个地方管理整个旅程",
+    "features": [
+      "安排每天的活动和交通，整理旅行行程。",
+      "在地图上查看地点和路线，并安排住宿。",
+      "管理预算和行李清单，与同行伙伴分享计划。"
+    ],
+    "noScript": "请启用 JavaScript 以登录并规划旅行。"
+  },
+  "ru": {
+    "title": "Tabiji Log · Планируйте поездки и делитесь маршрутами",
+    "description": "Составляйте маршрут по дням, отмечайте места на карте, планируйте проживание и бюджет и делитесь поездкой со своими спутниками.",
+    "heading": "Вся поездка в одном месте",
+    "features": [
+      "Планируйте дни, занятия и транспорт для своего маршрута.",
+      "Просматривайте места и маршруты на карте и выбирайте проживание.",
+      "Ведите бюджет и список вещей и делитесь планом со своими спутниками."
+    ],
+    "noScript": "Включите JavaScript, чтобы войти и спланировать поездку."
+  },
+  "ja": {
+    "title": "Tabiji Log · 旅の計画と共有",
+    "description": "日ごとの旅程を作成し、地図で観光スポットを確認。宿泊先や予算、持ち物をまとめて、旅の仲間と計画を共有できます。",
+    "heading": "旅の計画をひとつに",
+    "features": [
+      "日ごとの予定、アクティビティ、移動手段を整理できます。",
+      "地図でスポットや移動ルートを確認し、宿泊先を計画できます。",
+      "予算や持ち物を管理し、旅の仲間と計画を共有できます。"
+    ],
+    "noScript": "ログインして旅を計画するには、JavaScriptを有効にしてください。"
+  }
+}

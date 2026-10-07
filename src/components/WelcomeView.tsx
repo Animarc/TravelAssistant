@@ -1,3 +1,4 @@
+import LandingDetails from './LandingDetails';
 import GoogleSignInButton from './GoogleSignInButton';
 import type { TranslationKey } from '../i18n/translations';
 import { useCallback, useState, type FormEvent } from 'react';
@@ -37,6 +38,7 @@ const WelcomeView = () => {
         <span className="welcome-kicker">Tabiji Log</span>
         <h1 id="welcome-title">{t('welcomeTitle')}</h1>
         <p className="welcome-intro">{t('welcomeIntro')}</p>
+        <LandingDetails language={state.language} />
 
         <div className="auth-switch" role="tablist" aria-label={t('accountAccess')}>
           <button type="button" role="tab" aria-selected={mode === 'login'} className={mode === 'login' ? 'active' : ''} onClick={() => setMode('login')}>{t('login')}</button>

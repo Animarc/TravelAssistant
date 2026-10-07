@@ -1,3 +1,4 @@
+import { homeLanguage } from '../seo';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { mapTrip } from '../api/mappers';
@@ -31,7 +32,7 @@ export const useTripState = (run: RemoteRunner) => {
   const canEditActiveTrip = activeTrip.capabilities?.canEdit === true && !store.publicPreview;
 
   useEffect(() => {
-    const routeView = routeViews.get(location.pathname);
+    const routeView = routeViews.get(location.pathname.replace(/\/$/, '') || '/');
     if (routeView) setStore(previous => previous.currentView === routeView ? previous : {
       ...previous, currentView: routeView, lastTripView: (routeView === 'account' || routeView === 'settings') ? previous.lastTripView : routeView
     });
@@ -51,7 +52,7 @@ export const useTripState = (run: RemoteRunner) => {
     const summaries = await travelsApi.listTrips();
     const details = await Promise.all(summaries.map(summary => travelsApi.getTrip(summary.id)));
     setRemoteTrips(details.map(detail => mapTrip(detail)));
-    if (locationPathRef.current === '/') navigate(summaries.length ? '/planning' : '/account', { replace: true });
+    if (homeLanguage(locationPathRef.current) !== null) navigate(summaries.length ? '/planning' : '/account', { replace: true });
   }, [navigate, setRemoteTrips]);
 
   const refreshTrip = useCallback(async (tripId: string, requestedDay?: number) => {

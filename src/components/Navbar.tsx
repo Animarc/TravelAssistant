@@ -1,3 +1,4 @@
+import { homeLanguage, homePath } from '../seo';
 import { useState, useEffect, useRef } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
@@ -211,16 +212,12 @@ const Navbar = () => {
             {showLanguageMenu && (
               <div className="dropdown-menu">
                 {languages.map(lang => (
-                  <button
-                    key={lang.code}
-                    className={`dropdown-item ${state.language === lang.code ? 'active' : ''}`}
-                    onClick={() => {
-                      setLanguage(lang.code);
-                      setShowLanguageMenu(false);
-                    }}
-                  >
-                    {lang.name}
-                  </button>
+                  !state.isAuthenticated && homeLanguage(window.location.pathname) && !window.location.search
+                    ? <a key={lang.code} href={homePath(lang.code)} hrefLang={lang.code}
+                        className={`dropdown-item ${state.language === lang.code ? 'active' : ''}`}
+                        onClick={event => { event.preventDefault(); setLanguage(lang.code); setShowLanguageMenu(false); }}>{lang.name}</a>
+                    : <button key={lang.code} className={`dropdown-item ${state.language === lang.code ? 'active' : ''}`}
+                        onClick={() => { setLanguage(lang.code); setShowLanguageMenu(false); }}>{lang.name}</button>
                 ))}
               </div>
             )}
