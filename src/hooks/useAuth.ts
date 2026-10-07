@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { ApiError, saveSession } from '../api/client';
 import { sessionApi } from '../api/sessionApi';
 import type { AuthResponse, UserProfileResponse } from '../api/contracts';
-import type { AuthUser } from '../types';
+import type { AuthUser, Language } from '../types';
 import { getErrorKey } from './useAsyncOperation';
 import type { TranslationKey } from '../i18n/translations';
 
@@ -64,8 +64,8 @@ export const useAuth = (loadTrips: () => Promise<void>, resetTrips: () => void, 
   const login = useCallback((email: string, password: string) =>
     authenticate(() => sessionApi.login(email, password)), [authenticate]);
 
-  const register = useCallback((email: string, password: string, username: string) =>
-    authenticate(() => sessionApi.register(email, password, username)), [authenticate]);
+  const register = useCallback((email: string, password: string, username: string, language: Language = 'es') =>
+    authenticate(() => sessionApi.register(email, password, username, language)), [authenticate]);
   const loginWithGoogle = useCallback((idToken: string) => authenticate(() => sessionApi.google(idToken)), [authenticate]);
   const loginWithApple = useCallback((idToken: string, firstName?: string, lastName?: string) => authenticate(() => sessionApi.apple(idToken, firstName, lastName)), [authenticate]);
 

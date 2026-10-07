@@ -27,7 +27,7 @@ export const usePlanningMap = (day: Day | undefined, accommodations: Accommodati
   useEffect(() => {
     const container = mapRef.current;
     if (container && !mapInstanceRef.current) {
-      mapInstanceRef.current = L.map(container).setView([35.6762, 139.6503], 10);
+      mapInstanceRef.current = L.map(container, { zoomControl: false }).setView([35.6762, 139.6503], 10);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap contributors' }).addTo(mapInstanceRef.current);
     }
 
@@ -51,6 +51,7 @@ export const usePlanningMap = (day: Day | undefined, accommodations: Accommodati
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
+    const zoom = L.control.zoom({ zoomInTitle: translations[language].mapZoomIn, zoomOutTitle: translations[language].mapZoomOut }).addTo(map);
     map.eachLayer(layer => { if (layer instanceof L.Marker || layer instanceof L.Polyline) map.removeLayer(layer); });
     const bounds: L.LatLngTuple[] = [];
 
@@ -64,7 +65,7 @@ export const usePlanningMap = (day: Day | undefined, accommodations: Accommodati
         L.polyline([start, end], { color: '#d47752', weight: 3, dashArray: activity.transportMode === 'plane' ? '8 6' : undefined }).addTo(map);
         for (const [label, point, suffix] of [[translations[language].transportOrigin, start, 'A'], [translations[language].transportDestination, end, 'B']] as const) {
           const icon = L.divIcon({ className: 'activity-marker', html: `<div class="activity-marker-inner">${index + 1}${suffix}</div>`, iconSize: [30, 30] });
-          L.marker(point, { icon }).addTo(map).bindPopup(activityPopup(`${activity.name} · ${label}`, activity.description));
+          L.marker(point, { icon, title: `${activity.name} · ${label}`, alt: `${activity.name} · ${label}` }).addTo(map).bindPopup(activityPopup(`${activity.name} · ${label}`, activity.description));
         }
         return;
       }
@@ -72,7 +73,7 @@ export const usePlanningMap = (day: Day | undefined, accommodations: Accommodati
       const point = activity.coordinates as [number, number];
       bounds.push(point);
       const icon = L.divIcon({ className: 'activity-marker', html: `<div class="activity-marker-inner">${index + 1}</div>`, iconSize: [30, 30] });
-      L.marker(point, { icon }).addTo(map).bindPopup(activityPopup(activity.name, activity.description));
+      L.marker(point, { icon, title: activity.name, alt: activity.name }).addTo(map).bindPopup(activityPopup(activity.name, activity.description));
     });
 
     accommodations.forEach(accommodation => {
@@ -80,10 +81,11 @@ export const usePlanningMap = (day: Day | undefined, accommodations: Accommodati
       const point = accommodation.coordinates as [number, number];
       bounds.push(point);
       const icon = L.divIcon({ className: 'accommodation-marker', html: '<div class="accommodation-marker-inner"></div>', iconSize: [36, 36] });
-      L.marker(point, { icon }).addTo(map).bindPopup(accommodationPopup(accommodation.name));
+      L.marker(point, { icon, title: accommodation.name, alt: accommodation.name }).addTo(map).bindPopup(accommodationPopup(accommodation.name));
     });
 
     if (bounds.length) map.fitBounds(bounds, { padding: [50, 50], maxZoom: 15 });
+    return () => { zoom.remove(); };
   }, [accommodations, day, language]);
 
   return mapRef;

@@ -182,7 +182,9 @@ const Navbar = () => {
                   noAccommodation: t('noAccommodation'),
                   importantInfo: t('importantInfo'),
                   noTime: t('noTime'),
-                  tripName: state.tripName
+                  tripName: state.tripName,
+                  language: state.language,
+                  currency: state.trips.find(trip => trip.id === state.activeTripId)?.currency
                 })
               }
             >

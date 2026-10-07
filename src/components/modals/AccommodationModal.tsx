@@ -1,3 +1,4 @@
+import { formatDayRange } from '../../utils';
 import type { TranslationKey } from '../../i18n/translations';
 import { useState, useEffect } from 'react';
 import { useApp } from '../../context/AppContext';
@@ -13,6 +14,7 @@ interface AccommodationModalProps {
 const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
   const { state, addAccommodation, updateAccommodation } = useApp();
   const { t } = useTranslation(state.language);
+  const tripCurrency = state.trips.find(trip => trip.id === state.activeTripId)?.currency ?? 'EUR';
   const isEditing = editId !== undefined;
   const [validationError, setValidationError] = useState<TranslationKey | null>(null);
   const { isSubmitting, submitOnce } = useSubmitLock();
@@ -109,7 +111,7 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
             <select name="fromDay" value={formData.fromDay} onChange={handleChange}>
               {state.days.map((day, index) => (
                 <option key={index} value={index}>
-                  {t('day')} {index + 1}: {day.title}
+                  {formatDayRange(index, index, state.language)}: {day.title}
                 </option>
               ))}
             </select>
@@ -119,13 +121,13 @@ const AccommodationModal = ({ editId, onClose }: AccommodationModalProps) => {
             <select name="toDay" value={formData.toDay} onChange={handleChange}>
               {state.days.map((day, index) => (
                 <option key={index} value={index}>
-                  {t('day')} {index + 1}: {day.title}
+                  {formatDayRange(index, index, state.language)}: {day.title}
                 </option>
               ))}
             </select>
           </label><br />
 
-          <label>{t('totalPrice')} (€):
+          <label>{t('totalPrice')} ({tripCurrency}):
             <input
               type="number"
               name="price"

@@ -41,14 +41,16 @@ export const isValidCoordinates = (coords: unknown): coords is [number, number] 
 /**
  * Format price with currency
  */
-export const formatPrice = (price: number | string | undefined, currency: string = 'EUR'): string => {
-  return `${parseFloat(String(price || 0)).toFixed(2)} ${currency}`;
+export const formatPrice = (price: number | string | undefined, currency: string = 'EUR', language: Language = 'es'): string => {
+  const amount = Number(price || 0);
+  return new Intl.NumberFormat(language, { style: 'currency', currency, currencyDisplay: 'code' }).format(Number.isFinite(amount) ? amount : 0);
 };
 
 /**
  * Format day range
  */
 export const formatDayRange = (fromDay: number, toDay: number, language: Language = 'es'): string => {
+  if (language === 'ja') return fromDay === toDay ? `${fromDay + 1}日目` : `${fromDay + 1}〜${toDay + 1}日目`;
   if (fromDay === toDay) {
     return `${translations[language].day} ${fromDay + 1}`;
   }
@@ -129,6 +131,8 @@ interface PrintLabels {
   importantInfo: string;
   noTime: string;
   tripName: string;
+  language?: Language;
+  currency?: string;
 }
 
 /**
@@ -156,7 +160,7 @@ export const printItinerary = (
       detailsLines.push(`<div class="important">${escapeHtml(labels.importantInfo)}: ${escapeHtml(a.importantInfo)}</div>`);
     }
     if (a.price) {
-      detailsLines.push(`<div class="price">${escapeHtml(String(a.price))} ${escapeHtml(a.currency || 'EUR')}</div>`);
+      detailsLines.push(`<div class="price">${escapeHtml(formatPrice(a.price, a.currency || labels.currency, labels.language))}</div>`);
     }
     parts.push(`<div class="details">${detailsLines.join('')}</div>`);
     return `<li class="activity">${parts.join('')}</li>`;
@@ -198,14 +202,14 @@ export const printItinerary = (
 
     return `
       <section class="day">
-        <h2>${escapeHtml(labels.day)} ${dayIndex + 1}: ${escapeHtml(day.title)}</h2>
+        <h2>${escapeHtml(formatDayRange(dayIndex, dayIndex, labels.language))}: ${escapeHtml(day.title)}</h2>
         ${sections.join('')}
       </section>
     `;
   }).join('');
 
   const html = `<!DOCTYPE html>
-<html>
+<html lang="${labels.language ?? 'es'}">
 <head>
   <meta charset="utf-8" />
   <title>${escapeHtml(labels.title)} - ${escapeHtml(labels.tripName)}</title>
@@ -265,7 +269,7 @@ export const printItinerary = (
       font-weight: bold;
       font-variant-numeric: tabular-nums;
     }
-    .details { flex: 1; }
+    .details { flex: 1; min-width: 0; overflow-wrap: anywhere; }
     .name { font-weight: bold; }
     .desc { margin-top: 2px; }
     .important {
@@ -324,3 +328,6 @@ export const printItinerary = (
     setTimeout(() => printWindow.print(), 100);
   };
 };
+
+export const formatPersonName = (firstName: string, lastName: string, language: Language): string =>
+  (language === 'ja' ? [lastName, firstName] : [firstName, lastName]).filter(Boolean).join(' ');

@@ -13,6 +13,8 @@ export const homeLanguage = (pathname: string): Language | null => {
 
 // The root keeps the user's preference; explicit language URLs always win.
 export const resolvePageLanguage = (pathname: string, search: string, stored: string | null, browserLanguages: readonly string[]): Language => {
+  const requested = new URLSearchParams(search).get('lang');
+  if (requested && Object.prototype.hasOwnProperty.call(copy, requested)) return requested as Language;
   const explicit = pathname === '/' ? null : homeLanguage(pathname);
   return explicit && !search ? explicit : resolveLanguage(stored, browserLanguages);
 };

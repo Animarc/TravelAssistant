@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type DragEvent, type KeyboardEvent, type PointerEvent } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
-import { getActivityTypeIcon, isValidCoordinates, createGoogleMapsUrl } from '../utils';
+import { formatPrice, formatDayRange, getActivityTypeIcon, isValidCoordinates, createGoogleMapsUrl } from '../utils';
 import ActivityModal from './modals/ActivityModal';
 import AccommodationModal from './modals/AccommodationModal';
 import DayModal from './modals/DayModal';
@@ -206,7 +206,7 @@ const PlanningView = () => {
               ←
             </button>
             <div className="day-title-group">
-              <span className="day-kicker">{t('day')} {state.currentDay + 1}</span>
+              <span className="day-kicker">{formatDayRange(state.currentDay, state.currentDay, state.language)}</span>
               <h2>{currentDay?.title}</h2>
             </div>
             <button
@@ -329,7 +329,7 @@ const PlanningView = () => {
                       setShowDayList(false);
                     }}
                   >
-                    <span className="day-list-index">{t('day')} {index + 1}</span>
+                    <span className="day-list-index">{formatDayRange(index, index, state.language)}</span>
                     <span className="day-list-title">{day.title}</span>
                   </button>
                   <button
@@ -388,7 +388,7 @@ const PlanningView = () => {
                       e.stopPropagation();
                       void toggleActivityDone(index).catch(() => undefined);
                     }}
-                    aria-label={activity.isDone ? 'Mark as not done' : 'Mark as done'}
+                    aria-label={t(activity.isDone ? 'markActivityPending' : 'markActivityDone')}
                   >
                     {activity.isDone && <span className="checkmark">✓</span>}
                   </button>
@@ -404,7 +404,7 @@ const PlanningView = () => {
                     )}
                     {activity.price && (
                       <span className="activity-price">
-                        {activity.price} {activity.currency || activeTrip?.currency || 'EUR'}
+                        {formatPrice(activity.price, activity.currency || activeTrip?.currency, state.language)}
                       </span>
                     )}
                   </div>
@@ -413,6 +413,7 @@ const PlanningView = () => {
                   {isValidCoordinates(activity.coordinates) && (
                     <button
                       className="activity-maps-btn"
+                      aria-label={t('openGoogleMaps')}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleOpenMaps(activity.coordinates as [number, number]);
@@ -423,6 +424,7 @@ const PlanningView = () => {
                   )}
                   {canEdit && <button
                     className="activity-edit-btn"
+                      aria-label={t('edit')}
                     onClick={(e) => {
                       e.stopPropagation();
                       setEditingActivity(index);
@@ -432,6 +434,7 @@ const PlanningView = () => {
                   </button>}
                   {canEdit && <button
                     className="activity-delete-btn"
+                      aria-label={t('delete')}
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDeleteActivity(index);
@@ -469,7 +472,7 @@ const PlanningView = () => {
                             e.stopPropagation();
                             void toggleActivityDone(realIndex).catch(() => undefined);
                           }}
-                          aria-label={activity.isDone ? 'Mark as not done' : 'Mark as done'}
+                          aria-label={t(activity.isDone ? 'markActivityPending' : 'markActivityDone')}
                         >
                           {activity.isDone && <span className="checkmark">✓</span>}
                         </button>
@@ -487,6 +490,7 @@ const PlanningView = () => {
                       <div className="activity-actions">
                         {canEdit && <button
                           className="activity-delete-btn"
+                          aria-label={t('delete')}
                           onClick={(e) => {
                             e.stopPropagation();
                             handleDeleteActivity(realIndex);

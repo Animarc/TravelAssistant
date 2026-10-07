@@ -396,7 +396,11 @@
     "accountSecurity": "Seguridad",
     "accountPasswordHelp": "Te enviaremos un enlace al correo de tu cuenta para cambiar la contraseña. Si accedes solo con Google, gestiona la contraseña desde tu cuenta de Google.",
     "accountResetSent": "Si tu cuenta tiene contraseña, recibirás un enlace en tu correo. Revisa también la carpeta de spam.",
-    "profileSaved": "Perfil guardado."
+    "profileSaved": "Perfil guardado.",
+    "markActivityDone": "Marcar como completada",
+    "markActivityPending": "Marcar como pendiente",
+    "mapZoomIn": "Acercar mapa",
+    "mapZoomOut": "Alejar mapa"
   },
   "en": {
     "accountCenter": "Travel center",
@@ -795,7 +799,11 @@
     "accountSecurity": "Security",
     "accountPasswordHelp": "We will email a link to your account address to change your password. If you only sign in with Google, manage your password through your Google account.",
     "accountResetSent": "If your account has a password, you will receive an email with a link. Check your spam folder too.",
-    "profileSaved": "Profile saved."
+    "profileSaved": "Profile saved.",
+    "markActivityDone": "Mark as done",
+    "markActivityPending": "Mark as not done",
+    "mapZoomIn": "Zoom in",
+    "mapZoomOut": "Zoom out"
   },
   "fr": {
     "accountCenter": "Espace voyages",
@@ -1194,7 +1202,11 @@
     "accountSecurity": "Sécurité",
     "accountPasswordHelp": "Nous enverrons un lien à votre adresse pour changer le mot de passe. Si vous vous connectez uniquement avec Google, gérez le mot de passe dans votre compte Google.",
     "accountResetSent": "Si votre compte possède un mot de passe, vous recevrez un lien par e-mail. Vérifiez aussi les courriers indésirables.",
-    "profileSaved": "Profil enregistré."
+    "profileSaved": "Profil enregistré.",
+    "markActivityDone": "Marquer comme terminée",
+    "markActivityPending": "Marquer comme à faire",
+    "mapZoomIn": "Zoom avant",
+    "mapZoomOut": "Zoom arrière"
   },
   "de": {
     "accountCenter": "Reisezentrale",
@@ -1593,7 +1605,11 @@
     "accountSecurity": "Sicherheit",
     "accountPasswordHelp": "Wir senden einen Link zum Ändern des Passworts an deine Konto-Adresse. Wenn du dich nur mit Google anmeldest, verwalte dein Passwort in deinem Google-Konto.",
     "accountResetSent": "Wenn dein Konto ein Passwort hat, erhältst du einen Link per E-Mail. Prüfe auch den Spam-Ordner.",
-    "profileSaved": "Profil gespeichert."
+    "profileSaved": "Profil gespeichert.",
+    "markActivityDone": "Als erledigt markieren",
+    "markActivityPending": "Als offen markieren",
+    "mapZoomIn": "Karte vergrößern",
+    "mapZoomOut": "Karte verkleinern"
   },
   "zh": {
     "accountCenter": "旅行中心",
@@ -1992,7 +2008,11 @@
     "accountSecurity": "安全",
     "accountPasswordHelp": "我们会将修改密码的链接发送到您的账户邮箱。如果您仅通过Google登录，请在Google账户中管理密码。",
     "accountResetSent": "如果您的账户已设置密码，您将收到包含链接的邮件。也请检查垃圾邮件文件夹。",
-    "profileSaved": "个人资料已保存。"
+    "profileSaved": "个人资料已保存。",
+    "markActivityDone": "标记为已完成",
+    "markActivityPending": "标记为未完成",
+    "mapZoomIn": "放大地图",
+    "mapZoomOut": "缩小地图"
   },
   "ru": {
     "accountCenter": "Центр путешествий",
@@ -2391,7 +2411,11 @@
     "accountSecurity": "Безопасность",
     "accountPasswordHelp": "Мы отправим ссылку для смены пароля на почту аккаунта. Если вы входите только через Google, управляйте паролем в аккаунте Google.",
     "accountResetSent": "Если у аккаунта есть пароль, вы получите письмо со ссылкой. Проверьте также папку спама.",
-    "profileSaved": "Профиль сохранён."
+    "profileSaved": "Профиль сохранён.",
+    "markActivityDone": "Отметить как выполненное",
+    "markActivityPending": "Отметить как невыполненное",
+    "mapZoomIn": "Приблизить карту",
+    "mapZoomOut": "Отдалить карту"
   },
   "ja": {
     "accountCenter": "旅の管理",
@@ -2741,7 +2765,7 @@
     "retryAction": "再試行",
     "forgotPassword": "パスワードを忘れましたか？",
     "recoverPassword": "パスワードを再設定",
-    "resetRequested": "このメールのパスワード付きアカウントがあればリンクを送信します。迷惑メールも確認してください。",
+    "resetRequested": "このメールアドレスでパスワードを設定済みのアカウントが登録されている場合、再設定用のリンクを送信します。迷惑メールフォルダーも確認してください。",
     "sendResetLink": "リンクを送信",
     "backToLogin": "ログインに戻る",
     "newPassword": "新しいパスワード",
@@ -2790,6 +2814,10 @@
     "accountSecurity": "セキュリティ",
     "accountPasswordHelp": "パスワード変更用のリンクを登録メールアドレスに送信します。Googleでのみログインする場合は、Googleアカウントでパスワードを管理してください。",
     "accountResetSent": "パスワードを設定済みのアカウントには、リンク付きメールが届きます。迷惑メールフォルダも確認してください。",
-    "profileSaved": "プロフィールを保存しました。"
+    "profileSaved": "プロフィールを保存しました。",
+    "markActivityDone": "完了にする",
+    "markActivityPending": "未完了に戻す",
+    "mapZoomIn": "地図を拡大",
+    "mapZoomOut": "地図を縮小"
   }
 }

@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
-import { formatPrice, getShoppingCategoryIcon, calculateNights } from '../utils';
+import { formatPrice, formatDayRange, getShoppingCategoryIcon, calculateNights } from '../utils';
 import ShoppingModal from './modals/ShoppingModal';
 import type { EntityId } from '../types';
 import ConfirmDialog from './ConfirmDialog';
@@ -76,20 +76,20 @@ const BudgetView = () => {
             <div className="budget-section-header">
               <h3>{t('activities')}</h3>
               <span className="budget-section-total">
-                {formatPrice(budget.activities, baseCurrency)}
+                {formatPrice(budget.activities, baseCurrency, state.language)}
               </span>
             </div>
             <div className="budget-section-content">
               {state.days.map((day, dayIndex) => (
                 <div key={dayIndex} className="budget-day">
-                  <h4>{t('day')} {dayIndex + 1}: {day.title}</h4>
+                  <h4>{formatDayRange(dayIndex, dayIndex, state.language)}: {day.title}</h4>
                   {day.activities
                     .filter(a => a.price)
                     .map((activity, actIndex) => (
                       <div key={actIndex} className="budget-item">
                         <span className="budget-item-name">{activity.name}</span>
                         <span className="budget-item-price">
-                          {formatPrice(activity.price, activity.currency)}
+                          {formatPrice(activity.price, activity.currency || baseCurrency, state.language)}
                         </span>
                       </div>
                     ))}
@@ -103,7 +103,7 @@ const BudgetView = () => {
             <div className="budget-section-header">
               <h3>{t('accommodations')}</h3>
               <span className="budget-section-total">
-                {formatPrice(budget.accommodations, baseCurrency)}
+                {formatPrice(budget.accommodations, baseCurrency, state.language)}
               </span>
             </div>
             <div className="budget-section-content">
@@ -116,7 +116,7 @@ const BudgetView = () => {
                     <span className="budget-item-nights">
                       {calculateNights(acc.fromDay, acc.toDay)} {calculateNights(acc.fromDay, acc.toDay) === 1 ? t('night') : t('nights')}
                     </span>
-                    <span className="budget-item-price">{formatPrice(acc.price, baseCurrency)}</span>
+                    <span className="budget-item-price">{formatPrice(acc.price, baseCurrency, state.language)}</span>
                   </div>
                 </div>
               ))}
@@ -128,7 +128,7 @@ const BudgetView = () => {
             <div className="budget-section-header">
               <h3>{t('shoppingAndReservations')}</h3>
               <span className="budget-section-total">
-                {formatPrice(budget.shopping, baseCurrency)}
+                {formatPrice(budget.shopping, baseCurrency, state.language)}
               </span>
             </div>
             <div className="budget-section-content">
@@ -145,10 +145,11 @@ const BudgetView = () => {
                       {item.purchased ? t('purchased') : t('pending')}
                     </span>
                     <span className="budget-item-price">
-                      {formatPrice(item.price, item.currency)}
+                      {formatPrice(item.price, item.currency, state.language)}
                     </span>
                     <button
                       className="toggle-purchased-btn"
+                      aria-label={t(item.purchased ? 'markActivityPending' : 'markActivityDone')}
                       disabled={!canEdit}
                       onClick={() => void toggleShoppingPurchased(item.id).catch(() => undefined)}
                     >
@@ -156,6 +157,7 @@ const BudgetView = () => {
                     </button>
                     <button
                       className="edit-btn"
+                      aria-label={t('edit')}
                       hidden={!canEdit}
                       disabled={!canEdit}
                       onClick={() => {
@@ -167,6 +169,7 @@ const BudgetView = () => {
                     </button>
                     <button
                       className="delete-btn"
+                      aria-label={t('delete')}
                       hidden={!canEdit}
                       disabled={!canEdit}
                       onClick={() => handleDeleteShopping(item.id)}
@@ -199,27 +202,27 @@ const BudgetView = () => {
               <div className="breakdown">
                 <div className="breakdown-row">
                   <span>{t('subtotalActivities')}</span>
-                  <span>{formatPrice(budget.activities, baseCurrency)}</span>
+                  <span>{formatPrice(budget.activities, baseCurrency, state.language)}</span>
                 </div>
                 <div className="breakdown-row">
                   <span>{t('subtotalAccommodations')}</span>
-                  <span>{formatPrice(budget.accommodations, baseCurrency)}</span>
+                  <span>{formatPrice(budget.accommodations, baseCurrency, state.language)}</span>
                 </div>
                 <div className="breakdown-row">
                   <span>{t('subtotalShopping')}</span>
-                  <span>{formatPrice(budget.shopping, baseCurrency)}</span>
+                  <span>{formatPrice(budget.shopping, baseCurrency, state.language)}</span>
                 </div>
               </div>
               <div className="grand-total">
                 <span>{t('total')}</span>
-                <span className="grand-total-amount">{formatPrice(budget.total, baseCurrency)}</span>
+                <span className="grand-total-amount">{formatPrice(budget.total, baseCurrency, state.language)}</span>
               </div>
-              {budget.foreign.map(([currency, total]) => <div className="breakdown-row" key={currency}><span>{t('unconverted')}</span><span>{formatPrice(total, currency)}</span></div>)}
+              {budget.foreign.map(([currency, total]) => <div className="breakdown-row" key={currency}><span>{t('unconverted')}</span><span>{formatPrice(total, currency, state.language)}</span></div>)}
               {payingTravelersCount > 1 && (
                 <div className="per-person-total">
                   <span>{t('perPerson')} ({payingTravelersCount})</span>
                   <span className="per-person-amount">
-                    {formatPrice(budget.total / payingTravelersCount, baseCurrency)}
+                    {formatPrice(budget.total / payingTravelersCount, baseCurrency, state.language)}
                   </span>
                 </div>
               )}

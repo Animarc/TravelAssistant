@@ -55,3 +55,8 @@ it.each([
   expect(robots.content).toBe(expected);
   expect(document.querySelectorAll('meta[name="robots"]')).toHaveLength(1);
 });
+
+it('honours the language of account email links on another device', () => {
+  expect(resolvePageLanguage('/', '?reset-password=1&lang=ja', 'es', ['es-ES'])).toBe('ja');
+  expect(resolvePageLanguage('/', '?verify-email=1&lang=invalid', 'fr', ['es-ES'])).toBe('fr');
+});

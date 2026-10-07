@@ -27,7 +27,7 @@ const WelcomeView = () => {
     event.preventDefault();
     try {
       if (mode === 'login') await login(form.email, form.password);
-      else await register(form.email, form.password, form.username);
+      else await register(form.email, form.password, form.username, state.language);
     } catch { /* The application state displays the API error. */ }
   };
 

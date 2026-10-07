@@ -1,3 +1,4 @@
+import type { Language } from '../types';
 import { apiRequest, refreshSession, saveSession, SESSION_API_URL } from './client';
 import type { AuthResponse, EmailVerificationResponse, UserProfileResponse, UserSearchResult } from './contracts';
 
@@ -13,9 +14,9 @@ export const sessionApi = {
     saveSession(session);
     return session;
   },
-  register: async (email: string, password: string, username: string) => {
+  register: async (email: string, password: string, username: string, preferredLanguage: Language = 'es') => {
     const session = await apiRequest<AuthResponse>(SESSION_API_URL, '/api/auth/browser/register', {
-      method: 'POST', body: JSON.stringify({ email, password, username, preferredLanguage: 'es' })
+      method: 'POST', body: JSON.stringify({ email, password, username, preferredLanguage })
     }, false);
     saveSession(session);
     return session;

@@ -1,3 +1,4 @@
+import { formatDayRange } from '../utils';
 import { useEffect, useState } from 'react';
 import { travelsApi } from '../api/travelsApi';
 import type { PublicTripDto, TripDetailDto } from '../api/contracts';
@@ -56,7 +57,7 @@ const PublicTripsExplorer = ({ authenticated = false, onCopy, onRegister, onOpen
       <div className="public-trip-dialog-card"><button className="dialog-close" disabled={copying} onClick={() => setSelected(null)} aria-label={t('close')}>×</button>
         <span className="welcome-kicker">{t('publicTrip')}</span><h2 id="public-trip-title">{selected.name}</h2><p>{selected.description}</p>
         <TripRating tripId={selected.id} authenticated={authenticated} language={state.language} />
-        <ol>{selected.days.slice(0, 7).map((day, index) => <li key={day.id}><b>{t('day')} {index + 1}</b><span>{day.title}</span></li>)}</ol>
+        <ol>{selected.days.slice(0, 7).map((day, index) => <li key={day.id}><b>{formatDayRange(index, index, state.language)}</b><span>{day.title}</span></li>)}</ol>
         {error && <p role="alert">{t(error)}</p>}
         <button className="welcome-submit" disabled={copying} onClick={async () => {
           if (!authenticated || !onCopy) { onRegister?.(); return; }

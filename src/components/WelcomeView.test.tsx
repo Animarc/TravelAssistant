@@ -31,6 +31,6 @@ describe('WelcomeView', () => {
     fireEvent.change(screen.getByLabelText(/correo electrónico/i), { target: { value: 'marc@example.com' } });
     fireEvent.change(screen.getByLabelText(/contraseña/i), { target: { value: 'Password!123' } });
     fireEvent.click(screen.getByRole('button', { name: /crear cuenta/i }));
-    expect(register).toHaveBeenCalledWith('marc@example.com', 'Password!123', 'marctabi');
+    expect(register).toHaveBeenCalledWith('marc@example.com', 'Password!123', 'marctabi', 'es');
   });
 });

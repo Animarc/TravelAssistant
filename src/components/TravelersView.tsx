@@ -1,3 +1,4 @@
+import { formatPersonName } from '../utils';
 import { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { useTranslation } from '../hooks/useTranslation';
@@ -76,11 +77,11 @@ const TravelersView = () => {
             >
               <div className="traveler-header">
                 <div className="traveler-avatar">
-                  {traveler.firstName.charAt(0)}{traveler.lastName.charAt(0)}
+                  {formatPersonName(traveler.firstName.charAt(0), traveler.lastName.charAt(0), state.language).replace(' ', '')}
                 </div>
                 <div className="traveler-basic-info">
                   <strong className="traveler-name">
-                    {traveler.firstName} {traveler.lastName}
+                    {formatPersonName(traveler.firstName, traveler.lastName, state.language)}
                   </strong>
                   {traveler.age != null && <span className="traveler-age">{traveler.age} {t('yearsOld')}</span>}
                 </div>
